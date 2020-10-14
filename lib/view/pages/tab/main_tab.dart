@@ -41,7 +41,7 @@ class _MainTabState extends State<MainTab> {
                             fontWeight: FontWeight.w400, fontSize: 18),
                       ),
                       Text(
-                        "Sur Name Here",
+                        "Owen",
                         maxLines: 1,
                         overflow: TextOverflow.clip,
                         style: blackTextFont.copyWith(

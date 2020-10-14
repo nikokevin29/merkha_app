@@ -4,16 +4,16 @@ const double defaultMargin = 24;
 
 Color mainColor = Color(0xFF503E9D);
 Color accentColor1 = Color(0xFF2C1F63);
-Color accentColor2 = Color(0x00000000);
-Color accentColor3 = Color(0xFFADADAD);
+Color accentColor2 = HexColor("#C5EA2A");
+Color accentColor3 = HexColor("#707070");
 
-TextStyle blackTextFont = GoogleFonts.raleway()
+TextStyle blackTextFont = GoogleFonts.roboto()
     .copyWith(color: Colors.black, fontWeight: FontWeight.w500);
-TextStyle whiteTextFont = GoogleFonts.raleway()
+TextStyle whiteTextFont = GoogleFonts.roboto()
     .copyWith(color: Colors.white, fontWeight: FontWeight.w500);
-TextStyle purpleTextFont = GoogleFonts.raleway()
+TextStyle purpleTextFont = GoogleFonts.roboto()
     .copyWith(color: mainColor, fontWeight: FontWeight.w500);
-TextStyle greyTextFont = GoogleFonts.raleway()
+TextStyle greyTextFont = GoogleFonts.roboto()
     .copyWith(color: accentColor3, fontWeight: FontWeight.w500);
 
 TextStyle whiteNumberFont =

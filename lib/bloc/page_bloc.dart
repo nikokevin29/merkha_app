@@ -7,7 +7,7 @@ part 'page_event.dart';
 part 'page_state.dart';
 
 class PageBloc extends Bloc<PageEvent, PageState> {
-  PageBloc() : super(OnLoginPage());
+  PageBloc() : super(OnLoginSignupPage());
 
   @override
   Stream<PageState> mapEventToState(
@@ -17,6 +17,8 @@ class PageBloc extends Bloc<PageEvent, PageState> {
       yield OnMainPage();
     } else if (event is GoToLoginPage) {
       yield OnLoginPage();
+    } else if (event is GoToLoginSignupPage) {
+      yield OnLoginSignupPage();
     }
   }
 }

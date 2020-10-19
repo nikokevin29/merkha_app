@@ -17,7 +17,7 @@ class GoToLoginPage extends PageEvent {
   List<Object> get props => [];
 }
 
-class GoToLoginSignupPage extends PageEvent {
+class GoToSignInOptionPage extends PageEvent {
   @override
   List<Object> get props => [];
 }

@@ -18,7 +18,7 @@ class OnLoginPage extends PageState {
   List<Object> get props => [];
 }
 
-class OnLoginSignupPage extends PageState{
+class OnSignInOptionPage extends PageState{
   @override
   List<Object> get props => [];
 }

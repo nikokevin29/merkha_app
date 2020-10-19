@@ -1,6 +1,6 @@
 part of 'pages.dart';
 
-class LoginSignupPage extends StatelessWidget {
+class SignInOptionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

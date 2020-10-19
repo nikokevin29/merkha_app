@@ -5,13 +5,12 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage>
-    with SingleTickerProviderStateMixin {
+class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin {
+  int bottomNavBarIndex = 0;
   TabController controller;
-
   @override
   void initState() {
-    controller = new TabController(length: 5, vsync: this);
+    controller = new TabController(length: 5, vsync: this, initialIndex: bottomNavBarIndex);
     super.initState();
   }
 
@@ -31,20 +30,28 @@ class _MainPageState extends State<MainPage>
           unselectedLabelColor: Colors.grey,
           labelColor: Colors.black,
           controller: controller,
+          onTap: (index) {
+            setState(() {
+              bottomNavBarIndex = index;
+            });
+          },
           tabs: <Widget>[
             Tab(
               icon: Icon(
-                Icons.search,
+                Icons.home,
               ),
             ),
             Tab(
-              icon: Icon(Icons.flash_on),
+              icon: Container(
+                child: Image.asset(
+                    (bottomNavBarIndex == 1) ? "assets/logo-yellow.png" : "assets/logo-grey.png"),
+              ),
             ),
             Tab(
               icon: Icon(Icons.shopping_cart),
             ),
             Tab(
-              icon: Icon(Icons.favorite),
+              icon: Icon(Icons.bookmark),
             ),
             Tab(
               icon: Icon(Icons.person),

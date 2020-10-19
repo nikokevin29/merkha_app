@@ -14,9 +14,7 @@ class _SignInPageState extends State<SignInPage> {
   bool isSigningIn = false;
   @override
   Widget build(BuildContext context) {
-    // context
-    //     .bloc<ThemeBloc>()
-    //     .add(ChangeTheme(ThemeData().copyWith(primaryColor: accentColor2)));
+    context.bloc<ThemeBloc>().add(ChangeTheme(ThemeData().copyWith(primaryColor: accentColor2)));
     return Scaffold(
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: defaultMargin),
@@ -46,7 +44,7 @@ class _SignInPageState extends State<SignInPage> {
                 decoration: InputDecoration(labelText: "Email"),
                 onChanged: (text) {
                   setState(() {
-                    isEmailValid = EmailValidator.validate(text);
+                    isEmailValid = EmailValidator.validate(text.trim());
                   });
                 },
               ),
@@ -99,8 +97,8 @@ class _SignInPageState extends State<SignInPage> {
                               setState(() {
                                 isSigningIn = true;
                               });
-                              context.bloc<PageBloc>().add(GoToMainPage());
                               Navigator.pop(context);
+                              context.bloc<PageBloc>().add(GoToMainPage());
                             }
                           : null),
                 ),

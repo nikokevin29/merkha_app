@@ -7,7 +7,7 @@ import 'package:merkha_app/bloc/theme_bloc.dart';
 import 'package:merkha_app/shared/shared.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_greetings/flutter_greetings.dart';
-import 'package:intl/intl.dart';
+import 'package:merkha_app/view/widgets/widgets.dart';
 
 part 'wrapper.dart';
 part 'sign_in_page.dart';

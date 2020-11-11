@@ -40,21 +40,26 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
               icon: Icon(
                 Icons.home,
               ),
+              text: "Home",
             ),
             Tab(
               icon: Container(
                 child: Image.asset(
                     (bottomNavBarIndex == 1) ? "assets/logo-yellow.png" : "assets/logo-grey.png"),
               ),
+              text: "Feed",
             ),
             Tab(
               icon: Icon(Icons.shopping_cart),
+              text: "Cart",
             ),
             Tab(
               icon: Icon(Icons.bookmark),
+              text: "Wishlist",
             ),
             Tab(
               icon: Icon(Icons.person),
+              text: "Profile",
             ),
           ],
         ),

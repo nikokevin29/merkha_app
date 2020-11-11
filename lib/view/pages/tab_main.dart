@@ -23,16 +23,16 @@ class _MainTabState extends State<MainTab> {
           Stack(
             children: [
               //note: Image
-              Container(
-                height: MediaQuery.of(context).size.height * 0.21,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage("assets/example1.png"),
-                  ),
-                ),
-              ),
+              // Container(
+              //   height: MediaQuery.of(context).size.height * 0.21,
+              //   width: MediaQuery.of(context).size.width,
+              //   decoration: BoxDecoration(
+              //     image: DecorationImage(
+              //       fit: BoxFit.cover,
+              //       image: AssetImage("assets/example1.png"),
+              //     ),
+              //   ),
+              // ),
               //note: Greetings
               SafeArea(
                 child: Container(
@@ -44,13 +44,13 @@ class _MainTabState extends State<MainTab> {
                       children: [
                         Text(
                           YonoGreetings.showGreetings() + " ",
-                          style: blackTextFont.copyWith(fontWeight: FontWeight.w400, fontSize: 18),
+                          style: blackTextFont.copyWith(fontWeight: FontWeight.w400, fontSize: 25),
                         ),
                         Text(
-                          "Owen",
+                          "Nicholas",
                           maxLines: 1,
                           overflow: TextOverflow.clip,
-                          style: blackTextFont.copyWith(fontWeight: FontWeight.w600, fontSize: 18),
+                          style: blackTextFont.copyWith(fontWeight: FontWeight.w600, fontSize: 25),
                         ),
                       ],
                     ),
@@ -67,23 +67,30 @@ class _MainTabState extends State<MainTab> {
               padding: EdgeInsets.only(left: defaultMargin, right: defaultMargin),
               children: [
                 //note : Search Box
-                TextField(
-                  controller: null,
-                  autofocus: false,
-                  style: TextStyle(fontSize: 16.0, color: Color(0xFFbdc6cf)),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    prefixIcon: Icon(Icons.search),
-                    hintText: 'What are you looking for?',
-                    contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 14.0),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(20),
+                SizedBox(
+                  height: 15,
+                ),
+                Material(
+                  borderRadius: BorderRadius.circular(20.0),
+                  elevation: 20,
+                  child: TextFormField(
+                    controller: null,
+                    autofocus: false,
+                    style: TextStyle(fontSize: 16.0, color: Color(0xFFbdc6cf)),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      prefixIcon: Icon(Icons.search),
+                      hintText: 'What are you looking for?',
+                      contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 14.0),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
                   ),
                 ),

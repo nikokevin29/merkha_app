@@ -1,11 +1,14 @@
 part of 'pages.dart';
 
 class SignUp3 extends StatefulWidget {
+  final List<String> genderlist = ["Female", "Male", "Prefer not to say"];
   @override
   _SignUp3State createState() => _SignUp3State();
 }
 
 class _SignUp3State extends State<SignUp3> {
+  bool isSignup3 = false;
+  List<String> selectedGender = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,64 +38,39 @@ class _SignUp3State extends State<SignUp3> {
               SizedBox(
                 height: 30,
               ),
-              Card(
-                shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                elevation: 3,
-                child: InkWell(
-                  onTap: () {
-                    print("Female Tapped");
-                  },
-                  child: Container(
-                    width: 244,
-                    height: 61,
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Female",
-                      style: blackTextFont.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
+              Wrap(
+                spacing: 50,
+                runSpacing: 20,
+                children: genderWidgets(context),
               ),
               SizedBox(
-                height: 6,
+                height: 30,
               ),
-              Card(
-                shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                elevation: 3,
-                child: InkWell(
-                  onTap: () {
-                    print("Male Tapped");
-                  },
-                  child: Container(
-                    width: 244,
-                    height: 61,
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Male",
-                      style: blackTextFont.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Card(
-                shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                elevation: 3,
-                child: InkWell(
-                  onTap: () {
-                    print("Not Prefer Say Tapped");
-                  },
-                  child: Container(
-                    width: 244,
-                    height: 61,
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Prefer not to say",
-                      style: blackTextFont.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
+              Container(
+                alignment: Alignment.bottomRight,
+                child: SizedBox(
+                  width: 150,
+                  height: 50,
+                  child: FlatButton(
+                      disabledColor: Color(0xFFE4E4E4),
+                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                      color: accentColor2,
+                      child: Text(
+                        (selectedGender.length == 0) ? "Next" : selectedGender.join(','),
+                        style: blackTextFont.copyWith(
+                            fontSize: 16, color: accentColor3, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: (selectedGender.length != 0)
+                          ? () async {
+                              setState(() {
+                                isSignup3 = true;
+                              });
+                              // Navigator.push(
+                              //   context,
+                              //   //MaterialPageRoute(builder: (context) => SignUp3()),
+                              // );
+                            }
+                          : null),
                 ),
               )
             ],
@@ -100,5 +78,35 @@ class _SignUp3State extends State<SignUp3> {
         )),
       ),
     );
+  }
+
+  List<Widget> genderWidgets(BuildContext context) {
+    double width = (MediaQuery.of(context).size.width - 2 * defaultMargin - 24) / 2;
+    return widget.genderlist
+        .map(
+          (e) => SelectableBox(
+            e,
+            width: width,
+            isSelected: selectedGender.contains(e),
+            onTap: () {
+              onSelectGender(e);
+            },
+          ),
+        )
+        .toList();
+  }
+
+  void onSelectGender(String gender) {
+    if (selectedGender.contains(gender)) {
+      setState(() {
+        selectedGender.remove(gender);
+      });
+    } else {
+      if (selectedGender.length < 1) {
+        setState(() {
+          selectedGender.add(gender);
+        });
+      }
+    }
   }
 }

@@ -26,6 +26,32 @@ class _ProfileTabState extends State<ProfileTab> {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
+                context.read<UserCubit>().signOut();
+                UserState state = context.read<UserCubit>().state;
+                if (state is UserLoaded) {
+                  Get.off(SignInOptionPage());
+                } else {
+                  Get.snackbar(
+                    "Failed",
+                    (state as UserLoadingFailed).message,
+                    backgroundColor: HexColor("D9435E"),
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    ),
+                  );
+                }
+              },
+              child: Icon(
+                Icons.logout,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
                 //action here
               },
               child: Icon(

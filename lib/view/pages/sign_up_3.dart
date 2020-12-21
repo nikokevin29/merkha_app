@@ -65,10 +65,10 @@ class _SignUp3State extends State<SignUp3> {
                               setState(() {
                                 isSignup3 = true;
                               });
-                              // Navigator.push(
-                              //   context,
-                              //   //MaterialPageRoute(builder: (context) => SignUp3()),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => SignUp4()),
+                              );
                             }
                           : null),
                 ),

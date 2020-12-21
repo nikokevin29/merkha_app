@@ -14,7 +14,6 @@ class _SignInPageState extends State<SignInPage> {
   bool isSigningIn = false;
   @override
   Widget build(BuildContext context) {
-    context.bloc<ThemeBloc>().add(ChangeTheme(ThemeData().copyWith(primaryColor: accentColor2)));
     return Scaffold(
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: defaultMargin),
@@ -97,8 +96,28 @@ class _SignInPageState extends State<SignInPage> {
                               setState(() {
                                 isSigningIn = true;
                               });
-                              Navigator.pop(context);
-                              context.bloc<PageBloc>().add(GoToMainPage());
+                              await context
+                                  .read<UserCubit>()
+                                  .signIn(emailController.text, passwordController.text);
+                              UserState state = context.read<UserCubit>().state;
+                              if (state is UserLoaded) {
+                                // context.read<ProductCubit>().getProduct();
+                                // context.read<OrderCubit>().getOrder();
+                                Navigator.pop(context);
+                                Get.off(MainPage());
+                              } else {
+                                Get.snackbar("Failed", "Sign In Failed",
+                                    backgroundColor: HexColor("D9435E"),
+                                    icon: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                    ),
+                                    titleText: Text("Sign In Failed", style: blackTextFont),
+                                    messageText: Text(
+                                      (state as UserLoadingFailed).message,
+                                      style: blackTextFont,
+                                    ));
+                              }
                             }
                           : null),
                 ),

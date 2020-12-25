@@ -32,7 +32,7 @@ class _SignUp1State extends State<SignUp1> {
                   height: 30,
                 ),
                 Text(
-                  "Enter your mobile number & email\naddress to register. We’ll send a 4-digit\ncode to this number and a verification\nlink to the email address.",
+                  "Enter your mobile number & email address\nto register. We’ll send a verification code\nto this number and a verification\nlink to the email address.",
                   style: blackTextFont.copyWith(color: accentColor3, fontWeight: FontWeight.w100),
                   textAlign: TextAlign.justify,
                 ),
@@ -82,10 +82,15 @@ class _SignUp1State extends State<SignUp1> {
                                 setState(() {
                                   isSignup1 = true;
                                 });
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => SignUp2()),
-                                );
+                                SharedPreferences signup = await SharedPreferences.getInstance();
+                                signup.setString('email', emailController.text);
+                                signup.setString('phone_number', phonenumberController.text);
+
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) => SignUp2()),
+                                // );
+                                Get.to(SignUp2());
                               }
                             : null),
                   ),

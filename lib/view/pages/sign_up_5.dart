@@ -1,0 +1,203 @@
+part of 'pages.dart';
+
+class SignUp5 extends StatefulWidget {
+  // final User user;
+  // // final String password;
+  // // final File pictureFile;
+  // SignUp5({this.user /*, this.password, this.pictureFile */});
+  @override
+  _SignUp5State createState() => _SignUp5State();
+}
+
+class _SignUp5State extends State<SignUp5> {
+  //User user = User();
+  File pictureFile;
+
+  String phone_number;
+  String first_name;
+  String last_name;
+  String username;
+  String gender;
+  String email;
+  String password;
+  getSignUpData() async {
+    SharedPreferences signup = await SharedPreferences.getInstance();
+    setState(() {
+      phone_number = signup.getString('phone_number');
+      first_name = signup.getString('first_name');
+      last_name = signup.getString('last_name');
+      username = signup.getString('username');
+      gender = signup.getString('gender');
+      email = signup.getString('email');
+      password = signup.getString('password');
+    });
+  }
+
+  void initState() {
+    super.initState();
+    getSignUpData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 50,
+                ),
+                Text(
+                  "Verify Your\nData",
+                  style: blackTextFont.copyWith(fontSize: 38, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Center(
+                  child: GestureDetector(
+                    onTap: () async {
+                      PickedFile pickedFile =
+                          await ImagePicker().getImage(source: ImageSource.gallery);
+                      if (pickedFile != null) {
+                        pictureFile = File(pickedFile.path);
+                        setState(() {});
+                      }
+                    },
+                    child: Container(
+                      width: 110,
+                      height: 110,
+                      margin: EdgeInsets.only(top: 26),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(image: AssetImage('assets/photo_border.png'))),
+                      child: (pictureFile != null)
+                          ? Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: FileImage(pictureFile), fit: BoxFit.cover),
+                              ),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: AssetImage('assets/photo.png'), fit: BoxFit.cover),
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  height: 40,
+                  thickness: 1,
+                  indent: 20,
+                  endIndent: 20,
+                ),
+                Center(
+                  child: Wrap(
+                    spacing: 5,
+                    runSpacing: 5,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Full Name', style: blackTextFont.copyWith(fontSize: 16)),
+                          Text('Gender', style: blackTextFont.copyWith(fontSize: 16)),
+                          Text('Username', style: blackTextFont.copyWith(fontSize: 16)),
+                          Text('Phone Number', style: blackTextFont.copyWith(fontSize: 16)),
+                          Text('Email', style: blackTextFont.copyWith(fontSize: 16)),
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(('$first_name $last_name') ?? 'null',
+                              style: blackTextFont.copyWith(fontSize: 16)),
+                          Text(gender ?? 'null', style: blackTextFont.copyWith(fontSize: 16)),
+                          Text(username ?? 'null', style: blackTextFont.copyWith(fontSize: 16)),
+                          Text(phone_number ?? 'null', style: blackTextFont.copyWith(fontSize: 16)),
+                          Text(email ?? 'null', style: blackTextFont.copyWith(fontSize: 16)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(
+                  height: 40,
+                  thickness: 1,
+                  indent: 20,
+                  endIndent: 20,
+                ),
+                Container(
+                  alignment: Alignment.bottomRight,
+                  child: SizedBox(
+                    width: 150,
+                    height: 50,
+                    child: FlatButton(
+                        disabledColor: Color(0xFFE4E4E4),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0),
+                        ),
+                        color: accentColor2,
+                        child: Text(
+                          'Register & Verify',
+                          style: blackTextFont.copyWith(
+                            fontSize: 16,
+                            color: accentColor3,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onPressed: () async {
+                          await context.read<UserCubit>().signUp(
+                              User(
+                                email: email,
+                                phone_number: phone_number,
+                                first_name: first_name,
+                                last_name: last_name,
+                                username: username,
+                                gender: gender,
+                              ),
+                              password,
+                              pictureFile: pictureFile);
+                          UserState state = context.read<UserCubit>().state;
+                          if (state is UserLoaded) {
+                            // context.read<ProductCubit>().getProduct();
+                            // context.read<OrderCubit>().getOrder();
+                            Get.snackbar("Register Complete", "Check Email for Verify");
+                            Get.off(MainPage());
+                          } else {
+                            Get.snackbar(
+                              "",
+                              "",
+                              backgroundColor: HexColor("D9435E"),
+                              icon: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              ),
+                              titleText: Text("Sign Up Failed", style: blackTextFont),
+                              messageText: Text(
+                                (state as UserLoadingFailed).message,
+                                style: blackTextFont,
+                              ),
+                            );
+                          }
+                        }),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

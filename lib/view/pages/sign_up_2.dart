@@ -6,13 +6,22 @@ class SignUp2 extends StatefulWidget {
 }
 
 class _SignUp2State extends State<SignUp2> {
+  bool _passwordVisible = false;
   bool isSignup2 = false;
   bool isfirst = false;
   bool islast = false;
   bool isuser = false;
+  bool ispass = false;
   TextEditingController firstnameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    _passwordVisible = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,6 +84,29 @@ class _SignUp2State extends State<SignUp2> {
                         });
                       },
                     ),
+                    TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: passwordController,
+                      obscureText: !_passwordVisible,
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        hintText: 'Enter your password',
+                        suffixIcon: IconButton(
+                          icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off,
+                              color: Theme.of(context).primaryColorDark),
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          (value != '' && value.length >= 6) ? ispass = true : ispass = false;
+                        });
+                      },
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -95,15 +127,18 @@ class _SignUp2State extends State<SignUp2> {
                           style: blackTextFont.copyWith(
                               fontSize: 16, color: accentColor3, fontWeight: FontWeight.bold),
                         ),
-                        onPressed: (isfirst == true && islast == true && isuser == true)
+                        onPressed: (isfirst == true && islast == true && isuser == true && ispass == true)
                             ? () async {
                                 setState(() {
                                   isSignup2 = true;
                                 });
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => SignUp3()),
-                                );
+
+                                SharedPreferences signup = await SharedPreferences.getInstance();
+                                signup.setString('first_name', firstnameController.text);
+                                signup.setString('last_name', lastnameController.text);
+                                signup.setString('username', usernameController.text);
+                                signup.setString('password', passwordController.text);
+                                Get.to(SignUp3());
                               }
                             : null),
                   ),

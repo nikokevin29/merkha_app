@@ -19,7 +19,7 @@ class UserServices {
 
     User.token = data['data']['token'];
     User value = User.fromJson(data['data']['user']);
-    
+
     return ApiReturnValue(value: value);
   }
 
@@ -39,7 +39,7 @@ class UserServices {
     if (response.statusCode != 200) {
       var data = jsonDecode(response.body);
       var message = data['message'];
-      print('status code ${response.statusCode} '+ message);
+      print('status code ${response.statusCode} ' + message);
       return ApiReturnValue(message: message);
     }
     var data = jsonDecode(response.body);
@@ -54,20 +54,24 @@ class UserServices {
     }
     String url = baseURL + 'register';
 
-    var response = await client.post(url,
-        headers: {"Context-Type": "application/json"},
-        body: jsonEncode(<String, String>{
-          'first_name': user.first_name,
-          'last_name': user.last_name,
-          'password': password,
-          'username': user.username,
-          'gender': user.gender,
-          'email': user.email,
-          'phone_number': user.phonenumber,
-          'url_photo': user.urlphoto,
-        }));
+    var response = await client.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(<String, String>{
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'password': password,
+        'username': user.username,
+        'gender': user.gender,
+        'email': user.email,
+        'phone_number': user.phone_number,
+        'url_photo': user.urlphoto,
+      }),
+    );
 
     if (response.statusCode != 200) {
+      print('StatusCode : ${response.statusCode}');
+      print('data : ${response.body}');
       return ApiReturnValue(message: 'Please try again');
     }
 

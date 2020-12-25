@@ -26,21 +26,43 @@ class _ProfileTabState extends State<ProfileTab> {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                context.read<UserCubit>().signOut();
-                UserState state = context.read<UserCubit>().state;
-                if (state is UserLoaded) {
-                  Get.off(SignInOptionPage());
-                } else {
-                  Get.snackbar(
-                    "Failed",
-                    (state as UserLoadingFailed).message,
-                    backgroundColor: HexColor("D9435E"),
-                    icon: Icon(
-                      Icons.close,
-                      color: Colors.white,
-                    ),
-                  );
-                }
+                Widget cancelButton = FlatButton(
+                  child: Text("Cancel"),
+                  onPressed: () => Navigator.pop(context),
+                );
+                Widget okButton = FlatButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    context.read<UserCubit>().signOut();
+                    UserState state = context.read<UserCubit>().state;
+                    if (state is UserLoaded) {
+                      Get.off(SignInOptionPage());
+                    } else {
+                      Get.snackbar(
+                        "Failed",
+                        (state as UserLoadingFailed).message,
+                        backgroundColor: HexColor("D9435E"),
+                        icon: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
+                      );
+                    }
+                  },
+                );
+                AlertDialog logoutalert = AlertDialog(
+                  title: Text("Logout"),
+                  content: Text("Are you sure want to logout ?"),
+                  actions: [
+                    cancelButton,
+                    okButton,
+                  ],
+                );
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return logoutalert;
+                    });
               },
               child: Icon(
                 Icons.logout,
@@ -52,7 +74,7 @@ class _ProfileTabState extends State<ProfileTab> {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                //action here
+                //Wallet Button
               },
               child: Icon(
                 Icons.account_balance_wallet,
@@ -64,7 +86,7 @@ class _ProfileTabState extends State<ProfileTab> {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                //action here
+                //Chat Button
               },
               child: Icon(
                 Icons.chat,
@@ -76,7 +98,7 @@ class _ProfileTabState extends State<ProfileTab> {
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                //action here
+                //note:More Button
               },
               child: Icon(
                 Icons.more_horiz,

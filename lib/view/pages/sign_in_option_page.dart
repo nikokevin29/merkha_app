@@ -56,10 +56,7 @@ class SignInOptionPage extends StatelessWidget {
                             fontSize: 24, color: accentColor3, fontWeight: FontWeight.w600),
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SignUp1()),
-                        );
+                        Get.to(SignUp1());
                       },
                     ),
                   ),
@@ -77,10 +74,7 @@ class SignInOptionPage extends StatelessWidget {
                             fontSize: 24, color: accentColor3, fontWeight: FontWeight.w600),
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SignInPage()),
-                        );
+                        Get.to(SignInPage());
                       },
                     ),
                   ),

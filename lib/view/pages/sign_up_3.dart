@@ -65,10 +65,9 @@ class _SignUp3State extends State<SignUp3> {
                               setState(() {
                                 isSignup3 = true;
                               });
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => SignUp4()),
-                              );
+                              SharedPreferences signup = await SharedPreferences.getInstance();
+                              signup.setString('gender', selectedGender.join(','));
+                              Get.to(SignUp4());
                             }
                           : null),
                 ),

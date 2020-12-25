@@ -103,7 +103,7 @@ class _SignInPageState extends State<SignInPage> {
                               if (state is UserLoaded) {
                                 // context.read<ProductCubit>().getProduct();
                                 // context.read<OrderCubit>().getOrder();
-                                Navigator.pop(context);
+                                //Navigator.pop(context);
                                 Get.off(MainPage());
                               } else {
                                 Get.snackbar("Failed", "Sign In Failed",

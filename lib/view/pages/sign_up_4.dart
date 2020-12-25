@@ -25,7 +25,24 @@ class _SignUp4State extends State<SignUp4> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 50,
+                height: 15,
+              ),
+              Container(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () {
+                    //tap here
+                    Get.to(SignUp5());
+                  },
+                  child: Text(
+                    "Skip",
+                    style: blackTextFont.copyWith(
+                        fontSize: 24, fontWeight: FontWeight.w100, color: HexColor('#a0a0a0')),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 35,
               ),
               Text(
                 "Choose your\ninterests",

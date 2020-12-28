@@ -15,6 +15,17 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        title: Text('Merkha Login', style: blackTextFont.copyWith()),
+        backgroundColor: Colors.white,
+        leading: BackButton(
+          color: Colors.black,
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: defaultMargin),
         child: SingleChildScrollView(
@@ -96,27 +107,41 @@ class _SignInPageState extends State<SignInPage> {
                               setState(() {
                                 isSigningIn = true;
                               });
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  });
                               await context
                                   .read<UserCubit>()
                                   .signIn(emailController.text, passwordController.text);
+                              Navigator.pop(context);
                               UserState state = context.read<UserCubit>().state;
                               if (state is UserLoaded) {
                                 // context.read<ProductCubit>().getProduct();
                                 // context.read<OrderCubit>().getOrder();
-                                //Navigator.pop(context);
-                                Get.off(MainPage());
+                                SharedPreferences autologin = await SharedPreferences.getInstance();
+                                await autologin.setString('email', emailController.text);
+                                await autologin.setString('password', passwordController.text);
+                                print(autologin);
+                                Get.offAll(MainPage());
                               } else {
-                                Get.snackbar("Failed", "Sign In Failed",
-                                    backgroundColor: HexColor("D9435E"),
-                                    icon: Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    ),
-                                    titleText: Text("Sign In Failed", style: blackTextFont),
-                                    messageText: Text(
-                                      (state as UserLoadingFailed).message,
-                                      style: blackTextFont,
-                                    ));
+                                Get.snackbar(
+                                  "Failed",
+                                  "Sign In Failed",
+                                  backgroundColor: HexColor("D9435E"),
+                                  icon: Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                  ),
+                                  titleText: Text("Sign In Failed", style: blackTextFont),
+                                  messageText: Text(
+                                    (state as UserLoadingFailed).message,
+                                    style: blackTextFont,
+                                  ),
+                                );
                               }
                             }
                           : null),

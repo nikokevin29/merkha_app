@@ -32,11 +32,13 @@ class _ProfileTabState extends State<ProfileTab> {
                 );
                 Widget okButton = FlatButton(
                   child: Text("OK"),
-                  onPressed: () {
+                  onPressed: () async {
                     context.read<UserCubit>().signOut();
                     UserState state = context.read<UserCubit>().state;
                     if (state is UserLoaded) {
-                      Get.off(SignInOptionPage());
+                      SharedPreferences autologin = await SharedPreferences.getInstance();
+                      await autologin.clear();
+                      Get.offAll(SignInOptionPage());
                     } else {
                       Get.snackbar(
                         "Failed",

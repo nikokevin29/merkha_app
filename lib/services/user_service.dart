@@ -56,7 +56,7 @@ class UserServices {
 
     var response = await client.post(
       url,
-      headers: {"Content-Type": "application/json"},
+      headers: {'Content-Type': 'application/json;charset=UTF-8', 'Charset': 'utf-8'},
       body: jsonEncode(<String, String>{
         'first_name': user.first_name,
         'last_name': user.last_name,
@@ -68,14 +68,13 @@ class UserServices {
         'url_photo': user.urlphoto,
       }),
     );
-
+    var data = jsonDecode(response.body);
     if (response.statusCode != 200) {
       print('StatusCode : ${response.statusCode}');
       print('data : ${response.body}');
-      return ApiReturnValue(message: 'Please try again');
-    }
 
-    var data = jsonDecode(response.body);
+      return ApiReturnValue(message: data['meta']['message']);
+    }
 
     User.token = data['data']['access_token'];
     User value = User.fromJson(data['data']['user']);
@@ -116,5 +115,28 @@ class UserServices {
     } else {
       return ApiReturnValue(message: 'Uploading Profile Picture Failed');
     }
+  }
+
+  static Future<ApiReturnValue<String>> sendVerification({http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'email/resend';
+    var response = await client.get(
+      url,
+      headers: {"Content-Type": "application/json", "Authorization": "Bearer " + User.token},
+    );
+
+    var data = jsonDecode(response.body);
+    if (response.statusCode != 200) {
+      print('StatusCode : ${response.statusCode}');
+      print('data : ${response.body}');
+
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+
+    String value = data['meta']['message'];
+
+    return ApiReturnValue(value: value);
   }
 }

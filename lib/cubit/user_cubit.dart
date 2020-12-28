@@ -32,6 +32,7 @@ class UserCubit extends Cubit<UserState> {
     ApiReturnValue<String> result = await UserServices.uploadProfilePicture(pictureFile);
 
     if (result.value != null) {
+      print('Print Upload Photo result.value : ' + result.value);
       emit(UserLoaded((state as UserLoaded).user.copyWith(urlphoto: baseURLphoto + result.value)));
     }
   }
@@ -41,6 +42,16 @@ class UserCubit extends Cubit<UserState> {
     print(result.value);
     if (result.value == null) {
       emit(UserLoadingFailed(result.message));
+    }
+  }
+
+  Future<void> sendVerificationEmail() async {
+    ApiReturnValue<String> result = await UserServices.sendVerification();
+
+    if (result.value != null) {
+      print(result.value);
+      emit(UserLoadingFailed(
+          result.message)); //use UserLoadingFailed karena untuk hanya return message;
     }
   }
 }

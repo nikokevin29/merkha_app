@@ -10,7 +10,6 @@ class SignUp5 extends StatefulWidget {
 }
 
 class _SignUp5State extends State<SignUp5> {
-  //User user = User();
   File pictureFile;
 
   String phone_number;
@@ -41,6 +40,15 @@ class _SignUp5State extends State<SignUp5> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: BackButton(
+          color: Colors.black,
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -120,12 +128,23 @@ class _SignUp5State extends State<SignUp5> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(('$first_name $last_name') ?? 'null',
-                              style: blackTextFont.copyWith(fontSize: 16)),
+                          Text(
+                            ('$first_name $last_name') ?? 'null',
+                            style: blackTextFont.copyWith(fontSize: 16),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           Text(gender ?? 'null', style: blackTextFont.copyWith(fontSize: 16)),
-                          Text(username ?? 'null', style: blackTextFont.copyWith(fontSize: 16)),
+                          Text(
+                            username ?? 'null',
+                            style: blackTextFont.copyWith(fontSize: 16),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           Text(phone_number ?? 'null', style: blackTextFont.copyWith(fontSize: 16)),
-                          Text(email ?? 'null', style: blackTextFont.copyWith(fontSize: 16)),
+                          Text(
+                            email ?? 'null',
+                            style: blackTextFont.copyWith(fontSize: 16),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ],
                       ),
                     ],
@@ -157,6 +176,13 @@ class _SignUp5State extends State<SignUp5> {
                           ),
                         ),
                         onPressed: () async {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              });
                           await context.read<UserCubit>().signUp(
                               User(
                                 email: email,
@@ -168,13 +194,17 @@ class _SignUp5State extends State<SignUp5> {
                               ),
                               password,
                               pictureFile: pictureFile);
+
                           UserState state = context.read<UserCubit>().state;
                           if (state is UserLoaded) {
                             // context.read<ProductCubit>().getProduct();
                             // context.read<OrderCubit>().getOrder();
-                            Get.snackbar("Register Complete", "Check Email for Verify");
-                            Get.off(MainPage());
+                            await context.read<UserCubit>().sendVerificationEmail();
+                            Get.offAll(SignUp6());
+                            Navigator.pop(context);
+                            Get.snackbar("Register Complete", "Check You Email");
                           } else {
+                            Navigator.pop(context);
                             Get.snackbar(
                               "",
                               "",
@@ -185,7 +215,7 @@ class _SignUp5State extends State<SignUp5> {
                               ),
                               titleText: Text("Sign Up Failed", style: blackTextFont),
                               messageText: Text(
-                                (state as UserLoadingFailed).message,
+                                (state as UserLoadingFailed).message ?? 'Kosong',
                                 style: blackTextFont,
                               ),
                             );

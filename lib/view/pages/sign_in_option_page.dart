@@ -1,6 +1,16 @@
 part of 'pages.dart';
 
-class SignInOptionPage extends StatelessWidget {
+class SignInOptionPage extends StatefulWidget {
+  @override
+  _SignInOptionPageState createState() => _SignInOptionPageState();
+}
+
+class _SignInOptionPageState extends State<SignInOptionPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +83,8 @@ class SignInOptionPage extends StatelessWidget {
                         style: blackTextFont.copyWith(
                             fontSize: 24, color: accentColor3, fontWeight: FontWeight.w600),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        //print((email != null) ? 'User Preference ON' : 'User Preference OFF');
                         Get.to(SignInPage());
                       },
                     ),

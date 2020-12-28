@@ -2,8 +2,6 @@ part of 'pages.dart';
 
 //User Interest
 class SignUp4 extends StatefulWidget {
-  final List<String> categoryList = ['miaw', 'meong'];
-  int tag = 1;
   @override
   _SignUp4State createState() => _SignUp4State();
 }
@@ -16,6 +14,15 @@ class _SignUp4State extends State<SignUp4> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: BackButton(
+          color: Colors.black,
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: SafeArea(
             child: Container(

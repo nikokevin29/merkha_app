@@ -18,13 +18,22 @@ class _SignUp2State extends State<SignUp2> {
   TextEditingController passwordController = TextEditingController();
 
   @override
-  void initState() {
-    _passwordVisible = false;
-  }
+  // void initState() {
+  //   _passwordVisible = false;
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: BackButton(
+          color: Colors.black,
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
@@ -127,7 +136,10 @@ class _SignUp2State extends State<SignUp2> {
                           style: blackTextFont.copyWith(
                               fontSize: 16, color: accentColor3, fontWeight: FontWeight.bold),
                         ),
-                        onPressed: (isfirst == true && islast == true && isuser == true && ispass == true)
+                        onPressed: (isfirst == true &&
+                                islast == true &&
+                                isuser == true &&
+                                ispass == true)
                             ? () async {
                                 setState(() {
                                   isSignup2 = true;

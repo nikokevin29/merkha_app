@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:merkha_app/view/pages/pages.dart';
 
 import 'cubit/cubit.dart';
+
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SignInOptionPage(),
+        home: SplashScreen(),
       ),
     );
   }

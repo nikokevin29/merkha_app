@@ -49,6 +49,21 @@ class UserServices {
 
   static Future<ApiReturnValue<User>> signUp(User user, String password,
       {File urlphoto, http.Client client}) async {
+    //Firebase Upload Image
+    String urlpicture;
+    if (urlphoto != null) {
+      String fileName = basename(urlphoto.path);
+      fb_storage.Reference firebaseStorageref =
+          fb_storage.FirebaseStorage.instance.ref('profile').child(fileName);
+      fb_storage.UploadTask uploadTask = firebaseStorageref.putFile(urlphoto);
+
+      fb_storage.TaskSnapshot taskSnapshot = await uploadTask;
+      var downurl = await (taskSnapshot).ref.getDownloadURL();
+      print(taskSnapshot);
+      urlpicture = downurl.toString();
+      print(urlpicture);
+    }
+
     if (client == null) {
       client = http.Client();
     }
@@ -65,7 +80,7 @@ class UserServices {
         'gender': user.gender,
         'email': user.email,
         'phone_number': user.phone_number,
-        'url_photo': user.urlphoto,
+        'url_photo': urlpicture,
       }),
     );
     var data = jsonDecode(response.body);
@@ -79,14 +94,34 @@ class UserServices {
     User.token = data['data']['access_token'];
     User value = User.fromJson(data['data']['user']);
 
-    if (urlphoto != null) {
-      ApiReturnValue<String> result = await uploadProfilePicture(urlphoto);
-      if (result.value != null) {
-        value = value.copyWith(urlphoto: baseURLphoto + result.value);
-      }
-    }
+    // Laravel Upload
+    // if (urlphoto != null) {
+    //   ApiReturnValue<String> result = await uploadProfilePicture(urlphoto);
+    //   if (result.value != null) {
+    //     value = value.copyWith(urlphoto: baseURLphoto + result.value);
+    //   }
+    // }
 
     return ApiReturnValue(value: value);
+  }
+
+  static Future<String> uploadProfileFirebase(File urlphoto) async {
+    if (urlphoto != null) {
+      String fileName = basename(urlphoto.path);
+      fb_storage.Reference firebaseStorageref =
+          fb_storage.FirebaseStorage.instance.ref('profile').child(fileName);
+      fb_storage.UploadTask uploadTask = firebaseStorageref.putFile(urlphoto);
+
+      fb_storage.TaskSnapshot taskSnapshot = await uploadTask;
+      var downurl = await (taskSnapshot).ref.getDownloadURL();
+      print(taskSnapshot);
+      String url = downurl.toString();
+
+      return url;
+    } else {
+      print('Photo Profile null');
+      return null;
+    }
   }
 
   static Future<ApiReturnValue<String>> uploadProfilePicture(File pictureFile,

@@ -46,9 +46,9 @@ class _SignUp6State extends State<SignUp6> {
                     initialTimer: 60, // Optional
                     height: 50,
                     width: MediaQuery.of(context).size.width * 0.45,
-                    minWidth: MediaQuery.of(context).size.width * 0.30,
+                    minWidth: MediaQuery.of(context).size.width * 0.45,
                     color: accentColor2,
-                    borderRadius: 5.0,
+                    borderRadius: 30.0,
                     child: Text(
                       "Resend Email",
                       style:
@@ -56,7 +56,7 @@ class _SignUp6State extends State<SignUp6> {
                     ),
                     loader: (timeLeft) {
                       return Text(
-                        "Resend Email | $timeLeft",
+                        "Resend in $timeLeft",
                         style: blackTextFont.copyWith(
                             fontSize: 18, color: accentColor3, fontWeight: FontWeight.w600),
                       );
@@ -82,7 +82,18 @@ class _SignUp6State extends State<SignUp6> {
                         style: blackTextFont.copyWith(
                             fontSize: 18, color: accentColor3, fontWeight: FontWeight.w600),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        Get.defaultDialog(
+                          barrierDismissible: true,
+                          content: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                        SharedPreferences autologin = await SharedPreferences.getInstance();
+                        String email = autologin.getString('email');
+                        String password = autologin.getString('password');
+                        await context.read<UserCubit>().signIn(email, password);
+                        Get.back();
                         Get.offAll(MainPage());
                       },
                     ),

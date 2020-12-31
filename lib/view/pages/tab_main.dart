@@ -33,7 +33,7 @@ class _MainTabState extends State<MainTab> {
               //     ),
               //   ),
               // ),
-              
+
               //note: Greetings
               SafeArea(
                 child: Container(
@@ -48,11 +48,12 @@ class _MainTabState extends State<MainTab> {
                           style: blackTextFont.copyWith(fontWeight: FontWeight.w400, fontSize: 25),
                         ),
                         Text(
-                          "Nicholas",
+                          (context.watch<UserCubit>().state as UserLoaded).user.first_name ??
+                              CircularProgressIndicator(), //First Name
+                          style: blackTextFont.copyWith(fontSize: 25, fontWeight: FontWeight.w400),
+                          overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          overflow: TextOverflow.clip,
-                          style: blackTextFont.copyWith(fontWeight: FontWeight.w600, fontSize: 25),
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -100,9 +101,9 @@ class _MainTabState extends State<MainTab> {
                 ),
                 //Carousel
                 CarouselSlider.builder(
-                  itemCount: 5,
+                  itemCount: 7,
                   options: CarouselOptions(
-                    height: 150.0,
+                    height: 200.0,
                     autoPlay: true,
                     autoPlayInterval: Duration(seconds: 3),
                     enlargeCenterPage: true,
@@ -110,7 +111,7 @@ class _MainTabState extends State<MainTab> {
                   itemBuilder: (context, index) {
                     return Container(
                       child: Center(
-                          child: Image.network(images[index], fit: BoxFit.cover, width: 1000)),
+                          child: Image.network(images[index], fit: BoxFit.cover, width: 1200)),
                     );
                   },
                 ),

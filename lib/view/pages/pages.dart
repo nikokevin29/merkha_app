@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:merkha_app/cubit/cubit.dart';
 import 'package:merkha_app/models/models.dart';
 import 'package:merkha_app/services/services.dart';
@@ -19,6 +22,7 @@ import 'package:smart_select/smart_select.dart';
 import 'package:async/async.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
+import 'package:lorem_ipsum/lorem_ipsum.dart';
 
 part 'sign_in_page.dart';
 part 'main_page.dart';

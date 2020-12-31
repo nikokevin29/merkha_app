@@ -70,8 +70,11 @@ class _SignUp5State extends State<SignUp5> {
                 Center(
                   child: GestureDetector(
                     onTap: () async {
-                      PickedFile pickedFile =
-                          await ImagePicker().getImage(source: ImageSource.gallery);
+                      PickedFile pickedFile = await ImagePicker().getImage(
+                        source: ImageSource.gallery,
+                        maxWidth: 800,
+                        maxHeight: 600,
+                      );
                       if (pickedFile != null) {
                         pictureFile = File(pickedFile.path);
                         setState(() {});
@@ -176,13 +179,12 @@ class _SignUp5State extends State<SignUp5> {
                           ),
                         ),
                         onPressed: () async {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              });
+                          Get.defaultDialog(
+                            barrierDismissible: true,
+                            content: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
                           await context.read<UserCubit>().signUp(
                               User(
                                 email: email,
@@ -197,14 +199,17 @@ class _SignUp5State extends State<SignUp5> {
 
                           UserState state = context.read<UserCubit>().state;
                           if (state is UserLoaded) {
-                            // context.read<ProductCubit>().getProduct();
-                            // context.read<OrderCubit>().getOrder();
                             await context.read<UserCubit>().sendVerificationEmail();
+
+                            SharedPreferences autologin = await SharedPreferences.getInstance();
+                            await autologin.setString('email', email);
+                            await autologin.setString('password', password);
+
+                            Get.back();
                             Get.offAll(SignUp6());
-                            Navigator.pop(context);
                             Get.snackbar("Register Complete", "Check You Email");
                           } else {
-                            Navigator.pop(context);
+                            Get.back();
                             Get.snackbar(
                               "",
                               "",

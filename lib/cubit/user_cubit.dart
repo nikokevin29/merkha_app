@@ -28,12 +28,16 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> uploadProfilePicture(File pictureFile) async {
-    ApiReturnValue<String> result = await UserServices.uploadProfilePicture(pictureFile);
+  Future<void> uploadProfileFirebase(File pictureFile) async {
+    String result = await UserServices.uploadProfileFirebase(pictureFile);
 
-    if (result.value != null) {
-      print('Print Upload Photo result.value : ' + result.value);
-      emit(UserLoaded((state as UserLoaded).user.copyWith(urlphoto: baseURLphoto + result.value)));
+    if (result != null) {
+      print('Print Upload Photo result : ' + result);
+      emit(
+        UserLoaded(
+          (state as UserLoaded).user.copyWith(urlphoto: result),
+        ),
+      );
     }
   }
 
@@ -50,8 +54,9 @@ class UserCubit extends Cubit<UserState> {
 
     if (result.value != null) {
       print(result.value);
-      emit(UserLoadingFailed(
-          result.message)); //use UserLoadingFailed karena untuk hanya return message;
+      emit(
+        UserLoadingFailed(result.message),
+      ); //use UserLoadingFailed karena untuk hanya return message;
     }
   }
 }

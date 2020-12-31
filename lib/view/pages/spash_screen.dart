@@ -12,19 +12,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     sharedPreferences();
-    Future.delayed(Duration(seconds: 1), () async {
+    Future.delayed(Duration(seconds: 2), () async {
       print(email);
       print(password);
       if (email != null && password != null) {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            });
         await context.read<UserCubit>().signIn(email, password);
-        Navigator.pop(context);
         Get.offAll(MainPage());
       } else {
         Get.offAll(SignInOptionPage());

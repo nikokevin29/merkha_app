@@ -120,8 +120,11 @@ class _SignUp4State extends State<SignUp4> {
                         style: blackTextFont.copyWith(
                             fontSize: 16, color: accentColor3, fontWeight: FontWeight.bold),
                       ),
-                      onPressed: (selectedCat.length != 0)
+                      onPressed: (selectedCat.length != 0 && selectedCat.length > 5)
                           ? () async {
+                              if (selectedCat.length > 5) {
+                                Get.snackbar('User Interest', 'Maximum Choice is 5');
+                              }
                               Get.to(SignUp5(selectedCat: selectedCat));
                             }
                           : null),

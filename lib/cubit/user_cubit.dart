@@ -54,9 +54,6 @@ class UserCubit extends Cubit<UserState> {
 
     if (result.value != null) {
       print(result.value);
-      emit(
-        UserLoadingFailed(result.message),
-      ); //use UserLoadingFailed karena untuk hanya return message;
     }
   }
 

@@ -71,11 +71,16 @@ class _ProfileTabState extends State<ProfileTab> {
   }
 }
 
-class Order extends StatelessWidget {
+class Order extends StatefulWidget {
   const Order({
     Key key,
   }) : super(key: key);
 
+  @override
+  _OrderState createState() => _OrderState();
+}
+
+class _OrderState extends State<Order> {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -87,11 +92,16 @@ class Order extends StatelessWidget {
   }
 }
 
-class Post extends StatelessWidget {
+class Post extends StatefulWidget {
   const Post({
     Key key,
   }) : super(key: key);
 
+  @override
+  _PostState createState() => _PostState();
+}
+
+class _PostState extends State<Post> {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
@@ -116,7 +126,7 @@ class AppBarProfile extends StatelessWidget {
       backgroundColor: Colors.white,
       leading: GestureDetector(
         onTap: () {
-          //action here
+          //Add Posting Button
         },
         child: Icon(
           Icons.add,
@@ -125,69 +135,99 @@ class AppBarProfile extends StatelessWidget {
       ),
       elevation: 0,
       actions: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GestureDetector(
-            onTap: () {
-              Widget cancelButton = FlatButton(
-                child: Text("Cancel"),
-                onPressed: () => Navigator.pop(context),
-              );
-              Widget okButton = FlatButton(
-                child: Text("OK"),
-                onPressed: () async {
-                  context.read<UserCubit>().signOut();
-                  UserState state = context.read<UserCubit>().state;
-                  if (state is UserLoaded) {
-                    SharedPreferences autologin = await SharedPreferences.getInstance();
-                    await autologin.clear();
-                    Get.offAll(SignInOptionPage());
-                  } else {
-                    Get.snackbar(
-                      "Failed",
-                      (state as UserLoadingFailed).message,
-                      backgroundColor: HexColor("D9435E"),
-                      icon: Icon(
-                        Icons.close,
-                        color: Colors.white,
+        PopupMenuButton(
+          icon: Icon(Icons.more_vert, color: Colors.grey),
+          itemBuilder: (context) => [
+            PopupMenuItem(
+                value: 'updateProfile',
+                child: GestureDetector(
+                  onTap: () {
+                    //
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.person,
+                        color: Colors.grey,
                       ),
-                    );
-                  }
-                },
-              );
-              AlertDialog logoutalert = AlertDialog(
-                title: Text("Logout"),
-                content: Text("Are you sure want to logout ?"),
-                actions: [
-                  cancelButton,
-                  okButton,
-                ],
-              );
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return logoutalert;
-                  });
-            },
-            child: Icon(
-              Icons.logout,
-              color: Colors.grey,
+                      Text(' Update Profile'),
+                    ],
+                  ),
+                )),
+            PopupMenuItem(
+              value: '2',
+              child: Text('Choice 2'),
             ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GestureDetector(
-            onTap: () {
-              //note:More Button
-            },
-            child: Icon(
-              Icons.more_horiz,
-              color: Colors.grey,
+            PopupMenuItem(
+              value: 'logout',
+              child: Logout(),
             ),
-          ),
+          ],
         ),
       ],
+    );
+  }
+}
+
+class Logout extends StatelessWidget {
+  const Logout({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      //Sign Out Button
+      onTap: () {
+        Widget cancelButton = FlatButton(
+          child: Text("Cancel"),
+          onPressed: () => Navigator.pop(context),
+        );
+        Widget okButton = FlatButton(
+          child: Text("OK"),
+          onPressed: () async {
+            context.read<UserCubit>().signOut();
+            UserState state = context.read<UserCubit>().state;
+            if (state is UserLoaded) {
+              SharedPreferences autologin = await SharedPreferences.getInstance();
+              await autologin.clear();
+              Get.offAll(SignInOptionPage());
+            } else {
+              Get.snackbar(
+                "Failed",
+                (state as UserLoadingFailed).message,
+                backgroundColor: HexColor("D9435E"),
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
+              );
+            }
+          },
+        );
+        AlertDialog logoutalert = AlertDialog(
+          title: Text("Logout"),
+          content: Text("Are you sure want to logout ?"),
+          actions: [
+            cancelButton,
+            okButton,
+          ],
+        );
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return logoutalert;
+            });
+      },
+      child: Row(
+        children: [
+          Icon(
+            Icons.logout,
+            color: Colors.grey,
+          ),
+          Text(' Sign Out'),
+        ],
+      ),
     );
   }
 }
@@ -245,28 +285,111 @@ Column buildHeader(BuildContext context) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //Profile Photo
-                  Container(
-                    padding: EdgeInsets.all(1),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 2)),
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          width: 55,
-                          height: 55,
-                          decoration: BoxDecoration(
+                  Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(1),
+                        decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: (NetworkImage(
-                                    (context.watch<UserCubit>().state as UserLoaded)
-                                            .user
-                                            .urlphoto ??
-                                        '')),
-                                fit: BoxFit.cover),
-                          ),
+                            border: Border.all(color: Colors.white, width: 2)),
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              width: 55,
+                              height: 55,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: ((context.watch<UserCubit>().state as UserLoaded)
+                                                .user
+                                                .urlphoto !=
+                                            null)
+                                        ? NetworkImage(
+                                            (context.watch<UserCubit>().state as UserLoaded)
+                                                .user
+                                                .urlphoto)
+                                        : AssetImage("assets/defaultProfile.png"),
+                                    fit: BoxFit.cover),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                  ((context.watch<UserCubit>().state as UserLoaded)
+                                              .user
+                                              .email_verified_at !=
+                                          null)
+                                      ? Icons.verified
+                                      : Icons.cancel,
+                                  color: ((context.watch<UserCubit>().state as UserLoaded)
+                                              .user
+                                              .email_verified_at !=
+                                          null)
+                                      ? Colors.green
+                                      : Colors.red),
+                              Text(
+                                ((context.watch<UserCubit>().state as UserLoaded)
+                                            .user
+                                            .email_verified_at !=
+                                        null)
+                                    ? 'Verified'
+                                    : 'Not Verified',
+                                style: blackTextFont.copyWith(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            child: ((context.watch<UserCubit>().state as UserLoaded)
+                                        .user
+                                        .email_verified_at ==
+                                    null)
+                                ? ArgonTimerButton(
+                                    initialTimer: 0,
+                                    height: 25,
+                                    width: MediaQuery.of(context).size.width * 0.2,
+                                    minWidth: MediaQuery.of(context).size.width * 0.2,
+                                    borderRadius: 15.0,
+                                    color: accentColor2,
+                                    child: Text(
+                                      ((context.watch<UserCubit>().state as UserLoaded)
+                                                  .user
+                                                  .email_verified_at ==
+                                              null)
+                                          ? 'Verify Now'
+                                          : '',
+                                      style: blackTextFont.copyWith(
+                                        fontSize: 14,
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    loader: (timeLeft) {
+                                      return Text(
+                                        "$timeLeft",
+                                        style: blackTextFont.copyWith(
+                                          fontSize: 14,
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      );
+                                    },
+                                    onTap: (startTimer, btnState) async {
+                                      if (btnState == ButtonState.Idle) {
+                                        startTimer(60);
+                                        await context.read<UserCubit>().sendVerificationEmail();
+                                      }
+                                    },
+                                  )
+                                : Container(),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                   Flexible(
                     child: Container(
@@ -304,7 +427,7 @@ Column buildHeader(BuildContext context) {
                               Row(
                                 children: [
                                   Text(NumberFormat.compactCurrency(decimalDigits: 0, symbol: '')
-                                      .format(12)),
+                                      .format(99999999)),
                                   Text(' Posts'),
                                 ],
                               ),

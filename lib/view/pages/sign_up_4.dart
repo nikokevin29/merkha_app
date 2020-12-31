@@ -82,7 +82,10 @@ class _SignUp4State extends State<SignUp4> {
                           onChange: (state) => setState(() => selectedCat = state.value),
                           choiceDirection: Axis.vertical,
                           tileBuilder: (context, state) {
-                            print(selectedCat);
+                            print(selectedCat); // This Value being update by change in Framework
+                            // for (int i = 0; i < selectedCat.length; i++) {
+                            //   print(selectedCat[i]);
+                            // }
                             return S2Tile.fromState(
                               state,
                               isTwoLine: true,
@@ -98,6 +101,30 @@ class _SignUp4State extends State<SignUp4> {
                       return CircularProgressIndicator();
                     }
                   },
+                ),
+              ),
+              Divider(
+                height: 30,
+              ),
+              Container(
+                alignment: Alignment.bottomRight,
+                child: SizedBox(
+                  width: 150,
+                  height: 50,
+                  child: FlatButton(
+                      disabledColor: Color(0xFFE4E4E4),
+                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                      color: accentColor2,
+                      child: Text(
+                        "Next",
+                        style: blackTextFont.copyWith(
+                            fontSize: 16, color: accentColor3, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: (selectedCat.length != 0)
+                          ? () async {
+                              Get.to(SignUp5(selectedCat: selectedCat));
+                            }
+                          : null),
                 ),
               )
             ],

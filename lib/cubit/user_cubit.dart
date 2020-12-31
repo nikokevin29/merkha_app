@@ -45,7 +45,7 @@ class UserCubit extends Cubit<UserState> {
     ApiReturnValue<User> result = await UserServices.signOut();
     print(result.value);
     if (result.value == null) {
-      emit(UserLoadingFailed(result.message));
+      print('Sign Out Message : ' + result.message);
     }
   }
 
@@ -57,6 +57,15 @@ class UserCubit extends Cubit<UserState> {
       emit(
         UserLoadingFailed(result.message),
       ); //use UserLoadingFailed karena untuk hanya return message;
+    }
+  }
+
+  Future<void> uploadUserInterest(String value) async {
+    ApiReturnValue<String> result = await UserServices.uploadUserInterest(value: value);
+
+    if (result.value != null) {
+      print(result.value);
+      emit(UserLoadingFailed(result.message));
     }
   }
 }

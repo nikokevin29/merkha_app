@@ -5,6 +5,8 @@ class SignUp5 extends StatefulWidget {
   // // final String password;
   // // final File pictureFile;
   // SignUp5({this.user /*, this.password, this.pictureFile */});
+  final List<String> selectedCat;
+  SignUp5({this.selectedCat});
   @override
   _SignUp5State createState() => _SignUp5State();
 }
@@ -20,6 +22,7 @@ class _SignUp5State extends State<SignUp5> {
   String email;
   String password;
   getSignUpData() async {
+    print('this is in SignUp 5 and has interest value ' + widget.selectedCat.toString());
     SharedPreferences signup = await SharedPreferences.getInstance();
     setState(() {
       phone_number = signup.getString('phone_number');
@@ -181,6 +184,7 @@ class _SignUp5State extends State<SignUp5> {
                         onPressed: () async {
                           Get.defaultDialog(
                             barrierDismissible: true,
+                            title: '',
                             content: Center(
                               child: CircularProgressIndicator(),
                             ),
@@ -204,6 +208,17 @@ class _SignUp5State extends State<SignUp5> {
                             SharedPreferences autologin = await SharedPreferences.getInstance();
                             await autologin.setString('email', email);
                             await autologin.setString('password', password);
+
+                            await context.read<UserCubit>().signIn(email, password);
+
+                            if (widget.selectedCat != null) {
+                              for (int i = 0; i < widget.selectedCat.length; i++) {
+                                print('Widget ' + widget.selectedCat[i]);
+                                await context
+                                    .read<UserCubit>()
+                                    .uploadUserInterest(widget.selectedCat[i]);
+                              }
+                            }
 
                             Get.back();
                             Get.offAll(SignUp6());

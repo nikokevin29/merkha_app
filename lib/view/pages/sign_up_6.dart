@@ -78,12 +78,13 @@ class _SignUp6State extends State<SignUp6> {
                       color: accentColor2,
                       shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                       child: Text(
-                        "Force Login",
+                        "Go To Home",
                         style: blackTextFont.copyWith(
                             fontSize: 18, color: accentColor3, fontWeight: FontWeight.w600),
                       ),
                       onPressed: () async {
                         Get.defaultDialog(
+                          backgroundColor: Colors.transparent,
                           barrierDismissible: true,
                           content: Center(
                             child: CircularProgressIndicator(),

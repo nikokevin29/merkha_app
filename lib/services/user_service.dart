@@ -174,4 +174,25 @@ class UserServices {
 
     return ApiReturnValue(value: value);
   }
+
+  static Future<ApiReturnValue<String>> uploadUserInterest(
+      {http.Client client, String value}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'user/interest/' + value;
+    var response = await client.post(
+      url,
+      headers: {"Content-Type": "application/json", "Authorization": "Bearer " + User.token},
+    );
+
+    if (response.statusCode != 200) {
+      print('StatusCode Upload Interest : ${response.statusCode}');
+      //print('data : ${response.body}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    String values = data['meta']['message'];
+    return ApiReturnValue(value: values);
+  }
 }

@@ -78,17 +78,23 @@ class _SignInPageState extends State<SignInPage> {
                 padding: const EdgeInsets.all(4.0),
                 child: Row(
                   children: <Widget>[
-                    // Text(
-                    //   "Forget Password ? ",
-                    //   style: greyTextFont.copyWith(fontSize: 12, fontWeight: FontWeight.w400),
-                    // ),
-                    // Text(
-                    //   "Click here",
-                    //   style: purpleTextFont.copyWith(fontSize: 12, fontWeight: FontWeight.w400),
-                    // )
+                    Text(
+                      "Forget Password ? ",
+                      style: greyTextFont.copyWith(fontSize: 12, fontWeight: FontWeight.w400),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(ResetPasswordPage());
+                      },
+                      child: Text(
+                        "Click here",
+                        style: purpleTextFont.copyWith(fontSize: 12, fontWeight: FontWeight.w400),
+                      ),
+                    )
                   ],
                 ),
               ),
+              SizedBox(height: 15),
               Center(
                 child: SizedBox(
                   width: 150,

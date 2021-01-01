@@ -39,3 +39,4 @@ part 'tab_feed.dart';
 part 'tab_main.dart';
 part 'tab_wishlist.dart';
 part 'spash_screen.dart';
+part 'reset_password_page.dart';

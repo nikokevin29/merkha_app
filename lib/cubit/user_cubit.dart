@@ -65,4 +65,12 @@ class UserCubit extends Cubit<UserState> {
       emit(UserLoadingFailed(result.message));
     }
   }
+
+  Future<void> resetPassword(String email) async {
+    ApiReturnValue<String> result = await UserServices.resetPassword(email: email);
+    if (result.value != null) {
+      print(result.value);
+      print(result.message);
+    }
+  }
 }

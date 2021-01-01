@@ -195,4 +195,25 @@ class UserServices {
     String values = data['meta']['message'];
     return ApiReturnValue(value: values);
   }
+
+  static Future<ApiReturnValue<String>> resetPassword({http.Client client, String email}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'password/email';
+    var response = await client.post(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(<String, String>{'email': email}),
+    );
+    if (response.statusCode != 200) {
+      return ApiReturnValue(message: 'StatusCode reset Password : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    String values = data['meta']['message'];
+    print(values);
+    return ApiReturnValue(value: values);
+  }
 }

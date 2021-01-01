@@ -12,6 +12,6 @@ import 'package:path/path.dart';
 part 'product_service.dart';
 part 'user_service.dart';
 
-String baseURL = "http://192.168.1.9:8000/api/";
+String baseURL = "http://192.168.1.12:8000/api/";
 
-String baseURLphoto = "http://192.168.1.9:8000/storage/";
+String baseURLphoto = "http://192.168.1.12:8000/storage/";

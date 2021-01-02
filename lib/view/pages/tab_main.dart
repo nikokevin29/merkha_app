@@ -18,27 +18,15 @@ class _MainTabState extends State<MainTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Stack(
-            children: [
-              //note: Image
-              // Container(
-              //   height: MediaQuery.of(context).size.height * 0.21,
-              //   width: MediaQuery.of(context).size.width,
-              //   decoration: BoxDecoration(
-              //     image: DecorationImage(
-              //       fit: BoxFit.cover,
-              //       image: AssetImage("assets/example1.png"),
-              //     ),
-              //   ),
-              // ),
-
-              //note: Greetings
-              SafeArea(
-                child: Container(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+            child: Column(
+              children: [
+                Container(
+                  //note: Greetings
                   margin: EdgeInsets.only(top: 5),
-                  padding: EdgeInsets.symmetric(horizontal: defaultMargin),
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width - 2 * defaultMargin,
                     child: Row(
@@ -58,77 +46,80 @@ class _MainTabState extends State<MainTab> {
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Container(
-            margin: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height * 0.12,
-            ),
-            child: ListView(
-              padding: EdgeInsets.only(left: defaultMargin, right: defaultMargin),
-              children: [
-                //note : Search Box
-                SizedBox(
-                  height: 15,
-                ),
-                Material(
-                  borderRadius: BorderRadius.circular(20.0),
-                  elevation: 20,
-                  child: TextFormField(
-                    controller: null,
-                    autofocus: false,
-                    style: TextStyle(fontSize: 16.0, color: Color(0xFFbdc6cf)),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      prefixIcon: Icon(Icons.search),
-                      hintText: 'What are you looking for?',
-                      contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 14.0),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                //Carousel
-                CarouselSlider.builder(
-                  itemCount: 7,
-                  options: CarouselOptions(
-                    height: 200.0,
-                    autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 3),
-                    enlargeCenterPage: true,
-                  ),
-                  itemBuilder: (context, index) {
-                    return Container(
-                      child: Center(
-                          child: Image.network(images[index], fit: BoxFit.cover, width: 1200)),
-                    );
-                  },
-                ),
+                //here
                 Container(
-                  margin: EdgeInsets.fromLTRB(defaultMargin, 30, defaultMargin, 12),
-                  child: Text(
-                    "Categories",
-                    style: blackTextFont.copyWith(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Column(
+                    children: [
+                      //note : Search Box
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        elevation: 20,
+                        child: TextFormField(
+                          controller: null,
+                          autofocus: false,
+                          style: TextStyle(fontSize: 16.0, color: Color(0xFFbdc6cf)),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            prefixIcon: Icon(Icons.search),
+                            hintText: 'What are you looking for?',
+                            contentPadding:
+                                const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 14.0),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      //Carousel
+                      CarouselSlider.builder(
+                        itemCount: 7,
+                        options: CarouselOptions(
+                          height: 200.0,
+                          autoPlay: true,
+                          autoPlayInterval: Duration(seconds: 3),
+                          enlargeCenterPage: true,
+                        ),
+                        itemBuilder: (context, index) {
+                          return Container(
+                            child: Center(
+                                child:
+                                    Image.network(images[index], fit: BoxFit.cover, width: 1200)),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Categories",
+                          style: blackTextFont.copyWith(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      
+                    ],
                   ),
                 ),
               ],
             ),
-          )
-        ],
+          ),
+        ),
       ),
     );
   }

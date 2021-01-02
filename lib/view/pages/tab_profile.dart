@@ -71,49 +71,6 @@ class _ProfileTabState extends State<ProfileTab> {
   }
 }
 
-class Order extends StatefulWidget {
-  const Order({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _OrderState createState() => _OrderState();
-}
-
-class _OrderState extends State<Order> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.zero,
-      children: Colors.primaries.map((color) {
-        return Container(color: color, height: 150.0);
-      }).toList(),
-    );
-  }
-}
-
-class Post extends StatefulWidget {
-  const Post({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _PostState createState() => _PostState();
-}
-
-class _PostState extends State<Post> {
-  @override
-  Widget build(BuildContext context) {
-    return GridView.count(
-      padding: EdgeInsets.zero,
-      crossAxisCount: 3,
-      children: Colors.primaries.map((color) {
-        return Container(color: color, height: 150.0);
-      }).toList(),
-    );
-  }
-}
-
 //TODO: App Bar
 class AppBarProfile extends StatelessWidget {
   const AppBarProfile({
@@ -140,9 +97,9 @@ class AppBarProfile extends StatelessWidget {
           itemBuilder: (context) => [
             PopupMenuItem(
                 value: 'updateProfile',
-                child: GestureDetector(
+                child: InkWell(
                   onTap: () {
-                    //
+                    Get.to(ProfileUpdate());
                   },
                   child: Row(
                     children: [

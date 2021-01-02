@@ -12,6 +12,32 @@ class WishlishTab extends StatelessWidget {
           style: blackTextFont.copyWith(fontSize: 24),
         ),
       ),
+      body: SafeArea(
+          child: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
+          child: Column(
+            children: [
+              Center(
+                child: Wrap(
+                  alignment: WrapAlignment.end,
+                  direction: Axis.horizontal,
+                  spacing: 10,
+                  runSpacing: 15,
+                  children: [
+                    ItemCard(),
+                    ItemCard(),
+                    ItemCard(),
+                    ItemCard(),
+                    ItemCard(),
+                    ItemCard(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      )),
     );
   }
 }

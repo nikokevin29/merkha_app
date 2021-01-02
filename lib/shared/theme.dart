@@ -17,4 +17,4 @@ TextStyle greyTextFont =
     GoogleFonts.roboto().copyWith(color: accentColor3, fontWeight: FontWeight.w500);
 
 TextStyle whiteNumberFont = GoogleFonts.openSans().copyWith(color: Colors.white);
-TextStyle yellowNumberFont = GoogleFonts.openSans().copyWith(color: accentColor2);
+TextStyle redNumberFont = GoogleFonts.openSans().copyWith(color: HexColor('#DB0B00'));

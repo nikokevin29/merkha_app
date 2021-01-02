@@ -47,6 +47,7 @@ dev_dependencies:
   firebase_storage: ^5.2.0
   flutter_spinkit: ^4.1.2+1
   lorem_ipsum: ^0.0.1
+  material_design_icons_flutter: ^4.0.5755
   shared_preferences: ^0.5.12+4
   smart_select: ^4.3.2
 

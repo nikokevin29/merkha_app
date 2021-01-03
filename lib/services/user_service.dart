@@ -47,6 +47,87 @@ class UserServices {
     return ApiReturnValue(message: messeage);
   }
 
+  static Future<ApiReturnValue<User>> updateProfile(
+      {File urlphoto, http.Client client, User user}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'user';
+    String token = User.token;
+
+    String urlpicture;
+    if (urlphoto != null) {
+      String fileName = basename(urlphoto.path);
+      fb_storage.Reference firebaseStorageref =
+          fb_storage.FirebaseStorage.instance.ref('profile').child(fileName);
+      fb_storage.UploadTask uploadTask = firebaseStorageref.putFile(urlphoto);
+
+      fb_storage.TaskSnapshot taskSnapshot = await uploadTask;
+      var downurl = await (taskSnapshot).ref.getDownloadURL();
+      print(taskSnapshot);
+      urlpicture = downurl.toString();
+
+      var response = await client.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+        body: jsonEncode(<String, String>{
+          'first_name': user.first_name,
+          'last_name': user.last_name,
+          'username': user.username,
+          'gender': user.gender,
+          'email': user.email,
+          'phone_number': user.phone_number,
+          'bio': user.bio,
+          'url_photo': urlpicture,
+        }),
+      );
+
+      var data = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        print('StatusCode : ${response.statusCode}');
+        print('data : ${response.body}');
+
+        return ApiReturnValue(message: data['meta']['message']);
+      }
+      print(data['data']);
+      User value = User.fromJson(data['data']);
+      return ApiReturnValue(value: value);
+    } else {
+      var response = await client.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+        body: jsonEncode(<String, String>{
+          'first_name': user.first_name,
+          'last_name': user.last_name,
+          'username': user.username,
+          'gender': user.gender,
+          'email': user.email,
+          'phone_number': user.phone_number,
+          'bio': user.bio,
+        }),
+      );
+
+      var data = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        print('StatusCode : ${response.statusCode}');
+        print('data : ${response.body}');
+
+        return ApiReturnValue(message: data['meta']['message']);
+      }
+      print(data['data']);
+      User value = User.fromJson(data['data']);
+      return ApiReturnValue(value: value);
+    }
+  }
+
   static Future<ApiReturnValue<User>> signUp(User user, String password,
       {File urlphoto, http.Client client}) async {
     //Firebase Upload Image

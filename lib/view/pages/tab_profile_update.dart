@@ -6,23 +6,22 @@ class ProfileUpdate extends StatefulWidget {
 }
 
 class _ProfileUpdateState extends State<ProfileUpdate> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
   List<String> gender = ['Male', 'Female', 'Not Preter Yet'];
   String _selectedGender;
   bool isEmailValid = false;
   File pictureFile;
-  bool isfirst = false;
-  bool islast = false;
-  bool isuser = false;
-  bool ispass = false;
-  bool isphone = false;
+  String email, username, firstName, lastName, phone, selectedGen, bio; //Setter
+  String _email, _username, _firstName, _lastName, _phone, _bio; //Getter
   @override
   Widget build(BuildContext context) {
+    email = (context.watch<UserCubit>().state as UserLoaded).user.email ?? '';
+    username = (context.watch<UserCubit>().state as UserLoaded).user.username ?? '';
+    firstName = (context.watch<UserCubit>().state as UserLoaded).user.first_name ?? '';
+    lastName = (context.watch<UserCubit>().state as UserLoaded).user.last_name ?? '';
+    phone = (context.watch<UserCubit>().state as UserLoaded).user.phone_number ?? '';
+    selectedGen = (context.watch<UserCubit>().state as UserLoaded).user.gender ?? '';
+    bio = (context.watch<UserCubit>().state as UserLoaded).user.bio ?? '';
+    _selectedGender = (context.watch<UserCubit>().state as UserLoaded).user.gender;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -73,18 +72,18 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                           : Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                image: DecorationImage( 
-                                    image: NetworkImage(
-                                      ((context.watch<UserCubit>().state as UserLoaded)
-                                                  .user
-                                                  .urlphoto !=
-                                              null)
-                                          ? (context.watch<UserCubit>().state as UserLoaded)
+                                image: DecorationImage(
+                                  image: ((context.watch<UserCubit>().state as UserLoaded)
                                               .user
-                                              .urlphoto
-                                          : AssetImage("assets/defaultProfile.png"),
-                                    ),
-                                    fit: BoxFit.cover),
+                                              .urlphoto !=
+                                          null)
+                                      ? NetworkImage(
+                                          (context.watch<UserCubit>().state as UserLoaded)
+                                              .user
+                                              .urlphoto)
+                                      : AssetImage("assets/defaultProfile.png"),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                     ),
@@ -93,55 +92,56 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 SizedBox(height: 50),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
-                  controller: emailController,
+                  initialValue: email,
                   decoration: InputDecoration(prefixIcon: Icon(MdiIcons.email), labelText: "Email"),
                   onChanged: (text) {
                     setState(() {
-                      isEmailValid = EmailValidator.validate(text.trim());
+                      _email = text;
+                      //isEmailValid = EmailValidator.validate(text.trim());
                     });
                   },
                 ),
                 TextFormField(
                   keyboardType: TextInputType.name,
-                  controller: usernameController,
+                  initialValue: username,
                   decoration:
                       InputDecoration(prefixIcon: Icon(MdiIcons.account), labelText: "Username"),
                   onChanged: (text) {
                     setState(() {
-                      text != '' ? isuser = true : isuser = false;
+                      _username = text;
                     });
                   },
                 ),
                 TextFormField(
                   keyboardType: TextInputType.name,
-                  controller: firstNameController,
+                  initialValue: firstName,
                   decoration:
                       InputDecoration(prefixIcon: Icon(MdiIcons.account), labelText: "First Name"),
                   onChanged: (text) {
                     setState(() {
-                      text != '' ? isfirst = true : isfirst = false;
+                      _firstName = text;
                     });
                   },
                 ),
                 TextFormField(
                   keyboardType: TextInputType.name,
-                  controller: lastNameController,
+                  initialValue: lastName,
                   decoration:
                       InputDecoration(prefixIcon: Icon(MdiIcons.account), labelText: "Last Name"),
                   onChanged: (text) {
                     setState(() {
-                      text != '' ? islast = true : islast = false;
+                      _lastName = text;
                     });
                   },
                 ),
                 TextFormField(
                   keyboardType: TextInputType.phone,
-                  controller: phoneController,
+                  initialValue: phone,
                   decoration:
                       InputDecoration(prefixIcon: Icon(MdiIcons.phone), labelText: "Phone Number"),
                   onChanged: (text) {
                     setState(() {
-                      text != '' ? isphone = true : isphone = false;
+                      _phone = text;
                     });
                   },
                 ),
@@ -164,6 +164,20 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   ),
                 ),
                 SizedBox(height: 9),
+                TextFormField(
+                  decoration: InputDecoration(prefixIcon: Icon(MdiIcons.bio)),
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 4,
+                  initialValue: bio,
+                  onChanged: (text) {
+                    setState(() {
+                      _bio = text;
+                    });
+                  },
+                ),
+                Divider(
+                  height: 15,
+                ),
                 SizedBox(
                   // Button Submit Edit
                   width: 150,
@@ -177,12 +191,69 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                         style: blackTextFont.copyWith(
                             fontSize: 16, color: accentColor3, fontWeight: FontWeight.bold),
                       ),
-                      onPressed: isEmailValid && isfirst && islast && isuser && isphone
+                      onPressed: email != null &&
+                              firstName != null &&
+                              lastName != null &&
+                              bio != null &&
+                              phone != null
                           ? () async {
                               setState(() {});
-                              //Execution Here
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  });
+                              if (_email == null) {
+                                _email = email;
+                              }
+                              if (_firstName == null) {
+                                _firstName = firstName;
+                              }
+                              if (_lastName == null) {
+                                _lastName = lastName;
+                              }
+                              if (_phone == null) {
+                                _phone = phone;
+                              }
+                              if (_username == null) {
+                                _username = username;
+                              }
+                              if (_bio == null) {
+                                _bio = bio;
+                              }
+                              if (pictureFile != null) {
+                                context.read<UserCubit>().updateProfile(
+                                    User(
+                                        email: _email,
+                                        first_name: _firstName,
+                                        last_name: _lastName,
+                                        phone_number: _phone,
+                                        username: _username,
+                                        bio: _bio,
+                                        gender: _selectedGender),
+                                    pictureFile: pictureFile);
+                              }else{
+                                context.read<UserCubit>().updateProfile(
+                                    User(
+                                        email: _email,
+                                        first_name: _firstName,
+                                        last_name: _lastName,
+                                        phone_number: _phone,
+                                        username: _username,
+                                        bio: _bio,
+                                        gender: _selectedGender),
+                                  );
+                              }
+                              Navigator.pop(context);
+                              Get.snackbar("Profile Updated", "Your Profile Has Been Updated");
+                              Get.back();
                             }
                           : null),
+                ),
+                Divider(
+                  height: 15,
                 ),
               ],
             ),

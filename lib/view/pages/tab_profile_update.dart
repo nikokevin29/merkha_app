@@ -7,11 +7,12 @@ class ProfileUpdate extends StatefulWidget {
 
 class _ProfileUpdateState extends State<ProfileUpdate> {
   List<String> gender = ['Male', 'Female', 'Not Preter Yet'];
-  String _selectedGender;
+  //String _selectedGender;
   bool isEmailValid = false;
   File pictureFile;
   String email, username, firstName, lastName, phone, selectedGen, bio; //Setter
-  String _email, _username, _firstName, _lastName, _phone, _bio; //Getter
+  String _email, _username, _firstName, _lastName, _phone, _selectedGender, _bio; //Getter
+
   @override
   Widget build(BuildContext context) {
     email = (context.watch<UserCubit>().state as UserLoaded).user.email ?? '';
@@ -21,7 +22,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     phone = (context.watch<UserCubit>().state as UserLoaded).user.phone_number ?? '';
     selectedGen = (context.watch<UserCubit>().state as UserLoaded).user.gender ?? '';
     bio = (context.watch<UserCubit>().state as UserLoaded).user.bio ?? '';
-    _selectedGender = (context.watch<UserCubit>().state as UserLoaded).user.gender;
+    selectedGen = (context.watch<UserCubit>().state as UserLoaded).user.gender;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -150,11 +151,12 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   alignment: Alignment.centerLeft,
                   child: DropdownButton(
                     icon: Icon(MdiIcons.genderMaleFemaleVariant),
-                    hint: Text('Please Choose Your Gender'),
+                    hint: Text(selectedGen,style: blackTextFont),
                     value: _selectedGender,
-                    onChanged: (newValue) {
+                    isExpanded: true,
+                    onChanged: (text) {
                       setState(() {
-                        _selectedGender = newValue;
+                        _selectedGender = text;
                         print(_selectedGender);
                       });
                     },
@@ -223,6 +225,9 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                               if (_bio == null) {
                                 _bio = bio;
                               }
+                              if (_selectedGender == null) {
+                                _selectedGender = selectedGen;
+                              }
                               if (pictureFile != null) {
                                 context.read<UserCubit>().updateProfile(
                                     User(
@@ -234,21 +239,20 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                         bio: _bio,
                                         gender: _selectedGender),
                                     pictureFile: pictureFile);
-                              }else{
+                              } else {
                                 context.read<UserCubit>().updateProfile(
-                                    User(
-                                        email: _email,
-                                        first_name: _firstName,
-                                        last_name: _lastName,
-                                        phone_number: _phone,
-                                        username: _username,
-                                        bio: _bio,
-                                        gender: _selectedGender),
-                                  );
+                                      User(
+                                          email: _email,
+                                          first_name: _firstName,
+                                          last_name: _lastName,
+                                          phone_number: _phone,
+                                          username: _username,
+                                          bio: _bio,
+                                          gender: _selectedGender),
+                                    );
                               }
                               Navigator.pop(context);
                               Get.snackbar("Profile Updated", "Your Profile Has Been Updated");
-                              Get.back();
                             }
                           : null),
                 ),

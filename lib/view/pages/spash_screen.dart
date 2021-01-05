@@ -12,12 +12,17 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     sharedPreferences();
-    Future.delayed(Duration(seconds: 2), () async {
+    Future.delayed(Duration(seconds: 1), () async {
       print(email);
-      print(password);
+      //print(password);
       if (email != null && password != null) {
         await context.read<UserCubit>().signIn(email, password);
-        Get.offAll(MainPage());
+        UserState state = context.read<UserCubit>().state;
+        if (state is UserLoaded) {
+          //TODO: SHOULD ADD More Cubit Here
+          context.read<AddressCubit>().showAddress();
+          Get.offAll(MainPage());
+        }
       } else {
         Get.offAll(SignInOptionPage());
       }

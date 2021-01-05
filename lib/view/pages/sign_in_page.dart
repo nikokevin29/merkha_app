@@ -126,6 +126,9 @@ class _SignInPageState extends State<SignInPage> {
                               Navigator.pop(context);
                               UserState state = context.read<UserCubit>().state;
                               if (state is UserLoaded) {
+                                //TODO: SHOULD ADD More Cubit Here
+                                context.read<AddressCubit>().showAddress();
+                                //context.read<OngkirCubit>().getProvince();
                                 // context.read<ProductCubit>().getProduct();
                                 // context.read<OrderCubit>().getOrder();
                                 SharedPreferences autologin = await SharedPreferences.getInstance();

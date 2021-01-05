@@ -8,9 +8,11 @@ class UserServices {
     }
     String url = baseURL + 'login';
 
-    var response = await client.post(url,
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(<String, String>{'email': email, 'password': password}));
+    var response = await client.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(<String, String>{'email': email, 'password': password}),
+    );
 
     if (response.statusCode != 200) {
       return ApiReturnValue(message: 'Please Try Again');

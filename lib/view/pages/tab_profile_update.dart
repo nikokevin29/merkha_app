@@ -92,9 +92,10 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 ),
                 SizedBox(height: 50),
                 TextFormField(
+                  enabled: false,
                   keyboardType: TextInputType.emailAddress,
                   initialValue: email,
-                  decoration: InputDecoration(prefixIcon: Icon(MdiIcons.email), labelText: "Email"),
+                  decoration: InputDecoration(prefixIcon: Icon(MdiIcons.email), labelText: "Email cannot be changed"),
                   onChanged: (text) {
                     setState(() {
                       _email = text;
@@ -151,7 +152,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   alignment: Alignment.centerLeft,
                   child: DropdownButton(
                     icon: Icon(MdiIcons.genderMaleFemaleVariant),
-                    hint: Text(selectedGen,style: blackTextFont),
+                    hint: Text(selectedGen, style: blackTextFont),
                     value: _selectedGender,
                     isExpanded: true,
                     onChanged: (text) {

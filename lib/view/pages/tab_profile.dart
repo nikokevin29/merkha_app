@@ -112,8 +112,18 @@ class AppBarProfile extends StatelessWidget {
                   ),
                 )),
             PopupMenuItem(
-              value: '2',
-              child: Text('Choice 2'),
+              value: 'address',
+              child: InkWell(
+                onTap: () {
+                  Get.to(AddressSettings());
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.home, color: Colors.grey),
+                    Text(' Address Settings'),
+                  ],
+                ),
+              ),
             ),
             PopupMenuItem(
               value: 'logout',

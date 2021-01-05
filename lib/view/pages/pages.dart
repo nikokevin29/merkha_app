@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -43,3 +41,4 @@ part 'tab_wishlist.dart';
 part 'spash_screen.dart';
 part 'reset_password_page.dart';
 part 'tab_profile_update.dart';
+part 'tab_profile_address.dart';

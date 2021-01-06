@@ -11,7 +11,7 @@ class ItemCard extends StatelessWidget {
         print('tap card');
       },
       child: Container(
-        width: 160,
+        width: 145,
         height: 245,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -37,7 +37,7 @@ class ItemCard extends StatelessWidget {
                 ),
                 Positioned(
                   top: 145,
-                  left: 100,
+                  left: 85,
                   child: GestureDetector(
                     child: Container(
                       //Button Shop

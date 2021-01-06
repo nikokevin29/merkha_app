@@ -95,7 +95,8 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   enabled: false,
                   keyboardType: TextInputType.emailAddress,
                   initialValue: email,
-                  decoration: InputDecoration(prefixIcon: Icon(MdiIcons.email), labelText: "Email cannot be changed"),
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(MdiIcons.email), labelText: "Email cannot be changed"),
                   onChanged: (text) {
                     setState(() {
                       _email = text;
@@ -253,6 +254,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                     );
                               }
                               Navigator.pop(context);
+                              Get.back();
                               Get.snackbar("Profile Updated", "Your Profile Has Been Updated");
                             }
                           : null),

@@ -59,7 +59,7 @@ class _SignUp4State extends State<SignUp4> {
                 height: 30,
               ),
               Text(
-                "Get personalized recommendations.\nPick 5 or more interests.",
+                "Get personalized recommendations\n"+"Pick 5 or more interests.",
                 style: blackTextFont.copyWith(color: accentColor3, fontWeight: FontWeight.w100),
                 textAlign: TextAlign.justify,
               ),
@@ -78,14 +78,11 @@ class _SignUp4State extends State<SignUp4> {
                           modalFilter: true,
                           choiceItems: snapshot.data,
                           choiceType: S2ChoiceType.checkboxes,
-                          placeholder: 'Select At least 1',
+                          placeholder: 'Select Minimum 5 Category',
                           onChange: (state) => setState(() => selectedCat = state.value),
                           choiceDirection: Axis.vertical,
                           tileBuilder: (context, state) {
-                            print(selectedCat); // This Value being update by change in Framework
-                            // for (int i = 0; i < selectedCat.length; i++) {
-                            //   print(selectedCat[i]);
-                            // }
+                            print('Selected Category : '+selectedCat.toString()); // This Value being update by change in Framework
                             return S2Tile.fromState(
                               state,
                               isTwoLine: true,
@@ -112,22 +109,20 @@ class _SignUp4State extends State<SignUp4> {
                   width: 150,
                   height: 50,
                   child: FlatButton(
-                      disabledColor: Color(0xFFE4E4E4),
-                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                      color: accentColor2,
-                      child: Text(
-                        "Next",
-                        style: blackTextFont.copyWith(
-                            fontSize: 16, color: accentColor3, fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: (selectedCat.length != 0 && selectedCat.length > 5)
-                          ? () async {
-                              if (selectedCat.length > 5) {
-                                Get.snackbar('User Interest', 'Maximum Choice is 5');
-                              }
-                              Get.to(SignUp5(selectedCat: selectedCat));
-                            }
-                          : null),
+                    disabledColor: Color(0xFFE4E4E4),
+                    shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                    color: accentColor2,
+                    child: Text(
+                      "Next",
+                      style: blackTextFont.copyWith(
+                          fontSize: 16, color: accentColor3, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: (selectedCat.length != 0 && selectedCat.length >= 5)
+                        ? () async {
+                            Get.to(SignUp5(selectedCat: selectedCat));
+                          }
+                        : null,
+                  ),
                 ),
               )
             ],

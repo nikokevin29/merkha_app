@@ -83,4 +83,5 @@ class UserCubit extends Cubit<UserState> {
       emit(UserLoadingFailed(result.message));
     }
   }
+
 }

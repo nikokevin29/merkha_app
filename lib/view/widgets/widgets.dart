@@ -10,3 +10,4 @@ import 'package:merkha_app/view/pages/pages.dart';
 part 'selectable_box.dart';
 part 'item_card.dart';
 part 'address_card.dart';
+part 'interest_card.dart';

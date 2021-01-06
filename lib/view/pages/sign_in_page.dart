@@ -128,9 +128,9 @@ class _SignInPageState extends State<SignInPage> {
                               if (state is UserLoaded) {
                                 //TODO: SHOULD ADD More Cubit Here
                                 context.read<AddressCubit>().showAddress();
-                                //context.read<OngkirCubit>().getProvince();
-                                // context.read<ProductCubit>().getProduct();
-                                // context.read<OrderCubit>().getOrder();
+                                context.read<UserInterestCubit>().loadInterest();
+                                //context.read<ProductCubit>().getProduct();
+                                //context.read<OrderCubit>().getOrder();
                                 SharedPreferences autologin = await SharedPreferences.getInstance();
                                 await autologin.setString('email', emailController.text);
                                 await autologin.setString('password', passwordController.text);
@@ -146,10 +146,10 @@ class _SignInPageState extends State<SignInPage> {
                                     color: Colors.white,
                                   ),
                                   titleText: Text("Sign In Failed", style: blackTextFont),
-                                  messageText: Text(
-                                    (state as UserLoadingFailed).message,
-                                    style: blackTextFont,
-                                  ),
+                                  // messageText: Text(
+                                  //   (state as UserLoadingFailed).message,
+                                  //   style: blackTextFont,
+                                  // ),
                                 );
                               }
                             }

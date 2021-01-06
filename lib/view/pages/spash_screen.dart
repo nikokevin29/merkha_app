@@ -21,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (state is UserLoaded) {
           //TODO: SHOULD ADD More Cubit Here
           context.read<AddressCubit>().showAddress();
+          context.read<UserInterestCubit>().loadInterest();
           Get.offAll(MainPage());
         }
       } else {

@@ -42,3 +42,4 @@ part 'spash_screen.dart';
 part 'reset_password_page.dart';
 part 'tab_profile_update.dart';
 part 'tab_profile_address.dart';
+part 'category_page.dart';

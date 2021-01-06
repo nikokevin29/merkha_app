@@ -4,10 +4,13 @@ import 'package:get/get.dart';
 import 'package:merkha_app/view/pages/pages.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'cubit/cubit.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);//Disable Landscape
   runApp(MyApp());
 }
 

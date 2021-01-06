@@ -242,152 +242,153 @@ Column buildHeader(BuildContext context) {
           ],
         ),
       ),
-      SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: defaultMargin),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //Profile Photo
-                  Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(1),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2)),
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              width: 55,
-                              height: 55,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: ((context.watch<UserCubit>().state as UserLoaded)
-                                                .user
-                                                .urlphoto !=
-                                            null)
-                                        ? NetworkImage(
-                                            (context.watch<UserCubit>().state as UserLoaded)
-                                                .user
-                                                .urlphoto)
-                                        : AssetImage("assets/defaultProfile.png"),
-                                    fit: BoxFit.cover),
-                              ),
+      Container(
+        margin: EdgeInsets.symmetric(horizontal: defaultMargin),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //Profile Photo
+                Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(1),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2)),
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            width: 55,
+                            height: 55,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: ((context.watch<UserCubit>().state as UserLoaded)
+                                              .user
+                                              .urlphoto !=
+                                          null)
+                                      ? NetworkImage(
+                                          (context.watch<UserCubit>().state as UserLoaded)
+                                              .user
+                                              .urlphoto)
+                                      : AssetImage("assets/defaultProfile.png"),
+                                  fit: BoxFit.cover),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                  ((context.watch<UserCubit>().state as UserLoaded)
-                                              .user
-                                              .email_verified_at !=
-                                          null)
-                                      ? Icons.verified
-                                      : Icons.cancel,
-                                  color: ((context.watch<UserCubit>().state as UserLoaded)
-                                              .user
-                                              .email_verified_at !=
-                                          null)
-                                      ? Colors.green
-                                      : Colors.red),
-                              Text(
+                    ),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
                                 ((context.watch<UserCubit>().state as UserLoaded)
                                             .user
                                             .email_verified_at !=
                                         null)
-                                    ? 'Verified'
-                                    : 'Not Verified',
-                                style: blackTextFont.copyWith(fontSize: 14),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            child: ((context.watch<UserCubit>().state as UserLoaded)
-                                        .user
-                                        .email_verified_at ==
-                                    null)
-                                ? ArgonTimerButton(
-                                    initialTimer: 0,
-                                    height: 25,
-                                    width: MediaQuery.of(context).size.width * 0.2,
-                                    minWidth: MediaQuery.of(context).size.width * 0.2,
-                                    borderRadius: 15.0,
-                                    color: accentColor2,
-                                    child: Text(
-                                      ((context.watch<UserCubit>().state as UserLoaded)
-                                                  .user
-                                                  .email_verified_at ==
-                                              null)
-                                          ? 'Verify Now'
-                                          : '',
+                                    ? Icons.verified
+                                    : Icons.cancel,
+                                color: ((context.watch<UserCubit>().state as UserLoaded)
+                                            .user
+                                            .email_verified_at !=
+                                        null)
+                                    ? Colors.green
+                                    : Colors.red),
+                            Text(
+                              ((context.watch<UserCubit>().state as UserLoaded)
+                                          .user
+                                          .email_verified_at !=
+                                      null)
+                                  ? 'Verified'
+                                  : 'Not Verified',
+                              style: blackTextFont.copyWith(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          child: ((context.watch<UserCubit>().state as UserLoaded)
+                                      .user
+                                      .email_verified_at ==
+                                  null)
+                              ? ArgonTimerButton(
+                                  initialTimer: 0,
+                                  height: 25,
+                                  width: MediaQuery.of(context).size.width * 0.2,
+                                  minWidth: MediaQuery.of(context).size.width * 0.2,
+                                  borderRadius: 15.0,
+                                  color: accentColor2,
+                                  child: Text(
+                                    ((context.watch<UserCubit>().state as UserLoaded)
+                                                .user
+                                                .email_verified_at ==
+                                            null)
+                                        ? 'Verify Now'
+                                        : '',
+                                    style: blackTextFont.copyWith(
+                                      fontSize: 14,
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  loader: (timeLeft) {
+                                    return Text(
+                                      "$timeLeft",
                                       style: blackTextFont.copyWith(
                                         fontSize: 14,
                                         color: Colors.green,
                                         fontWeight: FontWeight.w600,
                                       ),
-                                    ),
-                                    loader: (timeLeft) {
-                                      return Text(
-                                        "$timeLeft",
-                                        style: blackTextFont.copyWith(
-                                          fontSize: 14,
-                                          color: Colors.green,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      );
-                                    },
-                                    onTap: (startTimer, btnState) async {
-                                      if (btnState == ButtonState.Idle) {
-                                        startTimer(60);
-                                        await context.read<UserCubit>().sendVerificationEmail();
-                                      }
-                                    },
-                                  )
-                                : Container(),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  Flexible(
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            (context.watch<UserCubit>().state as UserLoaded).user.first_name ??
-                                CircularProgressIndicator(), //First Name
-                            style: blackTextFont.copyWith(fontSize: 32),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                          Text(
-                            (context.watch<UserCubit>().state as UserLoaded).user.last_name ??
-                                CircularProgressIndicator(), //Last Name
-                            style: blackTextFont.copyWith(fontSize: 32),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                          Divider(height: 15),
-                          //bio
-                          Text(
-                            (context.watch<UserCubit>().state as UserLoaded).user.bio ?? '',
-                            style: blackTextFont,
-                          ),
-                          Divider(height: 15, color: Colors.white),
-                          // Counter Post Followers Following
-                          Row(
+                                    );
+                                  },
+                                  onTap: (startTimer, btnState) async {
+                                    if (btnState == ButtonState.Idle) {
+                                      startTimer(60);
+                                      await context.read<UserCubit>().sendVerificationEmail();
+                                    }
+                                  },
+                                )
+                              : Container(),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          (context.watch<UserCubit>().state as UserLoaded).user.first_name ??
+                              CircularProgressIndicator(), //First Name
+                          style: blackTextFont.copyWith(fontSize: 32),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        Text(
+                          (context.watch<UserCubit>().state as UserLoaded).user.last_name ??
+                              CircularProgressIndicator(), //Last Name
+                          style: blackTextFont.copyWith(fontSize: 32),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        Divider(height: 15),
+                        //bio
+                        Text(
+                          (context.watch<UserCubit>().state as UserLoaded).user.bio ?? '',
+                          style: blackTextFont,
+                        ),
+                        Divider(height: 15, color: Colors.white),
+                        // Counter Post Followers Following
+                        SizedBox(
+                          width: double.infinity,
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -418,15 +419,15 @@ Column buildHeader(BuildContext context) {
                               ),
                             ],
                           ),
-                          Divider(height: 15, color: Colors.white),
-                        ],
-                      ),
+                        ),
+                        Divider(height: 15, color: Colors.white),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     ],

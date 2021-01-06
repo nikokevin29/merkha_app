@@ -26,24 +26,17 @@ class _MainTabState extends State<MainTab> {
               children: [
                 Container(
                   //note: Greetings
+                  alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(top: 5),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width - 2 * defaultMargin,
-                    child: Row(
-                      children: [
-                        Text(
-                          YonoGreetings.showGreetings() + " ",
-                          style: blackTextFont.copyWith(fontWeight: FontWeight.w400, fontSize: 25),
-                        ),
-                        Text(
-                          (context.watch<UserCubit>().state as UserLoaded).user.first_name ??
-                              CircularProgressIndicator(), //First Name
-                          style: blackTextFont.copyWith(fontSize: 25, fontWeight: FontWeight.w400),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        )
-                      ],
-                    ),
+                  child: Text(
+                    YonoGreetings.showGreetings() +
+                        " " +
+                        (context.watch<UserCubit>().state as UserLoaded)
+                            .user
+                            .first_name, //First Name
+                    style: blackTextFont.copyWith(fontSize: 24, fontWeight: FontWeight.w400),
+                    maxLines: 1,
+                    overflow: TextOverflow.clip
                   ),
                 ),
                 //here

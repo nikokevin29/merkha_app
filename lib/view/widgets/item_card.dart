@@ -12,7 +12,7 @@ class ItemCard extends StatelessWidget {
       },
       child: Container(
         width: 145,
-        height: 245,
+        height: 260,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),

@@ -1,6 +1,11 @@
 part of 'pages.dart';
 
+// ignore: must_be_immutable
 class MainPage extends StatefulWidget {
+  var bottomNavBarIndex;
+
+  MainPage({this.bottomNavBarIndex = 0});
+
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -10,7 +15,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   TabController controller;
   @override
   void initState() {
-    controller = new TabController(length: 5, vsync: this, initialIndex: bottomNavBarIndex);
+    controller = new TabController(length: 5, vsync: this, initialIndex: widget.bottomNavBarIndex);
     super.initState();
   }
 
@@ -32,7 +37,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
           controller: controller,
           onTap: (index) {
             setState(() {
-              bottomNavBarIndex = index;
+              widget.bottomNavBarIndex = index;
             });
           },
           tabs: <Widget>[
@@ -45,7 +50,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
             Tab(
               icon: Container(
                 child: Image.asset(
-                    (bottomNavBarIndex == 1) ? "assets/logo-yellow.png" : "assets/logo-grey.png"),
+                    (widget.bottomNavBarIndex == 1) ? "assets/logo-yellow.png" : "assets/logo-grey.png"),
               ),
               text: "Feed",
             ),

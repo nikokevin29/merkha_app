@@ -22,7 +22,7 @@ class WishlishTab extends StatelessWidget {
                 child: Wrap(
                   alignment: WrapAlignment.center,
                   direction: Axis.horizontal,
-                  spacing: 10,
+                  spacing: 20,
                   runSpacing: 15,
                   children: [
                     ItemCard(),

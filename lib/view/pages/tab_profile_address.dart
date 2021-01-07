@@ -7,6 +7,12 @@ class AddressSettings extends StatefulWidget {
 
 class _AddressSettingsState extends State<AddressSettings> {
   @override
+  void initState() {
+    super.initState();
+    context.read<AddressCubit>().showAddress();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -262,20 +268,30 @@ class _AddAddressState extends State<AddAddress> {
 }
 
 class EditAddress extends StatefulWidget {
-  final String addressid;
-  EditAddress({this.addressid});
+  final Address address;
+  EditAddress({this.address});
   @override
   _EditAddressState createState() => _EditAddressState();
 }
 
 class _EditAddressState extends State<EditAddress> {
-  TextEditingController addressSaveNameController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
-  TextEditingController postalCodeController = TextEditingController();
-  bool isaddressSN = false, isaddress = false, ispostal = false, iscity = false, isprovince = false;
+  TextEditingController addressSaveNameController;
+  TextEditingController addressController;
+  TextEditingController postalCodeController;
+  //bool isaddressSN = false, isaddress = false, ispostal = false, iscity = false, isprovince = false;
   var _valueProvince, _valueCity, _provinceName, _cityName;
   List<dynamic> _dataProvince = List();
   List<dynamic> _dataCity = List();
+
+  @override
+  void initState() {
+    super.initState();
+    addressSaveNameController = TextEditingController(text: widget.address.addressSaveName);
+    addressController = TextEditingController(text: widget.address.address);
+    postalCodeController = TextEditingController(text: widget.address.postalCode);
+    _valueProvince = widget.address.province;
+    _valueCity = widget.address.city;
+  }
 
   Future<void> getProvince() async {
     final response = await http.get(apiRajaOngkir + 'province', headers: {"key": apiKeyOngkir});
@@ -316,144 +332,133 @@ class _EditAddressState extends State<EditAddress> {
           },
         ),
       ),
-      body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
-          child: Column(
-            children: [
-              TextField(
-                keyboardType: TextInputType.text,
-                controller: addressSaveNameController,
-                decoration: InputDecoration(labelText: "Address Save Name"),
-                onChanged: (text) {
-                  setState(() {
-                    text != '' ? isaddressSN = true : isaddressSN = false;
-                  });
-                },
-              ),
-              TextField(
-                keyboardType: TextInputType.multiline,
-                maxLines: 5,
-                minLines: 4,
-                controller: addressController,
-                decoration: InputDecoration(labelText: "Address"),
-                onChanged: (text) {
-                  setState(() {
-                    text != '' ? isaddress = true : isaddress = false;
-                  });
-                },
-              ),
-              TextField(
-                keyboardType: TextInputType.number,
-                controller: postalCodeController,
-                decoration: InputDecoration(labelText: "Postal Code (5 Digit)"),
-                onChanged: (text) {
-                  setState(() {
-                    text.length == 5 ? ispostal = true : ispostal = false;
-                  });
-                },
-              ),
-              FutureBuilder(
-                  future: getProvince(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return DropdownButton(
-                          hint: Text('Select Province'),
-                          value: _valueProvince,
-                          items: _dataProvince
-                              .map((item) => DropdownMenuItem(
-                                    child: Text(item['province']),
-                                    value: item['province_id'],
-                                    onTap: () {
-                                      _provinceName = item['province']; //Get Province Name
-                                    },
-                                  ))
-                              .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _valueProvince = value;
-                              _valueProvince != '' ? isprovince = true : isprovince = false;
-                              // _valueCity and iscity reset after province changed
-                              _valueCity = null;
-                              iscity = false;
-                              print("Province ID " + _valueProvince);
-                            });
-                            getCity(value);
-                          });
-                    } else {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(child: CircularProgressIndicator()),
-                      );
-                    }
-                  }),
-              Center(
-                  child: DropdownButton(
-                      hint: Text('Select City'),
-                      value: _valueCity,
-                      items: _dataCity.map((item) {
-                        return DropdownMenuItem(
-                          child: Text(item['city_name']),
-                          value: item['city_id'],
-                          onTap: () {
-                            _cityName = item['city_name']; //Get City Name
-                          },
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _valueCity = value;
-
-                          _valueCity != '' ? iscity = true : iscity = false;
-                          print("City id :" + _valueCity.toString());
-                        });
-                      })),
-              SizedBox(height: 15),
-              FlatButton(
-                disabledColor: Color(0xFFE4E4E4),
-                shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                color: accentColor2,
-                child: Text(
-                  "Submit",
-                  style: blackTextFont.copyWith(
-                      fontSize: 16, color: accentColor3, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
+            child: Column(
+              children: [
+                TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: addressSaveNameController,
+                  decoration: InputDecoration(labelText: "Address Save Name"),
                 ),
-                onPressed: isaddressSN == true &&
-                        isaddress == true &&
-                        ispostal == true &&
-                        iscity == true &&
-                        isprovince == true
-                    ? () async {
-                        //Action Here
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Center(
-                                child: CircularProgressIndicator(),
+                TextFormField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 5,
+                  minLines: 4,
+                  controller: addressController,
+                  decoration: InputDecoration(labelText: "Address"),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: postalCodeController,
+                  decoration: InputDecoration(labelText: "Postal Code (5 Digit)"),
+                ),
+                // FutureBuilder(
+                //     future: getProvince(),
+                //     builder: (context, snapshot) {
+                //       if (snapshot.hasData) {
+                //         return DropdownButton(
+                //             hint: Text('Select Province'),
+                //             value: _valueProvince,
+                //             items: _dataProvince
+                //                 .map((item) => DropdownMenuItem(
+                //                       child: Text(item['province']),
+                //                       value: item['province_id'],
+                //                       onTap: () {
+                //                         _provinceName = item['province']; //Get Province Name
+                //                       },
+                //                     ))
+                //                 .toList(),
+                //             onChanged: (value) {
+                //               setState(() {
+                //                 _valueProvince = value;
+                //                 _valueProvince != '' ? isprovince = true : isprovince = false;
+                //                 // _valueCity and iscity reset after province changed
+                //                 _valueCity = null;
+                //                 iscity = false;
+                //                 print("Province ID " + _valueProvince);
+                //               });
+                //               getCity(value);
+                //             });
+                //       } else {
+                //         return Padding(
+                //           padding: const EdgeInsets.all(8.0),
+                //           child: Center(child: CircularProgressIndicator()),
+                //         );
+                //       }
+                //     }),
+                // Center(
+                //   child: DropdownButton(
+                //       hint: Text('Select City'),
+                //       value: _valueCity,
+                //       items: _dataCity.map((item) {
+                //         return DropdownMenuItem(
+                //           child: Text(item['city_name']),
+                //           value: item['city_id'],
+                //           onTap: () {
+                //             _cityName = item['city_name']; //Get City Name
+                //           },
+                //         );
+                //       }).toList(),
+                //       onChanged: (value) {
+                //         setState(() {
+                //           _valueCity = value;
+
+                //           _valueCity != '' ? iscity = true : iscity = false;
+                //           print("City id :" + _valueCity.toString());
+                //         });
+                //       }),
+                // ),
+                SizedBox(height: 15),
+                Text('Provinces and cities cannot be edit temporarily',
+                    style: blackTextFont.copyWith(color: Colors.red)),
+                SizedBox(height: 15),
+                FlatButton(
+                  disabledColor: Color(0xFFE4E4E4),
+                  shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                  color: accentColor2,
+                  child: Text(
+                    "Submit",
+                    style: blackTextFont.copyWith(
+                        fontSize: 16, color: accentColor3, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: addressSaveNameController.text.length != 0 &&
+                          addressController.text.length != 0 &&
+                          postalCodeController.text.length == 5
+                      ? () async {
+                          //Action Here
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              });
+                          await context.read<AddressCubit>().editAddress(
+                                widget.address.id,
+                                Address(
+                                  addressSaveName: addressSaveNameController.text,
+                                  address: addressController.text +
+                                      ', ' +
+                                      _cityName +
+                                      ', ' +
+                                      _provinceName,
+                                  postalCode: postalCodeController.text,
+                                  city: _valueCity,
+                                  province: _valueProvince,
+                                ),
                               );
-                            });
-                        await context.read<AddressCubit>().editAddress(
-                              widget.addressid,
-                              Address(
-                                addressSaveName: addressSaveNameController.text,
-                                address: addressController.text +
-                                    ', ' +
-                                    _cityName +
-                                    ', ' +
-                                    _provinceName,
-                                postalCode: postalCodeController.text,
-                                city: _valueCity,
-                                province: _valueProvince,
-                              ),
-                            );
-                        await context.read<AddressCubit>().showAddress(); //Reload Address
-                        Navigator.pop(context);
-                        Get.back();
-                        Get.snackbar('Success', 'Success Edit Address');
-                      }
-                    : null,
-              )
-            ],
-          )),
+                          await context.read<AddressCubit>().showAddress(); //Reload Address
+                          Navigator.pop(context);
+                          Get.back();
+                          Get.snackbar('Success', 'Success Edit Address');
+                        }
+                      : null,
+                )
+              ],
+            )),
+      ),
     );
   }
 }

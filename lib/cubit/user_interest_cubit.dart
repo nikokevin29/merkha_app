@@ -8,7 +8,6 @@ part 'user_interest_state.dart';
 class UserInterestCubit extends Cubit<UserInterestState> {
   UserInterestCubit() : super(UserInterestInitial());
 
-  
   Future<void> loadInterest() async {
     ApiReturnValue<List<UserInterest>> result = await UserInterestService.showUserInterest();
     if (result.value != null) {

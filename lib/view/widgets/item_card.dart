@@ -11,7 +11,7 @@ class ItemCard extends StatelessWidget {
         print('tap card');
       },
       child: Container(
-        width: 145,
+        width: (MediaQuery.of(context).size.width - 4 * defaultMargin) / 2,
         height: 260,
         decoration: BoxDecoration(
           color: Colors.white,

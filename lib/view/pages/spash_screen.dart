@@ -20,8 +20,10 @@ class _SplashScreenState extends State<SplashScreen> {
         UserState state = context.read<UserCubit>().state;
         if (state is UserLoaded) {
           //TODO: SHOULD ADD More Cubit Here
-          context.read<AddressCubit>().showAddress();
           context.read<UserInterestCubit>().loadInterest();
+          context.read<ProductCubit>().showProductDiscover(limit: '20');
+          context.read<BestSellerProductCubit>().showProductbyBestSeller(limit: '20');
+          
           Get.offAll(MainPage());
         }
       } else {

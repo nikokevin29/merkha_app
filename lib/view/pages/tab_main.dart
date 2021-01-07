@@ -29,15 +29,14 @@ class _MainTabState extends State<MainTab> {
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(top: 5),
                   child: Text(
-                    YonoGreetings.showGreetings() +
-                        " " +
-                        (context.watch<UserCubit>().state as UserLoaded)
-                            .user
-                            .first_name, //First Name
-                    style: blackTextFont.copyWith(fontSize: 24, fontWeight: FontWeight.w400),
-                    maxLines: 1,
-                    overflow: TextOverflow.clip
-                  ),
+                      YonoGreetings.showGreetings() +
+                          " " +
+                          (context.watch<UserCubit>().state as UserLoaded)
+                              .user
+                              .first_name, //First Name
+                      style: blackTextFont.copyWith(fontSize: 24, fontWeight: FontWeight.w400),
+                      maxLines: 1,
+                      overflow: TextOverflow.clip),
                 ),
                 //here
                 Container(
@@ -95,6 +94,7 @@ class _MainTabState extends State<MainTab> {
                       SizedBox(
                         height: 25,
                       ),
+                      // note: User Interest Categories
                       SizedBox(
                         height: 100,
                         child:
@@ -109,10 +109,12 @@ class _MainTabState extends State<MainTab> {
                                     child: Wrap(children: [
                                       InterestCard(
                                         interest[index],
-                                        onTap: () {
-                                          // context
-                                          //     .bloc<PageBloc>()
-                                          //     .add(GoToMovieDetailPage(interest[index]));
+                                        onTap: () async {
+                                          await context
+                                              .read<ProductByCategoryCubit>()
+                                              .showProductByCategory(
+                                                  categoryId: interest[index].idCategory);
+
                                           Get.to(CategoryPage(
                                             userInterest: interest[index],
                                           ));
@@ -126,6 +128,108 @@ class _MainTabState extends State<MainTab> {
                           }
                         }),
                       ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Discover',
+                          style: blackTextFont.copyWith(
+                            fontSize: 25,
+                          ),
+                        ),
+                      ),
+                      //Discover Product (Random)
+                      BlocBuilder<ProductCubit, ProductState>(builder: (_, state) {
+                        if (state is ProductListLoaded) {
+                          List<Product> product = state.product;
+                          return Container(
+                            width: MediaQuery.of(context).size.width - 2 * defaultMargin,
+                            child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  childAspectRatio: 1,
+                                ),
+                                itemCount: product.length,
+                                itemBuilder: (_, index) => Container(
+                                      child: Wrap(
+                                        alignment: WrapAlignment.center,
+                                        direction: Axis.vertical,
+                                        spacing: 10,
+                                        runSpacing: 10,
+                                        children: [
+                                          ProductCard(product[index], onTap: () {
+                                            //Navigate to Details Here
+                                          }),
+                                        ],
+                                      ),
+                                    )),
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      }),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Who to Follow',
+                          style: blackTextFont.copyWith(
+                            fontSize: 25,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 150,
+                        width: MediaQuery.of(context).size.width,
+                        child: Container(
+                          color: Colors.grey, // Soon
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Best Seller',
+                          style: blackTextFont.copyWith(
+                            fontSize: 25,
+                          ),
+                        ),
+                      ),
+                      //note: Best Seller Product
+                      BlocBuilder<BestSellerProductCubit, BestSellerProductState>(
+                          builder: (_, state) {
+                        if (state is BestSellerProductListLoaded) {
+                          List<Product> product = state.product;
+                          return Container(
+                            width: MediaQuery.of(context).size.width - 2 * defaultMargin,
+                            child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  childAspectRatio: 1,
+                                ),
+                                itemCount: product.length,
+                                itemBuilder: (_, index) => Container(
+                                      child: Wrap(
+                                        alignment: WrapAlignment.center,
+                                        direction: Axis.vertical,
+                                        spacing: 10,
+                                        runSpacing: 10,
+                                        children: [
+                                          ProductCard(product[index], onTap: () {
+                                            //Navigate to Details Here
+                                          }),
+                                        ],
+                                      ),
+                                    )),
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      }),
                     ],
                   ),
                 ),

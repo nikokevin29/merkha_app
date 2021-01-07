@@ -6,8 +6,10 @@ import 'package:merkha_app/cubit/cubit.dart';
 import 'package:merkha_app/models/models.dart';
 import 'package:merkha_app/shared/shared.dart';
 import 'package:merkha_app/view/pages/pages.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 part 'selectable_box.dart';
 part 'item_card.dart';
 part 'address_card.dart';
 part 'interest_card.dart';
+part 'product_card.dart';

@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:merkha_app/cubit/cubit.dart';
+import 'package:merkha_app/cubit/product_cubit.dart';
 import 'package:merkha_app/models/models.dart';
 import 'package:merkha_app/services/services.dart';
 import 'package:merkha_app/shared/shared.dart';
@@ -21,6 +22,7 @@ import 'package:async/async.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 
 part 'sign_in_page.dart';

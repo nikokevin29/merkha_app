@@ -77,8 +77,8 @@ class AddressCard extends StatelessWidget {
                   color: Colors.greenAccent,
                   onPressed: () {
                     //Edit Button
-                    Get.to(EditAddress(addressid: address.id));
-                    print('edit' + address.id.toString());
+                    Get.to(EditAddress(address: address));
+                    print('Edit Address : ' + address.addressSaveName);
                   },
                   child: Text('Edit', style: blackTextFont.copyWith(color: Colors.white)),
                 ),

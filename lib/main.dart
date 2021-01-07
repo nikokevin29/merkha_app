@@ -10,7 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);//Disable Landscape
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]); //Disable Landscape
   runApp(MyApp());
 }
 
@@ -22,6 +22,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => UserCubit()),
         BlocProvider(create: (_) => AddressCubit()),
         BlocProvider(create: (_) => UserInterestCubit()),
+        BlocProvider(create: (_) => ProductCubit()),
+        BlocProvider(create: (_) => BestSellerProductCubit()),
+        BlocProvider(create: (_) => ProductByCategoryCubit()),
         // BlocProvider(create: (_) => TransactionCubit())
       ],
       child: GetMaterialApp(

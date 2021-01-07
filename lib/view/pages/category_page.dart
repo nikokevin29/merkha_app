@@ -10,6 +10,12 @@ class CategoryPage extends StatefulWidget {
 
 class _CategoryPageState extends State<CategoryPage> {
   @override
+  void initState() {
+    super.initState();
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +29,41 @@ class _CategoryPageState extends State<CategoryPage> {
           },
         ),
       ),
-      body: Center(child: Text('ID Category ' + widget.userInterest.idCategory)),
+      body: Column(
+        children: [
+          BlocBuilder<ProductByCategoryCubit, ProductByCategoryState>(builder: (_, state) {
+            if (state is ProductByCategoryListLoaded) {
+              List<Product> product = state.product;
+              return Container(
+                width: MediaQuery.of(context).size.width - 2 * defaultMargin,
+                child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 1,
+                    ),
+                    itemCount: product.length,
+                    itemBuilder: (_, index) => Container(
+                          child: Wrap(
+                            alignment: WrapAlignment.center,
+                            direction: Axis.vertical,
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: [
+                              ProductCard(product[index], onTap: () {
+                                //Navigate to Details Product Here
+                              }),
+                            ],
+                          ),
+                        )),
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          }),
+        ],
+      ),
     );
   }
 }

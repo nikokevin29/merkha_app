@@ -219,6 +219,15 @@ class _SignUp5State extends State<SignUp5> {
                                     .uploadUserInterest(widget.selectedCat[i]);
                               }
                             }
+                            //TODO: SHOULD ADD More Cubit Here
+                            await context.read<UserInterestCubit>().loadInterest();
+                            await context.read<ProductCubit>().showProductDiscover(limit: '21');
+                            await context
+                                .read<BestSellerProductCubit>()
+                                .showProductbyBestSeller(limit: '21');
+                            await context
+                                .read<MerchantRandomOrderCubit>()
+                                .showMerchantByRandom(limit: '21');
 
                             Get.back();
                             Get.offAll(SignUp6());

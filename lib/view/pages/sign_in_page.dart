@@ -114,6 +114,7 @@ class _SignInPageState extends State<SignInPage> {
                                 isSigningIn = true;
                               });
                               showDialog(
+                                  barrierDismissible: false,
                                   context: context,
                                   builder: (BuildContext context) {
                                     return Center(
@@ -132,6 +133,9 @@ class _SignInPageState extends State<SignInPage> {
                                 context
                                     .read<BestSellerProductCubit>()
                                     .showProductbyBestSeller(limit: '20');
+                                context
+                                    .read<MerchantRandomOrderCubit>()
+                                    .showMerchantByRandom(limit: '20');
                                 //context.read<ProductCubit>().getProduct();
                                 //context.read<OrderCubit>().getOrder();
                                 SharedPreferences autologin = await SharedPreferences.getInstance();

@@ -35,6 +35,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
           unselectedLabelColor: Colors.grey,
           labelColor: Colors.black,
           controller: controller,
+          labelStyle: blackTextFont.copyWith(fontSize: 10),
           onTap: (index) {
             setState(() {
               widget.bottomNavBarIndex = index;
@@ -49,8 +50,9 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
             ),
             Tab(
               icon: Container(
-                child: Image.asset(
-                    (widget.bottomNavBarIndex == 1) ? "assets/logo-yellow.png" : "assets/logo-grey.png"),
+                child: Image.asset((widget.bottomNavBarIndex == 1)
+                    ? "assets/logo-yellow.png"
+                    : "assets/logo-grey.png"),
               ),
               text: "Feed",
             ),
@@ -63,7 +65,20 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
               text: "Wishlist",
             ),
             Tab(
-              icon: Icon(Icons.person),
+              icon: ((context.watch<UserCubit>().state as UserLoaded).user.urlphoto != null)
+                  ? Container(
+                      height: 25,
+                      width: 25,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                (context.watch<UserCubit>().state as UserLoaded).user.urlphoto),
+                            fit: BoxFit.cover),
+                      ),
+                    )
+                  : Image.asset("assets/defaultProfile.png"),
               text: "Profile",
             ),
           ],

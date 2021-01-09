@@ -9,14 +9,7 @@ abstract class ProductState extends Equatable {
 
 class ProductInitial extends ProductState {}
 
-// class ProducLoaded extends AddressState {
-//   final Address address;
 
-//   AddressLoaded(this.address);
-
-//   @override
-//   List<Object> get props => [address];
-// }
 class ProductListLoaded extends ProductState {
   final List<Product> product;
 

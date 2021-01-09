@@ -17,26 +17,4 @@ class ProductCubit extends Cubit<ProductState> {
       emit(ProductLoadingFailed(result.message));
     }
   }
-
-  // Future<void> showProductbyMerchant(int idMerchant) async {
-  //   ApiReturnValue<List<Product>> result =
-  //       await ProductServices.showProductbyMerchant(idMerhcant: idMerchant);
-  //   if (result.value != null) {
-  //     emit(ProductListLoaded(result.value));
-  //   } else {
-  //     emit(ProductLoadingFailed(result.message));
-  //   }
-  // }
-
-  // Future<void> showProductbyOrder(int limit, String order) async {
-  //   ApiReturnValue<List<Product>> result =
-  //       await ProductServices.showProductbyOrder(limit: limit, order: order);
-  //   if (result.value != null) {
-  //     emit(ProductListLoaded(result.value));
-  //   } else {
-  //     emit(ProductLoadingFailed(result.message));
-  //   }
-  // }
-
-  
 }

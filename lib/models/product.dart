@@ -16,7 +16,7 @@ class Product extends Equatable {
   final String createdAt;
   final String updatedAt;
   final String preview;
-  final List<String> photo;
+  final String photo;
 
   Product({
     this.id,
@@ -70,7 +70,7 @@ class Product extends Equatable {
         stock: int.parse(data['stock'].toString()),
         weight: double.parse(data['weight'].toString()),
         preview: data['preview'],
-        photo: List<String>.from(data['photo']),
+        photo: data['photo'].toString(),
         createdAt: data['created_at'],
         updatedAt: data['updated_at'],
       );

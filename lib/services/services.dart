@@ -10,6 +10,7 @@ part 'product_service.dart';
 part 'user_service.dart';
 part 'address_service.dart';
 part 'user_interest_service.dart';
+part 'merchant_service.dart';
 
 String baseURL = "http://192.168.0.103:8000/api/";
 

@@ -25,6 +25,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => ProductCubit()),
         BlocProvider(create: (_) => BestSellerProductCubit()),
         BlocProvider(create: (_) => ProductByCategoryCubit()),
+        BlocProvider(create: (_) => MerchantRandomOrderCubit()),
+        BlocProvider(create: (_) => SearchProductCubit()),
+        BlocProvider(create: (_) => SearchMerchantCubit()),
+
         // BlocProvider(create: (_) => TransactionCubit())
       ],
       child: GetMaterialApp(

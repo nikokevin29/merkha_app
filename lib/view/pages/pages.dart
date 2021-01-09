@@ -22,8 +22,6 @@ import 'package:async/async.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
 
 part 'sign_in_page.dart';
 part 'main_page.dart';
@@ -46,3 +44,7 @@ part 'reset_password_page.dart';
 part 'tab_profile_update.dart';
 part 'tab_profile_address.dart';
 part 'category_page.dart';
+part 'search_page.dart';
+part 'search_product.dart';
+part 'search_merchant.dart';
+

@@ -1,9 +1,9 @@
 part of 'widgets.dart';
 
 class ItemCard extends StatelessWidget {
-  // final Product product;
-
-  // ItemCard(this.product);
+  final Product product;
+  final Function onTap;
+  ItemCard({this.product, this.onTap});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -12,31 +12,30 @@ class ItemCard extends StatelessWidget {
       },
       child: Container(
         width: (MediaQuery.of(context).size.width - 4 * defaultMargin) / 2,
-        height: 260,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(spreadRadius: 3, blurRadius: 15, color: Colors.black12),
-          ],
-        ),
+        height: 215,
         child: Column(
           children: [
             Stack(
-              fit: StackFit.loose,
+              fit: StackFit.passthrough,
               children: [
                 Container(
                   //Image Product
-                  height: 180,
+                  height: 150,
+                  width: 150,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                    borderRadius: BorderRadius.circular(15),
                     image: DecorationImage(
-                        image: NetworkImage('https://bit.ly/3b2rIIC'), fit: BoxFit.cover),
+                        image: (product.preview != null)
+                            ? NetworkImage(product.preview)
+                            : AssetImage('assets/logo-yellow.png'),
+                        fit: BoxFit.cover),
+                    boxShadow: [
+                      BoxShadow(spreadRadius: 3, blurRadius: 15, color: Colors.black12),
+                    ],
                   ),
                 ),
                 Positioned(
-                  top: 145,
+                  top: 115,
                   left: 85,
                   child: GestureDetector(
                     child: Container(
@@ -68,24 +67,25 @@ class ItemCard extends StatelessWidget {
                 children: [
                   Text(
                     //Proudct Name
-                    'Product Name',
-                    style: blackTextFont,
+                    product.productName,
+                    style: blackTextFont.copyWith(fontWeight: FontWeight.w600),
                     maxLines: 1,
-                    overflow: TextOverflow.clip,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     //Price
-                    'Rp.100.000',
+                    NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                        .format(product.price),
                     style: redNumberFont,
                     maxLines: 1,
-                    overflow: TextOverflow.clip,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     //Merchant
-                    'by xBanana',
-                    style: blackTextFont,
+                    'by ' + product.merchant,
+                    style: greyTextFont.copyWith(fontSize: 12),
                     maxLines: 1,
-                    overflow: TextOverflow.clip,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

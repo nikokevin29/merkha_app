@@ -25,7 +25,7 @@ class _MainTabState extends State<MainTab> {
             child: Column(
               children: [
                 Container(
-                  //note: Greetings
+                  //note: Greetings + Fistname User From Userstate
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(top: 5),
                   child: Text(
@@ -46,37 +46,48 @@ class _MainTabState extends State<MainTab> {
                       SizedBox(
                         height: 15,
                       ),
-                      Material(
-                        borderRadius: BorderRadius.circular(20.0),
-                        elevation: 20,
-                        child: TextFormField(
-                          controller: null,
-                          autofocus: false,
-                          style: TextStyle(fontSize: 16.0, color: Color(0xFFbdc6cf)),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            prefixIcon: Icon(Icons.search),
-                            hintText: 'What are you looking for?',
-                            contentPadding:
-                                const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 14.0),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(SearchPage());
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+                          height: 50,
+                          alignment: Alignment.centerLeft,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.25),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
+                                child: Icon(Icons.search, color: Colors.grey),
+                              ),
+                              Text(
+                                'What are you looking for ?',
+                                style: greyTextFont.copyWith(fontSize: 14),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                       SizedBox(
                         height: 25,
                       ),
-                      //Carousel
+                      //Carousel Photo
                       CarouselSlider.builder(
-                        itemCount: 7,
+                        itemCount: images.length,
                         options: CarouselOptions(
                           height: 200.0,
                           autoPlay: true,
@@ -124,7 +135,7 @@ class _MainTabState extends State<MainTab> {
                                 itemCount: interest.length,
                                 scrollDirection: Axis.horizontal);
                           } else {
-                            return Center(child: CircularProgressIndicator());
+                            return CircularProgressIndicator();
                           }
                         }),
                       ),
@@ -180,12 +191,34 @@ class _MainTabState extends State<MainTab> {
                           ),
                         ),
                       ),
+                      // note: Merhcant Follow
                       SizedBox(
-                        height: 150,
-                        width: MediaQuery.of(context).size.width,
-                        child: Container(
-                          color: Colors.grey, // Soon
-                        ),
+                        height: 200,
+                        child: BlocBuilder<MerchantRandomOrderCubit, MerchantRandomOrderState>(
+                            builder: (_, state) {
+                          if (state is MerchantByRandomListLoaded) {
+                            List<Merchant> merchant = state.merchant;
+                            return ListView.builder(
+                              itemCount: merchant.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (_, index) => Container(
+                                margin: EdgeInsets.only(
+                                    left: (index == 0) ? defaultMargin : 0,
+                                    right: (index == merchant.length - 1) ? defaultMargin : 16),
+                                child: Wrap(children: [
+                                  MerchantCard(
+                                    merchant: merchant[index],
+                                    onTap: () {
+                                      print('Merchant Card Tapped');
+                                    },
+                                  ),
+                                ]),
+                              ),
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        }),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 16),

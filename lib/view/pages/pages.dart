@@ -22,6 +22,7 @@ import 'package:async/async.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:lorem_ipsum/lorem_ipsum.dart';
 
 part 'sign_in_page.dart';
 part 'main_page.dart';
@@ -47,4 +48,4 @@ part 'category_page.dart';
 part 'search_page.dart';
 part 'search_product.dart';
 part 'search_merchant.dart';
-
+part 'detail_product.dart';

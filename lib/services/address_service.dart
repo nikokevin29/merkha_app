@@ -40,13 +40,13 @@ class AddressService {
         'province': address.province,
       }),
     );
-    var data = jsonDecode(response.body);
+    
     if (response.statusCode != 200) {
       print('StatusCode : ${response.statusCode}');
       print('data : ${response.body}');
-      return ApiReturnValue(message: data['meta']['message']);
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
     }
-
+    var data = jsonDecode(response.body);
     Address value = Address.fromJson(data['data']);
     return ApiReturnValue(value: value, message: data['meta']['message']);
   }

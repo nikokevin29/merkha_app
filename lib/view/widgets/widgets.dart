@@ -17,3 +17,4 @@ part 'interest_card.dart';
 part 'product_card.dart';
 part 'merchant_card.dart';
 part 'merchant_search_card.dart';
+part 'item_card_wishlist.dart';

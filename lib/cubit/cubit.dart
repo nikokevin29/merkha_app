@@ -7,3 +7,4 @@ export 'product_by_category_cubit.dart';
 export 'merchant_random_order_cubit.dart';
 export 'search_product_cubit.dart';
 export 'search_merchant_cubit.dart';
+export 'wishlist_cubit.dart';

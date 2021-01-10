@@ -8,6 +8,9 @@ class MerchantCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
       elevation: 5,
       color: HexColor('#E6E6E6'),
       child: Container(

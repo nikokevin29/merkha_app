@@ -9,6 +9,8 @@ Color accentColor3 = HexColor("#707070");
 
 TextStyle blackTextFont =
     GoogleFonts.roboto().copyWith(color: Colors.black, fontWeight: FontWeight.w500);
+TextStyle blackMonstadtTextFont =
+    GoogleFonts.montserrat().copyWith(color: Colors.black, fontWeight: FontWeight.w500);
 TextStyle whiteTextFont =
     GoogleFonts.roboto().copyWith(color: Colors.white, fontWeight: FontWeight.w500);
 TextStyle purpleTextFont =

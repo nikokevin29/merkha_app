@@ -11,10 +11,11 @@ part 'user_service.dart';
 part 'address_service.dart';
 part 'user_interest_service.dart';
 part 'merchant_service.dart';
+part 'wishlist_service.dart';
 
 String baseURL = "http://192.168.0.103:8000/api/";
 
 String baseURLphoto = "http://192.168.1.12:8000/storage/";
 
-String apiRajaOngkir  = "https://api.rajaongkir.com/starter/";
-String apiKeyOngkir   = "7facf87ad54c821e568ef658f3fa79d6";
+String apiRajaOngkir = "https://api.rajaongkir.com/starter/";
+String apiKeyOngkir = "7facf87ad54c821e568ef658f3fa79d6";

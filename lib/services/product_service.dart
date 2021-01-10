@@ -123,4 +123,25 @@ class ProductServices {
     
     return ApiReturnValue(value: product, message: data['meta']['message']);
   }
+  static Future<ApiReturnValue<List<Product>>> getProductById(
+      {String id, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'product/showbyid/' + id;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode : ${response.statusCode}');
+      print('data : ${response.body}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    print(data);
+    List<Product> product = (data['data'] as Iterable).map((e) => Product.fromJson(e)).toList();
+    
+    return ApiReturnValue(value: product, message: data['meta']['message']);
+  }
 }

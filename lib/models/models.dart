@@ -7,3 +7,4 @@ part 'address.dart';
 part 'user_interest.dart';
 part 'product.dart';
 part 'merchant.dart';
+part 'wishlist.dart';

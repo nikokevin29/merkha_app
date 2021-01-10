@@ -1,9 +1,9 @@
 part of 'widgets.dart';
 
-class ItemCard extends StatelessWidget {
+class ItemCardWishlist extends StatelessWidget {
   final Product product;
   final Function onTap;
-  ItemCard({this.product, this.onTap});
+  ItemCardWishlist({this.product, this.onTap});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -53,6 +53,27 @@ class ItemCard extends StatelessWidget {
                     onTap: () {
                       // onTap Shop Button
                       print('tap Button');
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: 5,
+                  left: 120,
+                  child: GestureDetector(
+                    child: Icon(Icons.cancel, color: Colors.blue),
+                    onTap: () async {
+                      // onTap Delete
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          });
+                      context.read<WishlistCubit>().deleteWishlist(product.id.toString());
+                      context.read<WishlistCubit>().showWishlist();
+                      Navigator.pop(context);
                     },
                   ),
                 ),

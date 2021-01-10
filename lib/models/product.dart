@@ -4,7 +4,10 @@ class Product extends Equatable {
   final int id;
   final String category;
   final int merchantId;
+  final String website;
   final String merchant;
+  final String merchantLocation;
+  final String merchantLogo;
   final String productName;
   final String description;
   final double price;
@@ -22,7 +25,10 @@ class Product extends Equatable {
     this.id,
     this.category,
     this.merchantId,
+    this.website,
     this.merchant,
+    this.merchantLocation,
+    this.merchantLogo,
     this.productName,
     this.description,
     this.price,
@@ -42,7 +48,10 @@ class Product extends Equatable {
         id,
         category,
         merchantId,
+        website,
         merchant,
+        merchantLocation,
+        merchantLogo,
         productName,
         description,
         price,
@@ -61,7 +70,10 @@ class Product extends Equatable {
         id: data['id'],
         category: data['category'],
         merchantId: data['merchant_id'],
+        website: data['website'],
         merchant: data['merchant'],
+        merchantLocation: data['merchant_location'],
+        merchantLogo: data['merchant_logo'],
         productName: data['product_name'],
         description: data['description'],
         price: double.parse(data['price']),

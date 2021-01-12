@@ -9,6 +9,7 @@ import 'package:merkha_app/models/models.dart';
 import 'package:merkha_app/shared/shared.dart';
 import 'package:merkha_app/view/pages/pages.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'selectable_box.dart';
 part 'item_card.dart';
@@ -18,3 +19,4 @@ part 'product_card.dart';
 part 'merchant_card.dart';
 part 'merchant_search_card.dart';
 part 'item_card_wishlist.dart';
+part 'feed_product_search_card.dart';

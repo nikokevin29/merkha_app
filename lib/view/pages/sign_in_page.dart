@@ -141,7 +141,6 @@ class _SignInPageState extends State<SignInPage> {
                                 SharedPreferences autologin = await SharedPreferences.getInstance();
                                 await autologin.setString('email', emailController.text);
                                 await autologin.setString('password', passwordController.text);
-                                print(autologin);
                                 Get.offAll(MainPage());
                               } else {
                                 Get.snackbar(

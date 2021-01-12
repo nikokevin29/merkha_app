@@ -83,7 +83,8 @@ class AppBarProfile extends StatelessWidget {
       backgroundColor: Colors.white,
       leading: GestureDetector(
         onTap: () {
-          //Add Posting Button
+          //Add Posting Button Create Feed
+          Get.to(CreatePost());
         },
         child: Icon(
           Icons.add,
@@ -227,7 +228,8 @@ Column buildHeader(BuildContext context) {
                       onTap: () {
                         //Wallet Button
                       },
-                      child: Image.asset('assets/wallet-icon.png')),
+                      child: SizedBox(
+                          height: 22, width: 30, child: Image.asset('assets/wallet-icon.png'))),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -235,7 +237,8 @@ Column buildHeader(BuildContext context) {
                       onTap: () {
                         //Chat Button
                       },
-                      child: Image.asset('assets/chat-icon.png')),
+                      child: SizedBox(
+                          height: 22, width: 30, child: Image.asset('assets/chat-icon.png'))),
                 ),
               ],
             )

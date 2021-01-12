@@ -17,7 +17,6 @@ class WishlistService {
       return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
     }
     var data = jsonDecode(response.body);
-    print(data);
     List<Product> wishlist = (data['data'] as Iterable).map((e) => Product.fromJson(e)).toList();
     return ApiReturnValue(value: wishlist, message: data['meta']['message']);
   }
@@ -38,7 +37,7 @@ class WishlistService {
         'id_product': wishlist.idProduct.toString(),
       }),
     );
-    
+
     if (response.statusCode != 200) {
       print('StatusCode : ${response.statusCode}');
       print('data : ${response.body}');

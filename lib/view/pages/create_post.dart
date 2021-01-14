@@ -46,7 +46,7 @@ class _CreatePostState extends State<CreatePost> {
           ),
           title: Center(
             child: Text(
-              ''Photo'',
+              'Photo',
               style: blackMonstadtTextFont.copyWith(fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ),

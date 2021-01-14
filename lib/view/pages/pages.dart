@@ -1,4 +1,5 @@
-import 'dart:convert';
+import 'dart:convert'
+;
 import 'dart:io';
 
 import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
@@ -6,6 +7,7 @@ import 'package:async/async.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_greetings/flutter_greetings.dart';
 import 'package:get/get.dart';
@@ -57,3 +59,4 @@ part 'tab_profile_order.dart';
 part 'tab_profile_post.dart';
 part 'tab_profile_update.dart';
 part 'tab_wishlist.dart';
+part 'chat_page.dart';

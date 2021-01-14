@@ -1,21 +1,14 @@
 part of 'widgets.dart';
 
+//NGGAK DIPAKE
 class FeedProductSearchCard extends StatelessWidget {
   final Product product;
-  final Function onTap;
-  FeedProductSearchCard({this.product, this.onTap});
+  FeedProductSearchCard({this.product});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        //Get.to(DetailProduct(product: product));
-        //TODO: Passting Data Back
-        SharedPreferences getpostProduct = await SharedPreferences.getInstance();
-        await getpostProduct.setString('id', product.id.toString());
-        await getpostProduct.setString('productName', product.productName);
-        print('click');
-        Get.back();
-        Get.back();
+        //
       },
       child: Container(
         width: (MediaQuery.of(context).size.width - 4 * defaultMargin) / 2,

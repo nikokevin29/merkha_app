@@ -12,6 +12,8 @@ class _CreatePost2State extends State<CreatePost2> {
   TextEditingController captionController = TextEditingController();
   String location;
   Product product;
+  String pName;
+  int pId;
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -46,9 +48,11 @@ class _CreatePost2State extends State<CreatePost2> {
     return await Geolocator.getCurrentPosition();
   }
 
-  @override
-  void initState() {
-    super.initState();
+  void update(int newId, String newString) {
+    setState(() {
+      pId = newId;
+      pName = newString;
+    });
   }
 
   @override
@@ -125,7 +129,8 @@ class _CreatePost2State extends State<CreatePost2> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('product.productName '),
+                  Text(pName ?? '...'),
+                  Text(pId.toString() ?? 'null'),
                   FlatButton(
                     minWidth: 100,
                     height: 30,
@@ -134,7 +139,9 @@ class _CreatePost2State extends State<CreatePost2> {
                     color: accentColor2,
                     onPressed: () {
                       //TODO: Add Product
-                      Get.to(SearchProductFeed());
+                      Get.to(SearchProductFeed(onSonChanged: (int newId, String newString) {
+                        update(newId, newString);
+                      }));
                     },
                     child: Text('Tag Product'),
                   ),

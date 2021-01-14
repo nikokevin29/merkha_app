@@ -1,14 +1,20 @@
 part of 'pages.dart';
 
-class SearchProductFeed extends StatefulWidget {
-  final Product product;
-  SearchProductFeed({this.product});
-  @override
-  _SearchProductFeedState createState() => _SearchProductFeedState();
-}
+typedef void Callback(int id, String name);
 
-class _SearchProductFeedState extends State<SearchProductFeed> {
-  TextEditingController searchController = TextEditingController();
+// class SearchProductFeed extends StatefulWidget {
+//   final Product product;
+//   final Callback onSonChanged;
+//   SearchProductFeed({this.product, this.onSonChanged});
+//   @override
+//   _SearchProductFeedState createState() => _SearchProductFeedState();
+// }
+
+class SearchProductFeed extends StatelessWidget {
+  final Product product;
+  final Callback onSonChanged;
+  SearchProductFeed({this.product, this.onSonChanged});
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,11 +83,90 @@ class _SearchProductFeedState extends State<SearchProductFeed> {
                                 spacing: 10,
                                 runSpacing: 10,
                                 children: [
-                                  FeedProductSearchCard(
-                                      product: product[index],
-                                      onTap: () {
-                                        print('tap');
-                                      })
+                                  GestureDetector(
+                                    onTap: () async {
+                                      onSonChanged(product[index].id, product[index].productName);
+                                      Get.back();
+                                    },
+                                    child: Container(
+                                      width:
+                                          (MediaQuery.of(context).size.width - 4 * defaultMargin) /
+                                              2,
+                                      height: 215,
+                                      child: Column(
+                                        children: [
+                                          Stack(
+                                            fit: StackFit.passthrough,
+                                            children: [
+                                              Container(
+                                                //Image Product
+                                                height: 150,
+                                                width: 150,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(15),
+                                                  image: DecorationImage(
+                                                      image: (product[index].preview != null)
+                                                          ? NetworkImage(product[index].preview)
+                                                          : AssetImage('assets/logo-yellow.png'),
+                                                      fit: BoxFit.cover),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        spreadRadius: 3,
+                                                        blurRadius: 15,
+                                                        color: Colors.black12),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            padding: EdgeInsets.all(6),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  //Proudct Name
+                                                  product[index].productName,
+                                                  style: blackTextFont.copyWith(
+                                                      fontWeight: FontWeight.w600),
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                Text(
+                                                  //Price
+                                                  NumberFormat.currency(
+                                                          locale: 'id',
+                                                          symbol: 'Rp ',
+                                                          decimalDigits: 0)
+                                                      .format(product[index].price),
+                                                  style: redNumberFont,
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                Text(
+                                                  //Merchant
+                                                  'by ' + product[index].merchant,
+                                                  style: greyTextFont.copyWith(fontSize: 12),
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                  // GestureDetector(
+                                  //   onTap: () {
+                                  //     print('tap');
+                                  //   },
+                                  //   child: FeedProductSearchCard(
+                                  //     product: product[index],
+                                  //   ),
+                                  // )
                                 ],
                               )),
                             )

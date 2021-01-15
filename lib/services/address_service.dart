@@ -38,6 +38,8 @@ class AddressService {
         'postal_code': address.postalCode,
         'city': address.city,
         'province': address.province,
+        'id_province': address.idProvince,
+        'id_city': address.idCity,
       }),
     );
     
@@ -69,6 +71,8 @@ class AddressService {
         'postal_code': address.postalCode,
         'city': address.city,
         'province': address.province,
+        'id_province': address.idProvince,
+        'id_city': address.idCity,
       }),
     );
     var data = jsonDecode(response.body);

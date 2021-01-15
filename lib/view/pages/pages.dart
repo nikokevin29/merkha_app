@@ -1,5 +1,4 @@
-import 'dart:convert'
-;
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
@@ -55,6 +54,8 @@ part 'tab_feed.dart';
 part 'tab_main.dart';
 part 'tab_profile.dart';
 part 'tab_profile_address.dart';
+part 'tab_profile_address_edit.dart';
+part 'tab_profile_address_add.dart';
 part 'tab_profile_order.dart';
 part 'tab_profile_post.dart';
 part 'tab_profile_update.dart';

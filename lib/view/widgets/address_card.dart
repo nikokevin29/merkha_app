@@ -21,20 +21,28 @@ class AddressCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 5),
-              // Text(
-              //   //User Name
-              //   address.idUser.toString(),
-              //   overflow: TextOverflow.ellipsis,
-              //   style: blackTextFont.copyWith(fontWeight: FontWeight.bold),
-              // ),
-              SizedBox(height: 5),
               Text(
                 address.address,
                 maxLines: 5,
                 style: blackTextFont.copyWith(),
               ),
+              Row(
+                children: [
+                  Text(
+                    address.city,
+                    maxLines: 1,
+                    style: blackTextFont.copyWith(),
+                  ),
+                  Text(', ', style: blackTextFont.copyWith()),
+                  Text(
+                    address.province,
+                    maxLines: 1,
+                    style: blackTextFont.copyWith(),
+                  ),
+                ],
+              ),
               Text(
-                /*address.city + ', ' + address.province + ', ' + */ address.postalCode,
+                address.postalCode,
                 maxLines: 5,
                 style: blackTextFont.copyWith(),
               ),

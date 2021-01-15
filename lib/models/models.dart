@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'dart:convert';
 
 part 'user.dart';
 part 'api_return_value.dart';
@@ -9,4 +8,3 @@ part 'user_interest.dart';
 part 'product.dart';
 part 'merchant.dart';
 part 'wishlist.dart';
-part 'province.dart';

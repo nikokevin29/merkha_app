@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>835615571091-sdc294ad2juvc16j3f8dg0a9ebhkb5iu.apps.googleusercontent.com</string>
+	<string>1456685368-026uooa788nhjcbfs9gluseu9hme4794.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.835615571091-sdc294ad2juvc16j3f8dg0a9ebhkb5iu</string>
+	<string>com.googleusercontent.apps.1456685368-026uooa788nhjcbfs9gluseu9hme4794</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBd33c7i9GXec3zvk2oQOp5IzAhZh9-nhU</string>
+	<string>AIzaSyBMuh_zvMDkLO0DAglfXOJhbyQpmQrZHF0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>835615571091</string>
+	<string>1456685368</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.xbanana.merkhaApp</string>
 	<key>PROJECT_ID</key>
-	<string>test-free-project-merkha</string>
+	<string>merkha-firebase</string>
 	<key>STORAGE_BUCKET</key>
-	<string>test-free-project-merkha.appspot.com</string>
+	<string>merkha-firebase.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:835615571091:ios:e2d2c5766a942b175a2166</string>
+	<string>1:1456685368:ios:63681ba876a317b816c1cd</string>
 </dict>
 </plist>

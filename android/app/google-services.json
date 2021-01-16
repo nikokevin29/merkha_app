@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "835615571091",
-    "project_id": "test-free-project-merkha",
-    "storage_bucket": "test-free-project-merkha.appspot.com"
+    "project_number": "1456685368",
+    "project_id": "merkha-firebase",
+    "storage_bucket": "merkha-firebase.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:835615571091:android:92548f11dea8a5cb5a2166",
+        "mobilesdk_app_id": "1:1456685368:android:284cd9f5d997d2de16c1cd",
         "android_client_info": {
           "package_name": "com.xbanana.merkha_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "835615571091-lhe8r9sa56jee2vqj4cs03tes27bk929.apps.googleusercontent.com",
+          "client_id": "1456685368-egaboe5m5l9rc1idcqdr4o43sak38m94.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCuR4BcD28ttbmBGq-j7v1m6zFzd4C7Nyo"
+          "current_key": "AIzaSyB-OeBTDhVnEh1B2vxWbmQFoI3gnexD3rM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "835615571091-lhe8r9sa56jee2vqj4cs03tes27bk929.apps.googleusercontent.com",
+              "client_id": "1456685368-egaboe5m5l9rc1idcqdr4o43sak38m94.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

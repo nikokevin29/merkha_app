@@ -21,3 +21,4 @@ part 'merchant_search_card.dart';
 part 'item_card_wishlist.dart';
 part 'feed_product_search_card.dart';
 part 'dropdown_widget.dart';
+part 'product_cart_card.dart';

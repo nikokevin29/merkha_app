@@ -22,6 +22,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_select/smart_select.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart' as geocode;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart' as fb_storage;
+import 'package:chat_bubbles/chat_bubbles.dart';
+import 'package:bubble/bubble.dart';
 
 import 'package:merkha_app/cubit/cubit.dart';
 import 'package:merkha_app/cubit/product_cubit.dart';
@@ -61,3 +66,4 @@ part 'tab_profile_post.dart';
 part 'tab_profile_update.dart';
 part 'tab_wishlist.dart';
 part 'chat_page.dart';
+part 'detail_chat.dart';

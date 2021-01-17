@@ -304,6 +304,19 @@ class DetailProduct extends StatelessWidget {
               InkWell(
                 onTap: () {
                   print('Chat Tapped');
+
+                  FirebaseFirestore.instance
+                      .collection(
+                          (context.read<UserCubit>().state as UserLoaded).user.id.toString())
+                      .doc(product.merchantId.toString())
+                      .set({
+                    'id_merchant': product.merchantId.toString(), //Id Merchant
+                    'url_photo': product.merchantLogo,
+                    'merchant_name': product.merchant,
+                    'created_at': DateTime.now(),
+                  });
+                  Get.to(DetailChat(
+                      peerId: product.merchantId.toString(), peerAvatar: product.merchantLogo,peerName: product.merchant));
                 },
                 child: SizedBox(
                   height: 50,

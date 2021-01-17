@@ -28,7 +28,7 @@ class _EditAddressState extends State<EditAddress> {
     _cityName = widget.address.city;
   }
 
-  Future<void> getProvince() async {
+  getProvince() async {
     final response = await http.get(apiRajaOngkir + 'province', headers: {"key": apiKeyOngkir});
     var jsonObject = jsonDecode(response.body);
     if (response.statusCode == 400) {
@@ -41,7 +41,7 @@ class _EditAddressState extends State<EditAddress> {
     return listProvince;
   }
 
-  Future<void> getCity(var idProvince) async {
+  getCity(var idProvince) async {
     final response = await http
         .get(apiRajaOngkir + 'city?province=' + _valueProvince, headers: {"key": apiKeyOngkir});
     var jsonObject = jsonDecode(response.body);
@@ -49,7 +49,7 @@ class _EditAddressState extends State<EditAddress> {
     setState(() {
       _dataCity = listCity;
     });
-
+    print('city Getter');
     return _dataCity;
   }
 
@@ -89,60 +89,8 @@ class _EditAddressState extends State<EditAddress> {
                   controller: postalCodeController,
                   decoration: InputDecoration(labelText: "Postal Code (5 Digit)"),
                 ),
-                FutureBuilder(
-                    future: getProvince(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return DropdownButtonFormField(
-                            isExpanded: true,
-                            hint: Text('Select Province'),
-                            value: _valueProvince,
-                            items: _dataProvince
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(item['province']),
-                                      value: item['province_id'],
-                                      onTap: () {
-                                        _provinceName = item['province']; //Get Province Name
-                                      },
-                                    ))
-                                .toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _valueProvince = value;
-                                // _valueCity and iscity reset after province changed
-                                _valueCity = null;
-                                iscity = false;
-                                print("Province ID " + _valueProvince);
-                              });
-                              getCity(value);
-                            });
-                      } else {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-                    }),
-                DropdownButton(
-                    isExpanded: true,
-                    hint: Text(_cityName),
-                    value: _valueCity,
-                    items: _dataCity.map((item) {
-                      return DropdownMenuItem(
-                        child: Text(item['city_name']),
-                        value: item['city_id'],
-                        onTap: () {
-                          _cityName = item['city_name']; //Get City Name
-                        },
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _valueCity = value;
-
-                        print("City id :" + _valueCity.toString());
-                      });
-                    }),
+                buildProvince(),
+                buildCity(),
                 SizedBox(height: 15),
                 SizedBox(height: 15),
                 FlatButton(
@@ -188,5 +136,65 @@ class _EditAddressState extends State<EditAddress> {
             )),
       ),
     );
+  }
+
+  DropdownButton buildCity() {
+    return DropdownButton(
+        isExpanded: true,
+        hint: Text(_cityName),
+        value: _valueCity,
+        items: _dataCity.map((item) {
+          return DropdownMenuItem(
+            child: Text(item['city_name']),
+            value: item['city_id'],
+            onTap: () {
+              _cityName = item['city_name']; //Get City Name
+            },
+          );
+        }).toList(),
+        onChanged: (value) {
+          setState(() {
+            _valueCity = value;
+
+            print("City id :" + _valueCity.toString());
+          });
+        });
+  }
+
+  Widget buildProvince() {
+    return FutureBuilder(
+        future: getProvince(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return DropdownButtonFormField(
+                isExpanded: true,
+                hint: Text('Select Province'),
+                value: _valueProvince,
+                items: _dataProvince
+                    .map((item) => DropdownMenuItem(
+                          child: Text(item['province']),
+                          value: item['province_id'],
+                          onTap: () {
+                            _provinceName = item['province']; //Get Province Name
+                          },
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _valueProvince = value;
+                    // _valueCity and iscity reset after province changed
+                    _valueCity = null;
+                    iscity = false;
+                    print("Province ID " + _valueProvince);
+                  });
+                  getCity(value);
+                });
+          } else {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+        });
   }
 }

@@ -167,10 +167,13 @@ class ChatScreenState extends State<ChatScreen> {
     // type: 0 = text, 1 = image, 2 = sticker
     if (content.trim() != '') {
       textEditingController.clear();
-
+      //TODO: onSend Messeage
       var documentReference = FirebaseFirestore.instance
-          .collection('messages')
-          .doc(groupChatId)
+          // .collection('messages')
+          // .doc(groupChatId)
+          // .collection(groupChatId)
+          .collection((context.read<UserCubit>().state as UserLoaded).user.id.toString())
+          .doc(peerId)
           .collection(groupChatId)
           .doc(DateTime.now().millisecondsSinceEpoch.toString());
 
@@ -501,9 +504,10 @@ class ChatScreenState extends State<ChatScreen> {
               child:
                   CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(themeColor)))
           : StreamBuilder(
+              //TODO: Build Message
               stream: FirebaseFirestore.instance
-                  .collection('messages')
-                  .doc(groupChatId)
+                  .collection((context.watch<UserCubit>().state as UserLoaded).user.id.toString())
+                  .doc(peerId)
                   .collection(groupChatId)
                   .orderBy('timestamp', descending: true)
                   .limit(_limit)

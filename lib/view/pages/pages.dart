@@ -67,3 +67,4 @@ part 'tab_profile_update.dart';
 part 'tab_wishlist.dart';
 part 'chat_page.dart';
 part 'detail_chat.dart';
+part 'address_feed_pick.dart';

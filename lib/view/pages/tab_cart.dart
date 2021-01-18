@@ -6,6 +6,7 @@ class CartTab extends StatefulWidget {
 }
 
 class _CartTabState extends State<CartTab> {
+  Address mockAddress;
   List<Product> _cart = [];
   Product _activeProduct = null;
 
@@ -31,6 +32,24 @@ class _CartTabState extends State<CartTab> {
   void initState() {
     super.initState();
     context.read<WishlistCubit>().showWishlist(); //Get Wishlist
+
+    context.read<AddressCubit>().showAddress(); //Get Address
+    mockAddress = Address(
+      address: '',
+      addressSaveName: '',
+      id: '',
+      idProvince: '',
+      idCity: '',
+      postalCode: '',
+      city: '',
+      province: '',
+    );
+  }
+
+  void updateAddress(Address newAddress) {
+    setState(() {
+      mockAddress = newAddress;
+    });
   }
 
   @override
@@ -109,16 +128,22 @@ class _CartTabState extends State<CartTab> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Jl. bangka Raya No.45A',
+                                            mockAddress.addressSaveName + ' id ' + mockAddress.id,
+                                            maxLines: 1,
+                                            style: blackTextFont.copyWith(
+                                                fontSize: 10, fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            mockAddress.address,
                                             maxLines: 2,
                                             style: blackTextFont.copyWith(fontSize: 10),
                                           ),
                                           Text(
-                                            'Jakarta Selatan' + ', ' + 'DKI Jakarta',
+                                            mockAddress.province + ', ' + mockAddress.city,
                                             style: blackTextFont.copyWith(fontSize: 10),
                                           ),
                                           Text(
-                                            '53176',
+                                            mockAddress.postalCode,
                                             style: blackTextFont.copyWith(fontSize: 10),
                                           ),
                                         ],
@@ -131,7 +156,10 @@ class _CartTabState extends State<CartTab> {
                                 alignment: Alignment.topRight,
                                 child: GestureDetector(
                                   onTap: () {
-                                    print('tap edit address');
+                                    print('Tap pick address');
+                                    Get.to(AddressFeedPick(onSonChanged: (Address newAddress) {
+                                      updateAddress(newAddress);
+                                    }));
                                   },
                                   child: Text(
                                     'Edit',

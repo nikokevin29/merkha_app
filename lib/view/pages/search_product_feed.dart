@@ -2,14 +2,6 @@ part of 'pages.dart';
 
 typedef void Callback(int id, String name);
 
-// class SearchProductFeed extends StatefulWidget {
-//   final Product product;
-//   final Callback onSonChanged;
-//   SearchProductFeed({this.product, this.onSonChanged});
-//   @override
-//   _SearchProductFeedState createState() => _SearchProductFeedState();
-// }
-
 class SearchProductFeed extends StatelessWidget {
   final Product product;
   final Callback onSonChanged;

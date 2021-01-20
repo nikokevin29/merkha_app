@@ -1,9 +1,10 @@
 part of 'widgets.dart';
 
 class ProductCardCard extends StatelessWidget {
+  final Cart cart;
   const ProductCardCard({
-    Key key,
-  }) : super(key: key);
+    this.cart
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class ProductCardCard extends StatelessWidget {
               ],
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage('https://bit.ly/2KeWtyW'),
+                image: NetworkImage(cart.urlPreview),
               ),
             ),
           ),
@@ -34,8 +35,9 @@ class ProductCardCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              //note: Product Name
               Text(
-                'Loca Sonokeling',
+                cart.productName,
                 style: blackTextFont.copyWith(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 15),
@@ -68,11 +70,12 @@ class ProductCardCard extends StatelessWidget {
                 SizedBox(width: 10),
                 Text('X'),
                 SizedBox(width: 10),
+                //note: Price Per Product
                 SizedBox(
                   width: 85,
                   child: Text(
                     NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                        .format(20000),
+                        .format(cart.price),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: redNumberFont.copyWith(fontSize: 12, color: Colors.black),
@@ -80,18 +83,6 @@ class ProductCardCard extends StatelessWidget {
                 ),
               ]),
             ],
-          ),
-        ],
-      ),
-      Divider(),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text('Subtotal :', style: redNumberFont.copyWith(fontSize: 12, color: Colors.grey)),
-          Text(
-            NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0).format(20000),
-            style: redNumberFont.copyWith(fontSize: 12),
           ),
         ],
       ),

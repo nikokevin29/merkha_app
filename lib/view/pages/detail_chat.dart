@@ -172,7 +172,7 @@ class ChatScreenState extends State<ChatScreen> {
           // .collection('messages')
           // .doc(groupChatId)
           // .collection(groupChatId)
-          .collection((context.read<UserCubit>().state as UserLoaded).user.id.toString())
+          .collection('rooms')
           .doc(peerId)
           .collection(groupChatId)
           .doc(DateTime.now().millisecondsSinceEpoch.toString());
@@ -506,7 +506,7 @@ class ChatScreenState extends State<ChatScreen> {
           : StreamBuilder(
               //TODO: Build Message
               stream: FirebaseFirestore.instance
-                  .collection((context.watch<UserCubit>().state as UserLoaded).user.id.toString())
+                  .collection('rooms')
                   .doc(peerId)
                   .collection(groupChatId)
                   .orderBy('timestamp', descending: true)

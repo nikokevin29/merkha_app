@@ -26,7 +26,7 @@ class _ChatPageState extends State<ChatPage> {
             padding: EdgeInsets.symmetric(horizontal: defaultMargin),
             child: StreamBuilder(
               stream: FirebaseFirestore.instance
-                  .collection((context.watch<UserCubit>().state as UserLoaded).user.id.toString())
+                  .collection('rooms')
                   .orderBy('created_at')
                   .snapshots(),
               builder: (context, snapshot) {

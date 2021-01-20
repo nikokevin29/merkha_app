@@ -7,8 +7,7 @@ class CartTab extends StatefulWidget {
 
 class _CartTabState extends State<CartTab> {
   Address mockAddress;
-  List<Product> _cart = [];
-  Product _activeProduct = null;
+  List<Cart> _cart = [];
 
   // _addOneItemToCart(Product p) {
   //   Product found = _cart.firstWhere((element) => element.id == p.id, orElse: () => null);
@@ -44,6 +43,11 @@ class _CartTabState extends State<CartTab> {
       city: '',
       province: '',
     );
+    LocalStorage.db.getCart().then((cartList) {
+      print(cartList);
+      _cart = cartList;
+      setState(() {});
+    });
   }
 
   void updateAddress(Address newAddress) {
@@ -181,7 +185,29 @@ class _CartTabState extends State<CartTab> {
                             ),
                           ),
                           //Cart Builder Here
-                          ProductCardCard(),
+                          ListView.builder(
+                              shrinkWrap: true, //Fixed Length
+                              physics: const ClampingScrollPhysics(), // Disable Touch Scroll
+                              itemCount: _cart.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ProductCardCard(cart: _cart[index]);
+                              }),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text('Subtotal :',
+                                  style: redNumberFont.copyWith(fontSize: 12, color: Colors.grey)),
+                              //note: Subtotal All Product
+                              Text(
+                                NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                    .format(0),
+                                style: redNumberFont.copyWith(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                          Divider(),
                           Container(
                             alignment: Alignment.centerLeft,
                             child: Row(

@@ -299,6 +299,21 @@ class DetailProduct extends StatelessWidget {
                 ),
                 onPressed: () {
                   print('Buy Tapped');
+                  Cart cart = Cart(
+                    id: product.id,
+                    productName: product.productName,
+                    urlPreview: product.preview,
+                    price: product.price,
+                    qty: 1,
+                    idMerchant: product.merchantId,
+                    merchantName: product.merchant,
+                    merchantLogo: product.merchantLogo,
+                  );
+                  // if (LocalStorage.db.check(2)) {
+                  //   Get.snackbar('Product Exist In Cart', 'This Product exist in cart');
+                  // } else {
+                  LocalStorage.db.insert(cart);
+                  // }
                 },
               ),
               InkWell(
@@ -307,16 +322,22 @@ class DetailProduct extends StatelessWidget {
 
                   FirebaseFirestore.instance
                       .collection(
-                          (context.read<UserCubit>().state as UserLoaded).user.id.toString())
+                          'rooms')
                       .doc(product.merchantId.toString())
                       .set({
                     'id_merchant': product.merchantId.toString(), //Id Merchant
+                    'id_user': (context.read<UserCubit>().state as UserLoaded)
+                        .user
+                        .id
+                        .toString(), //Id Merchant
                     'url_photo': product.merchantLogo,
                     'merchant_name': product.merchant,
                     'created_at': DateTime.now(),
                   });
                   Get.to(DetailChat(
-                      peerId: product.merchantId.toString(), peerAvatar: product.merchantLogo,peerName: product.merchant));
+                      peerId: product.merchantId.toString(),
+                      peerAvatar: product.merchantLogo,
+                      peerName: product.merchant));
                 },
                 child: SizedBox(
                   height: 50,

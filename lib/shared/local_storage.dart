@@ -7,6 +7,7 @@ class LocalStorage {
   static const String urlPreview = 'urlPreview';
   static const String price = 'price';
   static const String qty = 'qty';
+  static const String subtotal = 'subtotal';
   static const String idMerchant = 'idMerchant';
   static const String merchantName = 'merchantName';
   static const String merchantLogo = 'merchantLogo';
@@ -39,6 +40,7 @@ class LocalStorage {
         "$urlPreview TEXT,"
         "$price TEXT,"
         "$qty TEXT,"
+        "$subtotal TEXT,"
         "$idMerchant TEXT,"
         "$merchantName TEXT,"
         "$merchantLogo TEXT"
@@ -46,7 +48,6 @@ class LocalStorage {
       );
     });
   }
-
 
   Future<List<Cart>> getCart() async {
     final db = await database;
@@ -56,6 +57,7 @@ class LocalStorage {
       urlPreview,
       price,
       qty,
+      subtotal,
       idMerchant,
       merchantName,
       merchantLogo,
@@ -85,4 +87,25 @@ class LocalStorage {
 
     return await db.delete(TABLE_CART, where: "id = ?", whereArgs: [id]);
   }
+
+  Future<int> updateQty(Cart cart) async {
+    final db = await database;
+    Future<int> count = db.rawUpdate(
+      'UPDATE Cart SET qty = ' + cart.qty.toString() + ' WHERE id = ' + cart.id.toString(),
+    );
+    return count;
+  }
+
+  // Future<int> updateSubtotal(Cart cart) async {
+  //   final db = await database;
+  //   Future<int> subtotal = db.rawUpdate(
+  //     'UPDATE Cart SET subtotal =' +
+  //         cart.qty.toString() +
+  //         '* price' +
+  //         ' WHERE id = ' +
+  //         cart.id.toString(),
+  //   );
+  //   return subtotal;
+  // }
+  //
 }

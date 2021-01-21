@@ -78,7 +78,16 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
                             fit: BoxFit.cover),
                       ),
                     )
-                  : Image.asset("assets/defaultProfile.png"),
+                  : Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                        image: DecorationImage(
+                            image: AssetImage('assets/defaultProfile.png'), fit: BoxFit.cover),
+                      ),
+                    ),
               text: "Profile",
             ),
           ],

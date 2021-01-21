@@ -1,10 +1,20 @@
 part of 'widgets.dart';
 
-class ProductCardCard extends StatelessWidget {
+class ProductCardCard extends StatefulWidget {
   final Cart cart;
-  const ProductCardCard({
-    this.cart
-  });
+  const ProductCardCard({this.cart});
+
+  @override
+  _ProductCardCardState createState() => _ProductCardCardState();
+}
+
+class _ProductCardCardState extends State<ProductCardCard> {
+  Cart cart;
+  @override
+  void initState() {
+    super.initState();
+    cart = widget.cart; //Setter
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +67,22 @@ class ProductCardCard extends StatelessWidget {
                     InkWell(
                         onTap: () {
                           //note: Decrease Qty
+                          if (cart.qty == 1) {
+                            print('min qty 1');
+                          } else {
+                            LocalStorage.db.updateQty(Cart(qty: cart.qty = cart.qty - 1));
+                            print(cart.qty.toString());
+                          }
+                          setState(() {});
                         },
                         child: Icon(Icons.arrow_drop_down)),
-                    Text('1'),
+                    Text(cart.qty.toString()),
                     InkWell(
                         onTap: () {
                           //note: Increase Qty
+                          LocalStorage.db.updateQty(Cart(qty: cart.qty = cart.qty + 1));
+                          print(cart.qty.toString());
+                          setState(() {});
                         },
                         child: Icon(Icons.arrow_drop_up)),
                   ]),

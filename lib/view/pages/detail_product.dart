@@ -300,20 +300,59 @@ class DetailProduct extends StatelessWidget {
                 onPressed: () {
                   print('Buy Tapped');
                   Cart cart = Cart(
-                    id: product.id,
-                    productName: product.productName,
-                    urlPreview: product.preview,
-                    price: product.price,
-                    qty: 1,
-                    idMerchant: product.merchantId,
-                    merchantName: product.merchant,
-                    merchantLogo: product.merchantLogo,
-                  );
-                  // if (LocalStorage.db.check(2)) {
-                  //   Get.snackbar('Product Exist In Cart', 'This Product exist in cart');
-                  // } else {
-                  LocalStorage.db.insert(cart);
-                  // }
+                      id: product.id,
+                      productName: product.productName,
+                      urlPreview: product.preview,
+                      price: product.price,
+                      qty: 1,
+                      idMerchant: product.merchantId,
+                      merchantName: product.merchant,
+                      merchantLogo: product.merchantLogo);
+                  List<Cart> _cart = []; //Init Empty String
+                  LocalStorage.db.getCart().then((value) {
+                    _cart = value;
+                    for (int i = 0; i <= _cart.length - 1; i++) {
+                      if (cart.id == _cart[i].id) {
+                        Get.snackbar('Product Exist In Cart', 'This Product exist in cart');
+                        break;
+                      } else if (cart.idMerchant == _cart[i].idMerchant) {
+                        Widget cancelButton = FlatButton(
+                          child: Text("Cancel"),
+                          onPressed: () {
+                            Get.back();
+                          },
+                        );
+                        Widget continueButton = FlatButton(
+                          child: Text("Add"),
+                          onPressed: () {
+                            _cart.clear();
+                            LocalStorage.db.insert(cart);
+                            Get.back();
+                          },
+                        );
+                        AlertDialog alert = AlertDialog(
+                          title: Text("Already Have Product From Another Merchant"),
+                          content:
+                              Text("Are you sure to add this item and remove old item in cart ?"),
+                          actions: [
+                            cancelButton,
+                            continueButton,
+                          ],
+                        );
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return alert;
+                          },
+                        );
+                        break;
+                      } else if (_cart.length == 0) {
+                        LocalStorage.db.insert(cart);
+                        print('insert first');
+                        break;
+                      }
+                    }
+                  });
                 },
               ),
               InkWell(
@@ -321,9 +360,13 @@ class DetailProduct extends StatelessWidget {
                   print('Chat Tapped');
 
                   FirebaseFirestore.instance
-                      .collection(
-                          'rooms')
-                      .doc(product.merchantId.toString())
+                      .collection('rooms')
+                      .doc(product.merchantId.toString() +
+                          '-' +
+                          (context.read<UserCubit>().state as UserLoaded)
+                              .user
+                              .id
+                              .toString()) //idMerchant-idUser
                       .set({
                     'id_merchant': product.merchantId.toString(), //Id Merchant
                     'id_user': (context.read<UserCubit>().state as UserLoaded)

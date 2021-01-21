@@ -173,14 +173,16 @@ class ChatScreenState extends State<ChatScreen> {
           // .doc(groupChatId)
           // .collection(groupChatId)
           .collection('rooms')
-          .doc(peerId)
-          .collection(groupChatId)
+          .doc(peerId + '-' + id)//idMerchant-idUser
+          .collection('message')
           .doc(DateTime.now().millisecondsSinceEpoch.toString());
 
       FirebaseFirestore.instance.runTransaction((transaction) async {
         transaction.set(
           documentReference,
           {
+            'id_room': peerId + '-' + id,
+            'from': 'user',
             'idFrom': id,
             'idTo': peerId,
             'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
@@ -308,7 +310,7 @@ class ChatScreenState extends State<ChatScreen> {
                         alignment: Alignment.centerLeft,
                         stick: true,
                         nip: BubbleNip.leftTop,
-                        color: Colors.cyanAccent,
+                        color: Colors.greenAccent,
                         child: Text(document.data()['content'],
                             style: blackTextFont.copyWith(color: Colors.white)),
                       )
@@ -507,8 +509,8 @@ class ChatScreenState extends State<ChatScreen> {
               //TODO: Build Message
               stream: FirebaseFirestore.instance
                   .collection('rooms')
-                  .doc(peerId)
-                  .collection(groupChatId)
+                  .doc(peerId + '-' + id)
+                  .collection('message')
                   .orderBy('timestamp', descending: true)
                   .limit(_limit)
                   .snapshots(),

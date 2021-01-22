@@ -64,13 +64,30 @@ class _CartTabState extends State<CartTab> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Text(
-            "My Cart",
-            style: blackTextFont.copyWith(fontSize: 24),
-          ),
-        ),
+            backgroundColor: Colors.white,
+            elevation: 0,
+            title: Text(
+              "My Cart",
+              style: blackTextFont.copyWith(fontSize: 24),
+            ),
+            actions: [
+              // Padding(
+              //   padding: const EdgeInsets.all(15.0),
+              //   child: InkWell(
+              //       onTap: () async {
+              //         print('cek');
+              //         LocalStorage.db.deleteAll();
+              //         await LocalStorage.db.getCart().then((value) {
+              //           _cart = value;
+              //           for (int i = 0; i <= _cart.length; i++) {
+              //             _cart.remove(i);
+              //           }
+              //         });
+              //         setState(() {});
+              //       },
+              //       child: Icon(Icons.delete_forever, color: Colors.black)),
+              // ),
+            ]),
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 5),

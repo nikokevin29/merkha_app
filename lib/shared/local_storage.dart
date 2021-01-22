@@ -96,6 +96,11 @@ class LocalStorage {
     return count;
   }
 
+  Future<List<Map<String, dynamic>>> deleteAll() async {
+    final db = await database;
+    return await db.rawQuery('DELETE FROM Cart');
+  }
+
   // Future<int> updateSubtotal(Cart cart) async {
   //   final db = await database;
   //   Future<int> subtotal = db.rawUpdate(

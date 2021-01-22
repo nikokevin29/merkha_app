@@ -297,7 +297,10 @@ class DetailProduct extends StatelessWidget {
                   style: blackTextFont.copyWith(
                       fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  SharedPreferences isMerchant =
+                      await SharedPreferences.getInstance(); //Save isMerchant
+                  int checkMerchant = (isMerchant.getInt('isMerchant'));
                   print('Buy Tapped');
                   Cart cart = Cart(
                       id: product.id,
@@ -309,47 +312,59 @@ class DetailProduct extends StatelessWidget {
                       merchantName: product.merchant,
                       merchantLogo: product.merchantLogo);
                   List<Cart> _cart = []; //Init Empty String
-                  LocalStorage.db.getCart().then((value) {
+
+                  LocalStorage.db.getCart().then((value) async {
                     _cart = value;
-                    for (int i = 0; i <= _cart.length - 1; i++) {
-                      if (cart.id == _cart[i].id) {
-                        Get.snackbar('Product Exist In Cart', 'This Product exist in cart');
-                        break;
-                      } else if (cart.idMerchant == _cart[i].idMerchant) {
-                        Widget cancelButton = FlatButton(
-                          child: Text("Cancel"),
-                          onPressed: () {
-                            Get.back();
-                          },
-                        );
-                        Widget continueButton = FlatButton(
-                          child: Text("Add"),
-                          onPressed: () {
-                            _cart.clear();
-                            LocalStorage.db.insert(cart);
-                            Get.back();
-                          },
-                        );
-                        AlertDialog alert = AlertDialog(
-                          title: Text("Already Have Product From Another Merchant"),
-                          content:
-                              Text("Are you sure to add this item and remove old item in cart ?"),
-                          actions: [
-                            cancelButton,
-                            continueButton,
-                          ],
-                        );
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return alert;
-                          },
-                        );
-                        break;
-                      } else if (_cart.length == 0) {
-                        LocalStorage.db.insert(cart);
-                        print('insert first');
-                        break;
+                    print(_cart);
+                    if (_cart.length == 0) {
+                      await isMerchant.setInt('isMerchant', cart.idMerchant);
+                      LocalStorage.db.insert(cart);
+                      Get.snackbar('Product Added to Cart', 'This Product Has been added to Cart');
+                    } else {
+                      for (int i = 0; i <= _cart.length - 1; i++) {
+                        if (cart.idMerchant != checkMerchant) {
+                          Widget cancelButton = FlatButton(
+                            child: Text("Cancel"),
+                            onPressed: () {
+                              Get.back();
+                            },
+                          );
+                          Widget continueButton = FlatButton(
+                            child: Text("Add"),
+                            onPressed: () {
+                              LocalStorage.db.deleteAll();
+                              LocalStorage.db.insert(cart);
+                              Get.back();
+                              Get.snackbar(
+                                  'Product Added to Cart', 'This Product Has been added to Cart');
+                            },
+                          );
+                          AlertDialog alert = AlertDialog(
+                            title: Text("Already Have Product From Another Merchant"),
+                            content:
+                                Text("Are you sure to add this item and remove old item in cart ?"),
+                            actions: [
+                              cancelButton,
+                              continueButton,
+                            ],
+                          );
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return alert;
+                            },
+                          );
+                          break;
+                        } else if (cart.id == _cart[i].id) {
+                          Get.snackbar('Product Exist In Cart', 'This Product exist in cart');
+                          break;
+                        } else {
+                          Get.snackbar(
+                              'Product Added to Cart', 'This Product Has been added to Cart');
+                          await isMerchant.setInt('isMerchant', cart.idMerchant);
+                          LocalStorage.db.insert(cart);
+                          break;
+                        }
                       }
                     }
                   });

@@ -7,10 +7,13 @@ class LocalStorage {
   static const String urlPreview = 'urlPreview';
   static const String price = 'price';
   static const String qty = 'qty';
+  static const String weight = 'weight';
   static const String subtotal = 'subtotal';
   static const String idMerchant = 'idMerchant';
   static const String merchantName = 'merchantName';
   static const String merchantLogo = 'merchantLogo';
+  static const String idProvinceM = 'idProvinceM';
+  static const String idCityM = 'idCityM';
 
   LocalStorage._();
   static final LocalStorage db = LocalStorage._();
@@ -40,10 +43,13 @@ class LocalStorage {
         "$urlPreview TEXT,"
         "$price TEXT,"
         "$qty TEXT,"
+        "$weight TEXT,"
         "$subtotal TEXT,"
         "$idMerchant TEXT,"
         "$merchantName TEXT,"
-        "$merchantLogo TEXT"
+        "$merchantLogo TEXT,"
+        "$idProvinceM TEXT,"
+        "$idCityM TEXT"
         ")",
       );
     });
@@ -57,10 +63,13 @@ class LocalStorage {
       urlPreview,
       price,
       qty,
+      weight,
       subtotal,
       idMerchant,
       merchantName,
       merchantLogo,
+      idProvinceM,
+      idCityM
     ]);
 
     List<Cart> cartList = List<Cart>();

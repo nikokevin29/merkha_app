@@ -5,22 +5,27 @@ class Cart {
   String productName;
   String urlPreview;
   double price;
+  double weight;
   int qty;
 
   int idMerchant;
   String merchantName;
   String merchantLogo;
+  String idProvinceM;
+  String idCityM;
 
-  Cart({
-    this.id,
-    this.productName,
-    this.urlPreview,
-    this.price,
-    this.qty,
-    this.idMerchant,
-    this.merchantName,
-    this.merchantLogo,
-  });
+  Cart(
+      {this.id,
+      this.productName,
+      this.urlPreview,
+      this.price,
+      this.weight,
+      this.qty,
+      this.idMerchant,
+      this.merchantName,
+      this.merchantLogo,
+      this.idProvinceM,
+      this.idCityM});
 
   // @override
   // List<Object> get props => [
@@ -41,9 +46,12 @@ class Cart {
       'urlPreview': urlPreview,
       'price': price,
       'qty': qty,
+      'weight': weight,
       'idMerchant': idMerchant,
       'merchantName': merchantName,
       'merchantLogo': merchantLogo,
+      'idProvinceM': idProvinceM,
+      'idCityM': idCityM,
     };
 
     if (id != null) {
@@ -62,9 +70,12 @@ class Cart {
       urlPreview: map['urlPreview'],
       price: double.parse(map['price']),
       qty: int.parse(map['qty']),
+      weight: double.parse(map['weight']),
       idMerchant: int.parse(map['idMerchant']),
       merchantName: map['merchantName'],
       merchantLogo: map['merchantLogo'],
+      idProvinceM: map['idProvinceM'],
+      idCityM: map['idCityM'],
     );
   }
 

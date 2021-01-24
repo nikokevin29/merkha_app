@@ -8,15 +8,20 @@ class CartTab extends StatefulWidget {
 class _CartTabState extends State<CartTab> {
   Address mockAddress;
   List<Cart> _cart = [];
+
   double subtotal;
+  double weightTotal;
+
   String merchantName;
   String urlMerchant;
+  String idProvinceM;
+  String idCityM;
+  String selectedCourier, selectedSubCourier, ongkir;
 
   @override
   void initState() {
     super.initState();
     context.read<WishlistCubit>().showWishlist(); //Get Wishlist
-
     context.read<AddressCubit>().showAddress(); //Get Address
     mockAddress = Address(
       address: '',
@@ -29,13 +34,18 @@ class _CartTabState extends State<CartTab> {
       province: '',
     );
     subtotal = 0; //Set subtotal
+    weightTotal = 0; //Set weight total
     LocalStorage.db.getCart().then((cartList) {
       if (cartList.length != 0) {
         _cart = cartList;
         merchantName = cartList.first.merchantName; //Get Merchant name
         urlMerchant = cartList.first.merchantLogo; // Get Merchant Url Logo
+        idProvinceM = cartList.first.idProvinceM; //Get idProvince Merhcant
+        idCityM = cartList.first.idCityM; //Get idCity Merchant
+        print(idProvinceM);
         for (int i = 0; i <= _cart.length - 1; i++) {
           subtotal = subtotal + (_cart[i].price * _cart[i].qty); // Set Subtotal init
+          weightTotal = weightTotal + (_cart[i].weight);
         }
         setState(() {});
       }
@@ -53,11 +63,34 @@ class _CartTabState extends State<CartTab> {
       _cart = cartList;
       merchantName = cartList.first.merchantName; //Get Merchant name
       urlMerchant = cartList.first.merchantLogo; // Get Merchant Url Logo
+      idProvinceM = cartList.first.idProvinceM; //Get idProvince Merhcant
+      idCityM = cartList.first.idCityM; //Get idCity Merchant
       for (int i = 0; i <= _cart.length - 1; i++) {
         subtotal = subtotal + (_cart[i].price * _cart[i].qty); // Set Subtotal init
       }
       setState(() {});
     });
+  }
+
+  getOngkir(var idCityOrigin, var idCityDest, var weight, var courier) async {
+    final response = await http.post(apiRajaOngkir + 'cost', headers: {
+      "key": apiKeyOngkir
+    }, body: {
+      "origin": idCityOrigin,
+      "destination": idCityDest,
+      "weight": weight, //gram
+      "courier": courier //jne, pos, tiki
+    });
+    print(response.body);
+    var jsonObject = jsonDecode(response.body);
+    var data = await (jsonObject as Map<String, dynamic>)['rajaongkir']['results'];
+    // for (int i = 0; i < data.length; i++) {
+    //_listCourier.add();
+    selectedSubCourier = data[0]['costs'][0]['service'];
+    ongkir = data[0]['costs'][0]['cost'][0]['value'].toString();
+    print(data[0]['costs'][0]['service']); //Service suatu paket
+    print(data[0]['costs'][0]['cost'][0]['value']); //Harga suatu paket
+    selectedCourier = data[0]['name'];
   }
 
   @override
@@ -214,6 +247,7 @@ class _CartTabState extends State<CartTab> {
                                 ),
                                 //TODO:Cart Builder Here
                                 buildCartBuilder(),
+
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -230,6 +264,19 @@ class _CartTabState extends State<CartTab> {
                                     ),
                                   ],
                                 ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text('Weight total : ',
+                                        style: redNumberFont.copyWith(
+                                            fontSize: 12, color: Colors.grey)),
+                                    Text(
+                                      weightTotal.toString() + ' gram',
+                                      style: redNumberFont.copyWith(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
                                 Divider(),
                                 Container(
                                   alignment: Alignment.centerLeft,
@@ -237,7 +284,7 @@ class _CartTabState extends State<CartTab> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        'Shipping',
+                                        'Shipping ' + idProvinceM.toString(),
                                         style: blackTextFont.copyWith(
                                             fontWeight: FontWeight.bold, fontSize: 12),
                                       ),
@@ -247,6 +294,10 @@ class _CartTabState extends State<CartTab> {
                                           style: blackTextFont.copyWith(
                                               color: Colors.blue, fontSize: 12),
                                         ),
+                                        onTap: () {
+                                          _onEditShipping();
+                                          setState(() {});
+                                        },
                                       ),
                                     ],
                                   ),
@@ -257,13 +308,13 @@ class _CartTabState extends State<CartTab> {
                                   children: [
                                     Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                       Text(
-                                        'JNE',
+                                        selectedCourier ?? 'Courier',
                                         style: blackTextFont.copyWith(
                                             fontSize: 10, fontWeight: FontWeight.w600),
                                       ),
                                       SizedBox(height: 5),
                                       Text(
-                                        'YES (Yakin Esok Sampai)',
+                                        selectedSubCourier ?? ' ',
                                         style: blackTextFont.copyWith(
                                             fontSize: 9, fontWeight: FontWeight.w200),
                                       ),
@@ -271,9 +322,34 @@ class _CartTabState extends State<CartTab> {
                                     Text(
                                       NumberFormat.currency(
                                               locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                                          .format(8000),
+                                          .format(double.parse(ongkir ?? '0')),
                                       style: redNumberFont.copyWith(fontSize: 12),
                                     ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    // DropdownButton(
+                                    //     isExpanded: true,
+                                    //     hint: Text('Select City'),
+                                    //     value: _valueCity,
+                                    //     items: _dataCity.map((item) {
+                                    //       return DropdownMenuItem(
+                                    //         child: Text(item['city_name']),
+                                    //         value: item['city_id'],
+                                    //         onTap: () {
+                                    //           //_cityName = item['city_name']; //Get City Name
+                                    //         },
+                                    //       );
+                                    //     }).toList(),
+                                    //     onChanged: (value) {
+                                    //       setState(() {
+                                    //         // _valueCity = value;
+                                    //         // _valueCity != '' ? iscity = true : iscity = false;
+                                    //         // print("City id :" + _valueCity.toString());
+                                    //       });
+                                    //     })
                                   ],
                                 ),
                                 Divider(),
@@ -500,6 +576,7 @@ class _CartTabState extends State<CartTab> {
                                     Cart(qty: _cart[index].qty -= 1),
                                   );
 
+                                  weightTotal -= (_cart[index].weight);
                                   subtotal -= (1 * _cart[index].price);
                                   print(_cart[index].qty.toString());
                                   print(subtotal.toString());
@@ -514,7 +591,7 @@ class _CartTabState extends State<CartTab> {
                                 LocalStorage.db.updateQty(
                                   Cart(qty: _cart[index].qty += 1),
                                 );
-
+                                weightTotal += (_cart[index].weight);
                                 subtotal += (1 * _cart[index].price);
                                 print(_cart[index].qty.toString());
                                 print(subtotal.toString());
@@ -578,5 +655,78 @@ class _CartTabState extends State<CartTab> {
             Divider(),
           ]);
         });
+  }
+
+  void _onEditShipping() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Column(
+            children: [
+              ListTile(
+                title: Text('POS'),
+                onTap: () async {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      });
+                  await getOngkir(
+                      idCityM, mockAddress.idCity.toString(), weightTotal.toString(), 'pos');
+                  Get.back();
+                  _selectedCourier(selectedCourier, selectedSubCourier ?? '', ongkir ?? '0');
+                  setState(() {});
+                },
+              ),
+              ListTile(
+                title: Text('JNE'),
+                onTap: () async {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      });
+                  await getOngkir(
+                      idCityM, mockAddress.idCity.toString(), weightTotal.toString(), 'jne');
+                  Get.back();
+                  _selectedCourier(selectedCourier, selectedSubCourier ?? '', ongkir ?? '0');
+                  setState(() {});
+                },
+              ),
+              ListTile(
+                  title: Text('TIKI'),
+                  onTap: () async {
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        });
+                    await getOngkir(
+                        idCityM, mockAddress.idCity.toString(), weightTotal.toString(), 'tiki');
+                    Get.back();
+                    _selectedCourier(selectedCourier, selectedSubCourier ?? '', ongkir ?? '0');
+                    setState(() {});
+                  }),
+            ],
+          );
+        });
+  }
+
+  void _selectedCourier(String courier, String sub, String price) {
+    Get.back();
+    setState(() {
+      selectedCourier = courier;
+      selectedSubCourier = sub;
+      ongkir = price;
+    });
   }
 }

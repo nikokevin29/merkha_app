@@ -58,14 +58,18 @@ class ItemCard extends StatelessWidget {
                       int checkMerchant = (isMerchant.getInt('isMerchant'));
                       print('Buy Tapped');
                       Cart cart = Cart(
-                          id: product.id,
-                          productName: product.productName,
-                          urlPreview: product.preview,
-                          price: product.price,
-                          qty: 1,
-                          idMerchant: product.merchantId,
-                          merchantName: product.merchant,
-                          merchantLogo: product.merchantLogo);
+                        id: product.id,
+                        productName: product.productName,
+                        urlPreview: product.preview,
+                        price: product.price,
+                        qty: 1,
+                        weight: product.weight,
+                        idMerchant: product.merchantId,
+                        merchantName: product.merchant,
+                        merchantLogo: product.merchantLogo,
+                        idProvinceM: product.idProvinceM,
+                        idCityM: product.idCityM,
+                      );
                       List<Cart> _cart = []; //Init Empty String
 
                       LocalStorage.db.getCart().then((value) async {

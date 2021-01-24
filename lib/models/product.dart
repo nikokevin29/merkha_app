@@ -8,6 +8,8 @@ class Product extends Equatable {
   final String merchant;
   final String merchantLocation;
   final String merchantLogo;
+  final String idProvinceM;
+  final String idCityM;
   final String productName;
   final String description;
   final double price;
@@ -29,6 +31,8 @@ class Product extends Equatable {
     this.merchant,
     this.merchantLocation,
     this.merchantLogo,
+    this.idProvinceM,
+    this.idCityM,
     this.productName,
     this.description,
     this.price,
@@ -52,6 +56,8 @@ class Product extends Equatable {
         merchant,
         merchantLocation,
         merchantLogo,
+        idProvinceM,
+        idCityM,
         productName,
         description,
         price,
@@ -74,6 +80,8 @@ class Product extends Equatable {
         merchant: data['merchant'],
         merchantLocation: data['merchant_location'],
         merchantLogo: data['merchant_logo'],
+        idProvinceM: data['id_province'].toString(),
+        idCityM: data['id_city'].toString(),
         productName: data['product_name'],
         description: data['description'],
         price: double.parse(data['price']),

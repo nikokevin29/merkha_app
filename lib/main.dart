@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => SearchProductCubit()),
         BlocProvider(create: (_) => SearchMerchantCubit()),
         BlocProvider(create: (_) => WishlistCubit()),
+        BlocProvider(create: (_) => VoucherCubit()),
 
         // BlocProvider(create: (_) => TransactionCubit())
       ],

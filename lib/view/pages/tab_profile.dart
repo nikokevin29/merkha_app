@@ -227,6 +227,7 @@ Column buildHeader(BuildContext context) {
                   child: GestureDetector(
                       onTap: () {
                         //Wallet Button
+                        Get.to(WalletPage());
                       },
                       child: SizedBox(
                           height: 22, width: 30, child: Image.asset('assets/wallet-icon.png'))),

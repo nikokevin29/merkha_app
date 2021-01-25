@@ -129,6 +129,7 @@ class _SignInPageState extends State<SignInPage> {
                               if (state is UserLoaded) {
                                 //TODO: SHOULD ADD More Cubit Here
                                 context.read<UserInterestCubit>().loadInterest();
+                                context.read<VoucherCubit>().showAllVoucher();
                                 context.read<ProductCubit>().showProductDiscover(limit: '20');
                                 context
                                     .read<BestSellerProductCubit>()

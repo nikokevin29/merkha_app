@@ -10,3 +10,4 @@ part 'product.dart';
 part 'merchant.dart';
 part 'wishlist.dart';
 part 'cart.dart';
+part 'voucher.dart';

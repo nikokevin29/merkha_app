@@ -11,6 +11,7 @@ import 'package:merkha_app/view/pages/pages.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:date_format/date_format.dart';
 
 part 'selectable_box.dart';
 part 'item_card.dart';
@@ -25,3 +26,4 @@ part 'dropdown_widget.dart';
 part 'product_cart_card.dart';
 part 'full_photo.dart';
 part 'address_pick_card.dart';
+part 'voucher_card.dart';

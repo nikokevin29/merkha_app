@@ -34,22 +34,49 @@ class VoucherCard extends StatelessWidget {
                       children: [
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.48,
-                          child: Text(
-                            voucher.merchant,
-                            style:
-                                blackTextFont.copyWith(fontSize: 16, fontWeight: FontWeight.bold),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                voucher.merchant,
+                                style: blackTextFont.copyWith(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                voucher.voucherName,
+                                style: blackTextFont.copyWith(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: HexColor('#403E3E'),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
                         ),
-                        Text(
-                          NumberFormat.currency(locale: 'id', symbol: 'IDR ', decimalDigits: 0)
-                              .format(voucher.discAmount),
-                          style: redNumberFont.copyWith(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: HexColor('#403E3E'),
-                          ),
+                        Container(
+                          child: (voucher.voucherType == "Rate")
+                              ? Text(
+                                  "Discount " + ((voucher.discRate * 10) + 1).toString() + ' %',
+                                  style: redNumberFont.copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: HexColor('#403E3E'),
+                                  ),
+                                )
+                              : Text(
+                                  NumberFormat.currency(
+                                          locale: 'id', symbol: 'IDR ', decimalDigits: 0)
+                                      .format(voucher.discAmount),
+                                  style: redNumberFont.copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: HexColor('#403E3E'),
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -63,9 +90,17 @@ class VoucherCard extends StatelessWidget {
                         fontSize: 8, color: Colors.grey, fontWeight: FontWeight.w200),
                   ),
                   SizedBox(width: 5),
-                  Text(
-                    formatDate(dates, [dd, '/', mm, '/', yy]) ?? '',
-                    style: redNumberFont.copyWith(fontSize: 12),
+                  Column(
+                    children: [
+                      Text(
+                        formatDate(dates, [dd, '/', mm, '/', yy]),
+                        style: redNumberFont.copyWith(fontSize: 12),
+                      ),
+                      Text(
+                        formatDate(dates, [H, ':', nn, ':', s]),
+                        style: redNumberFont.copyWith(fontSize: 12),
+                      ),
+                    ],
                   ),
                 ]),
               ],

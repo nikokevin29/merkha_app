@@ -25,6 +25,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_select/smart_select.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:clipboard/clipboard.dart';
 
 import 'package:merkha_app/cubit/cubit.dart';
 import 'package:merkha_app/cubit/product_cubit.dart';

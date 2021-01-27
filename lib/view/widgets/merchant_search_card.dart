@@ -25,7 +25,7 @@ class MerchantSearchCard extends StatelessWidget {
                 child: CachedNetworkImage(
                   height: 40,
                   width: 40,
-                  imageUrl: merchant.urlPhoto,
+                  imageUrl: merchant.merchantLogo,
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       CircularProgressIndicator(value: downloadProgress.progress),
                   errorWidget: (context, url, error) => Icon(Icons.error),
@@ -53,11 +53,11 @@ class MerchantSearchCard extends StatelessWidget {
                   children: [
                     Text(merchant.merchantName,
                         style: blackTextFont.copyWith(fontWeight: FontWeight.w600, fontSize: 12)),
-                    Text(merchant.address, style: greyTextFont.copyWith(fontSize: 10)),
+                    Text(merchant.province, style: greyTextFont.copyWith(fontSize: 10)),
                     Divider(height: 5),
                     SizedBox(
                       width: MediaQuery.of(context).size.width - (7 * defaultMargin),
-                      child: Text(merchant.bio,
+                      child: Text(merchant.description,
                           style: blackTextFont.copyWith(fontSize: 12),
                           maxLines: 3,
                           overflow: TextOverflow.clip),

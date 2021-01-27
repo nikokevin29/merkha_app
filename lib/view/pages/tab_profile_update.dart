@@ -91,6 +91,80 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   ),
                 ),
                 SizedBox(height: 50),
+                Column(
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                                ((context.watch<UserCubit>().state as UserLoaded)
+                                            .user
+                                            .email_verified_at !=
+                                        null)
+                                    ? Icons.verified
+                                    : Icons.cancel,
+                                color: ((context.watch<UserCubit>().state as UserLoaded)
+                                            .user
+                                            .email_verified_at !=
+                                        null)
+                                    ? Colors.green
+                                    : Colors.red),
+                            Text(
+                              ((context.watch<UserCubit>().state as UserLoaded)
+                                          .user
+                                          .email_verified_at !=
+                                      null)
+                                  ? 'Email Verified'
+                                  : 'Not Verified',
+                              style: blackTextFont.copyWith(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          child: ((context.watch<UserCubit>().state as UserLoaded)
+                                      .user
+                                      .email_verified_at ==
+                                  null)
+                              ? ArgonTimerButton(
+                                  initialTimer: 0,
+                                  height: 25,
+                                  width: MediaQuery.of(context).size.width * 0.2,
+                                  minWidth: MediaQuery.of(context).size.width * 0.2,
+                                  borderRadius: 15.0,
+                                  color: accentColor2,
+                                  child: Text(
+                                    ((context.watch<UserCubit>().state as UserLoaded)
+                                                .user
+                                                .email_verified_at ==
+                                            null)
+                                        ? 'Verify Now'
+                                        : '',
+                                    style: blackTextFont.copyWith(
+                                      fontSize: 14,
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  loader: (timeLeft) {
+                                    return Text(
+                                      "$timeLeft",
+                                      style: blackTextFont.copyWith(
+                                        fontSize: 14,
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    );
+                                  },
+                                  onTap: (startTimer, btnState) async {
+                                    if (btnState == ButtonState.Idle) {
+                                      startTimer(60);
+                                      await context.read<UserCubit>().sendVerificationEmail();
+                                    }
+                                  },
+                                )
+                              : Container(),
+                        ),
+                      ],
+                    ),
                 TextFormField(
                   enabled: false,
                   keyboardType: TextInputType.emailAddress,

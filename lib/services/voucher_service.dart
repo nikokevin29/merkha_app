@@ -20,20 +20,48 @@ class VoucherServices {
     return ApiReturnValue(value: voucher);
   }
 
-  static Future<ApiReturnValue<Voucher>> useVoucher({String id, http.Client client}) async {
+  static Future<ApiReturnValue<Voucher>> useVoucher({String code, http.Client client}) async {
     if (client == null) {
       client = http.Client();
     }
-    String url = baseURL + 'voucher/usevoucher/' + id;
+    String url = baseURL + 'voucher/usevoucher/' + code;
     var response = await client.get(url, headers: {
       "Content-Type": "application/json",
       'Authorization': 'Bearer ' + User.token,
     });
 
-    if (response.statusCode != 200) {
+    if (response.statusCode == 404) {
       print('StatusCode : ${response.statusCode}');
       print('data : ${response.body}');
-      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+      return ApiReturnValue(message: 'Not Found');
+    } else if (response.statusCode == 406) {
+      return ApiReturnValue(message: 'Voucher Sold Out or Reach Max Usage');
+    } else if(response.statusCode != 200){
+      return ApiReturnValue(message: 'Something Wrong');
+    }
+    var data = jsonDecode(response.body);
+    Voucher voucher = Voucher.fromJson(data['data']);
+    return ApiReturnValue(value: voucher);
+  }
+
+  static Future<ApiReturnValue<Voucher>> checkVoucher({String code, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'voucher/check/' + code;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+
+    if (response.statusCode == 404) {
+      print('StatusCode : ${response.statusCode}');
+      print('data : ${response.body}');
+      return ApiReturnValue(message: 'Not Found');
+    } else if (response.statusCode == 406) {
+      return ApiReturnValue(message: 'Voucher Sold Out or Reach Max Usage');
+    } else if(response.statusCode != 200){
+      return ApiReturnValue(message: 'Something Wrong');
     }
     var data = jsonDecode(response.body);
     Voucher voucher = Voucher.fromJson(data['data']);

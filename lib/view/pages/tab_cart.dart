@@ -6,6 +6,9 @@ class CartTab extends StatefulWidget {
 }
 
 class _CartTabState extends State<CartTab> {
+  TextEditingController promoController = TextEditingController();
+  bool isempty = false;
+  bool voucherCheck = false;
   Address mockAddress;
   List<Cart> _cart = [];
 
@@ -17,12 +20,16 @@ class _CartTabState extends State<CartTab> {
   String idProvinceM;
   String idCityM;
   String selectedCourier, selectedSubCourier, ongkir;
+  //((subtotal - voucher.discAmount) * voucher.discRate) + ongkir
+  double total;
+  double amountVoucher, rateVoucher;
 
   @override
   void initState() {
     super.initState();
     context.read<WishlistCubit>().showWishlist(); //Get Wishlist
-    context.read<AddressCubit>().showAddress(); //Get Address
+
+    //note: set address to first list
     mockAddress = Address(
       address: '',
       addressSaveName: '',
@@ -33,8 +40,11 @@ class _CartTabState extends State<CartTab> {
       city: '',
       province: '',
     );
+    total = 0; //Set total
     subtotal = 0; //Set subtotal
     weightTotal = 0; //Set weight total
+    amountVoucher = 0;
+    rateVoucher = 1;
     LocalStorage.db.getCart().then((cartList) {
       if (cartList.length != 0) {
         _cart = cartList;
@@ -124,390 +134,491 @@ class _CartTabState extends State<CartTab> {
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 5),
-            child: Column(
-              children: [
-                SizedBox(height: 15),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: (merchantName != null)
-                      ? Card(
-                          color: Colors.white,
-                          elevation: 5,
-                          child: Container(
-                            padding: EdgeInsets.all(15),
-                            child: Column(
-                              children: [
-                                Row(children: [
-                                  (urlMerchant != null)
-                                      ? Container(
-                                          height: 50,
-                                          width: 50,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: NetworkImage(urlMerchant)),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey.withOpacity(0.3),
-                                                spreadRadius: 3,
-                                                blurRadius: 7,
-                                                offset: Offset(0, 3), // changes position of shadow
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : Container(),
-                                  SizedBox(width: 15),
-                                  Expanded(
-                                    child: (merchantName != null)
-                                        ? Text(
-                                            merchantName,
-                                            style: blackTextFont.copyWith(),
-                                            maxLines: 1,
-                                          )
-                                        : Text(''),
-                                  ),
-                                ]),
-                                Divider(),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Shipping Address :',
-                                            style: blackTextFont.copyWith(
-                                                fontWeight: FontWeight.bold, fontSize: 12),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.all(10),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  mockAddress.addressSaveName +
-                                                      ' id ' +
-                                                      mockAddress.id,
-                                                  maxLines: 1,
-                                                  style: blackTextFont.copyWith(
-                                                      fontSize: 10, fontWeight: FontWeight.bold),
-                                                ),
-                                                Text(
-                                                  mockAddress.address,
-                                                  maxLines: 2,
-                                                  style: blackTextFont.copyWith(fontSize: 10),
-                                                ),
-                                                Text(
-                                                  mockAddress.province + ', ' + mockAddress.city,
-                                                  style: blackTextFont.copyWith(fontSize: 10),
-                                                ),
-                                                Text(
-                                                  mockAddress.postalCode,
-                                                  style: blackTextFont.copyWith(fontSize: 10),
+            child: GestureDetector(
+              onTap: () {
+                //note: unfocusing keyboard and TextField Promo Code
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
+              child: Column(
+                children: [
+                  SizedBox(height: 15),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: (merchantName != null)
+                        ? Card(
+                            color: Colors.white,
+                            elevation: 5,
+                            child: Container(
+                              padding: EdgeInsets.all(15),
+                              child: Column(
+                                children: [
+                                  Row(children: [
+                                    (urlMerchant != null)
+                                        ? Container(
+                                            height: 50,
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: NetworkImage(urlMerchant)),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey.withOpacity(0.3),
+                                                  spreadRadius: 3,
+                                                  blurRadius: 7,
+                                                  offset:
+                                                      Offset(0, 3), // changes position of shadow
                                                 ),
                                               ],
                                             ),
-                                          ),
-                                        ],
-                                      ),
+                                          )
+                                        : Container(),
+                                    SizedBox(width: 15),
+                                    Expanded(
+                                      child: (merchantName != null)
+                                          ? Text(
+                                              merchantName,
+                                              style: blackTextFont.copyWith(),
+                                              maxLines: 1,
+                                            )
+                                          : Text(''),
                                     ),
-                                    Container(
-                                      alignment: Alignment.topRight,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          print('Tap pick address');
-                                          Get.to(
-                                              AddressFeedPick(onSonChanged: (Address newAddress) {
-                                            updateAddress(newAddress);
-                                          }));
-                                        },
-                                        child: Text(
-                                          'Edit',
-                                          style: blackTextFont.copyWith(
-                                              color: Colors.blueAccent, fontSize: 12),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Divider(),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.only(bottom: 10),
-                                  child: Text(
-                                    'Item',
-                                    style: blackTextFont.copyWith(
-                                        fontWeight: FontWeight.bold, fontSize: 12),
-                                  ),
-                                ),
-                                //TODO:Cart Builder Here
-                                buildCartBuilder(),
-
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text('Subtotal : ',
-                                        style: redNumberFont.copyWith(
-                                            fontSize: 12, color: Colors.grey)),
-                                    //note: Subtotal All Product
-                                    Text(
-                                      NumberFormat.currency(
-                                              locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                                          .format(subtotal),
-                                      style: redNumberFont.copyWith(fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text('Weight total : ',
-                                        style: redNumberFont.copyWith(
-                                            fontSize: 12, color: Colors.grey)),
-                                    Text(
-                                      weightTotal.toString() + ' gram',
-                                      style: redNumberFont.copyWith(fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                                Divider(),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Row(
+                                  ]),
+                                  Divider(),
+                                  Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        'Shipping ' + idProvinceM.toString(),
-                                        style: blackTextFont.copyWith(
-                                            fontWeight: FontWeight.bold, fontSize: 12),
-                                      ),
-                                      InkWell(
-                                        child: Text(
-                                          'Edit',
-                                          style: blackTextFont.copyWith(
-                                              color: Colors.blue, fontSize: 12),
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Shipping Address :',
+                                              style: blackTextFont.copyWith(
+                                                  fontWeight: FontWeight.bold, fontSize: 12),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.all(10),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    mockAddress.addressSaveName ?? '',
+                                                    maxLines: 1,
+                                                    style: blackTextFont.copyWith(
+                                                        fontSize: 10, fontWeight: FontWeight.bold),
+                                                  ),
+                                                  Text(
+                                                    mockAddress.address ?? '',
+                                                    maxLines: 2,
+                                                    style: blackTextFont.copyWith(fontSize: 10),
+                                                  ),
+                                                  Text(
+                                                    mockAddress.province ??
+                                                        '' + ', ' + mockAddress.city ??
+                                                        '',
+                                                    style: blackTextFont.copyWith(fontSize: 10),
+                                                  ),
+                                                  Text(
+                                                    mockAddress.postalCode ?? '',
+                                                    style: blackTextFont.copyWith(fontSize: 10),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        onTap: () {
-                                          _onEditShipping();
-                                          setState(() {});
-                                        },
+                                      ),
+                                      Container(
+                                        alignment: Alignment.topRight,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            print('Tap pick address');
+                                            Get.to(
+                                                AddressFeedPick(onSonChanged: (Address newAddress) {
+                                              updateAddress(newAddress);
+                                            }));
+                                          },
+                                          child: Text(
+                                            'Edit',
+                                            style: blackTextFont.copyWith(
+                                                color: Colors.blueAccent, fontSize: 12),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
-                                SizedBox(height: 9),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                      Text(
-                                        selectedCourier ?? 'Courier',
-                                        style: blackTextFont.copyWith(
-                                            fontSize: 10, fontWeight: FontWeight.w600),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Text(
-                                        selectedSubCourier ?? ' ',
-                                        style: blackTextFont.copyWith(
-                                            fontSize: 9, fontWeight: FontWeight.w200),
-                                      ),
-                                    ]),
-                                    Text(
-                                      NumberFormat.currency(
-                                              locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                                          .format(double.parse(ongkir ?? '0')),
-                                      style: redNumberFont.copyWith(fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    // DropdownButton(
-                                    //     isExpanded: true,
-                                    //     hint: Text('Select City'),
-                                    //     value: _valueCity,
-                                    //     items: _dataCity.map((item) {
-                                    //       return DropdownMenuItem(
-                                    //         child: Text(item['city_name']),
-                                    //         value: item['city_id'],
-                                    //         onTap: () {
-                                    //           //_cityName = item['city_name']; //Get City Name
-                                    //         },
-                                    //       );
-                                    //     }).toList(),
-                                    //     onChanged: (value) {
-                                    //       setState(() {
-                                    //         // _valueCity = value;
-                                    //         // _valueCity != '' ? iscity = true : iscity = false;
-                                    //         // print("City id :" + _valueCity.toString());
-                                    //       });
-                                    //     })
-                                  ],
-                                ),
-                                Divider(),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: FlatButton(
-                                    height: 30,
-                                    disabledColor: Color(0xFFE4E4E4),
+                                  Divider(),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    padding: EdgeInsets.only(bottom: 10),
                                     child: Text(
-                                      'Add Voucher',
+                                      'Item',
                                       style: blackTextFont.copyWith(
-                                          fontSize: 12, fontWeight: FontWeight.bold),
+                                          fontWeight: FontWeight.bold, fontSize: 12),
                                     ),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: new BorderRadius.circular(30.0)),
-                                    color: accentColor2,
-                                    onPressed: () {
-                                      //note: press Voucher
-                                    },
                                   ),
-                                ),
-                                Divider(),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 15),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  //TODO:Cart Builder Here
+                                  buildCartBuilder(),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Text(
-                                        'TOTAL',
-                                        style: blackTextFont.copyWith(fontWeight: FontWeight.bold),
-                                      ),
+                                      Text('Subtotal : ',
+                                          style: redNumberFont.copyWith(
+                                              fontSize: 12, color: Colors.grey)),
+                                      //note: Subtotal All Product
                                       Text(
                                         NumberFormat.currency(
                                                 locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                                            .format(100000),
+                                            .format(subtotal),
                                         style: redNumberFont.copyWith(fontSize: 12),
-                                      )
+                                      ),
                                     ],
                                   ),
-                                ),
-                                FlatButton(
-                                  disabledColor: Color(0xFFE4E4E4),
-                                  minWidth: MediaQuery.of(context).size.width - (2 * defaultMargin),
-                                  color: HexColor('#65C07D'),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: new BorderRadius.circular(30.0)),
-                                  child: Text(
-                                    'Payment',
-                                    style: blackTextFont.copyWith(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text('Weight total : ',
+                                          style: redNumberFont.copyWith(
+                                              fontSize: 12, color: Colors.grey)),
+                                      Text(
+                                        weightTotal.toString() + ' gram',
+                                        style: redNumberFont.copyWith(fontSize: 12),
+                                      ),
+                                    ],
                                   ),
-                                  onPressed: () {
-                                    //
-                                  },
-                                ),
-                              ],
+                                  Divider(),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Shipping ' + idProvinceM.toString(),
+                                          style: blackTextFont.copyWith(
+                                              fontWeight: FontWeight.bold, fontSize: 12),
+                                        ),
+                                        InkWell(
+                                          child: Text(
+                                            'Edit',
+                                            style: blackTextFont.copyWith(
+                                                color: Colors.blue, fontSize: 12),
+                                          ),
+                                          onTap: () {
+                                            if (mockAddress.id == '') {
+                                              Get.snackbar('No Address Assign',
+                                                  'Please Pick Shipping Address');
+                                            } else {
+                                              _onEditShipping();
+                                              setState(() {});
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 9),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              selectedCourier ?? 'Courier',
+                                              style: blackTextFont.copyWith(
+                                                  fontSize: 10, fontWeight: FontWeight.w600),
+                                            ),
+                                            SizedBox(height: 5),
+                                            Text(
+                                              selectedSubCourier ?? ' ',
+                                              style: blackTextFont.copyWith(
+                                                  fontSize: 9, fontWeight: FontWeight.w200),
+                                            ),
+                                          ]),
+                                      Text(
+                                        NumberFormat.currency(
+                                                locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                            .format(double.parse(ongkir ?? '0')),
+                                        style: redNumberFont.copyWith(fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // DropdownButton(
+                                      //     isExpanded: true,
+                                      //     hint: Text('Select City'),
+                                      //     value: _valueCity,
+                                      //     items: _dataCity.map((item) {
+                                      //       return DropdownMenuItem(
+                                      //         child: Text(item['city_name']),
+                                      //         value: item['city_id'],
+                                      //         onTap: () {
+                                      //           //_cityName = item['city_name']; //Get City Name
+                                      //         },
+                                      //       );
+                                      //     }).toList(),
+                                      //     onChanged: (value) {
+                                      //       setState(() {
+                                      //         // _valueCity = value;
+                                      //         // _valueCity != '' ? iscity = true : iscity = false;
+                                      //         // print("City id :" + _valueCity.toString());
+                                      //       });
+                                      //     })
+                                    ],
+                                  ),
+                                  Divider(),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: FlatButton(
+                                          height: 30,
+                                          disabledColor: Color(0xFFE4E4E4),
+                                          child: Text(
+                                            'Add Voucher',
+                                            style: blackTextFont.copyWith(
+                                                fontSize: 12, fontWeight: FontWeight.bold),
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: new BorderRadius.circular(30.0)),
+                                          color: accentColor2,
+                                          onPressed: () async {
+                                            //note: press Voucher
+                                            showDialog(
+                                                barrierDismissible: false,
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return Center(
+                                                    child: CircularProgressIndicator(),
+                                                  );
+                                                });
+                                            await context
+                                                .read<VoucherCubit>()
+                                                .checkVoucher(promoController.text.trim());
+                                            Navigator.pop(context);
+                                            setState(() {
+                                              total = (((subtotal - amountVoucher) * rateVoucher) +
+                                                  double.parse(ongkir ?? '0'));
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(width: 9),
+                                      Expanded(
+                                        child: TextField(
+                                          controller: promoController,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'Promo Code',
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  BlocBuilder<VoucherCubit, VoucherState>(
+                                      builder: (context, state) {
+                                    if (state is VoucherUsed) {
+                                      // (context.watch<VoucherCubit>().state as VoucherUsed)
+                                      amountVoucher = state.voucher.discAmount;
+                                      print(amountVoucher);
+                                      rateVoucher = state.voucher.discRate;
+                                      print(rateVoucher);
+                                      return Container(
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text('Voucher Name: '),
+                                                Text(
+                                                  state.voucher.voucherName,
+                                                  style: blackTextFont.copyWith(),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text('Voucher Type: '),
+                                                Text(
+                                                  state.voucher.voucherType,
+                                                  style: blackTextFont.copyWith(),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text('Value: '),
+                                                Container(
+                                                  child: (state.voucher.voucherType == "Amount")
+                                                      ? Text(state.voucher.discAmount.toString())
+                                                      : Text(((state.voucher.discRate * 10) + 1)
+                                                              .toString() +
+                                                          '%'),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    } else {
+                                      return Container(child: Text('Voucher Not Applied'));
+                                    }
+                                  }),
+
+                                  Divider(),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 15),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'TOTAL',
+                                          style:
+                                              blackTextFont.copyWith(fontWeight: FontWeight.bold),
+                                        ),
+                                        //((subtotal - voucher.discAmount) * voucher.discRate) + ongkir
+                                        //total = (subtotal - amountVoucher) + double.parse(ongkir)
+                                        Text(
+                                          NumberFormat.currency(
+                                                  locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                              .format(total =
+                                                  (((subtotal - amountVoucher) * rateVoucher) +
+                                                      double.parse(ongkir ?? '0'))),
+                                          style: redNumberFont.copyWith(fontSize: 12),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  FlatButton(
+                                    disabledColor: Color(0xFFE4E4E4),
+                                    minWidth:
+                                        MediaQuery.of(context).size.width - (2 * defaultMargin),
+                                    color: HexColor('#65C07D'),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: new BorderRadius.circular(30.0)),
+                                    child: Text(
+                                      'Payment',
+                                      style: blackTextFont.copyWith(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                    onPressed: () {
+                                      //
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
+                          )
+                        : Container(
+                            child: Center(child: Text('Cart Empty')),
                           ),
-                        )
-                      : Container(
-                          child: Center(child: Text('Cart Empty')),
-                        ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 15),
-                  width: 200,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 3,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
                   ),
-                  child: FlatButton(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Continue Shopping',
-                          style: blackTextFont.copyWith(
-                            color: HexColor('#4A95E9'),
-                            fontWeight: FontWeight.bold,
-                          ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 15),
+                    width: 200,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 3,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
                         ),
-                        SizedBox(width: 5),
-                        Icon(Icons.home, color: HexColor('#4A95E9'))
                       ],
                     ),
-                    shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                    color: Colors.white,
-                    onPressed: () {
-                      Get.to(MainPage(bottomNavBarIndex: 0));
-                      //BUG
-                    },
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  alignment: Alignment.centerLeft,
-                  child: Text('My Wishlist',
-                      style: blackTextFont.copyWith(fontSize: 22, fontWeight: FontWeight.bold)),
-                ),
-                BlocBuilder<WishlistCubit, WishlistState>(builder: (_, state) {
-                  if (state is WishlistLoaded) {
-                    List<Product> wishlist = state.wishlist;
-                    return Container(
-                      width: MediaQuery.of(context).size.width - 2 * defaultMargin,
-                      child: (wishlist.length != 0)
-                          ? GridView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 0.73,
-                              ),
-                              itemCount: wishlist.length,
-                              itemBuilder: (_, index) => Container(
-                                  child: Wrap(
-                                alignment: WrapAlignment.center,
-                                direction: Axis.horizontal,
-                                spacing: 10,
-                                runSpacing: 10,
-                                children: [
-                                  ItemCardWishlist(product: wishlist[index]),
-                                ],
-                              )),
-                            )
-                          : Center(
-                              child: Column(
-                                children: [
-                                  SizedBox(height: 50),
-                                  Text(
-                                    'Wishlist Empty',
-                                    style: blackTextFont.copyWith(fontSize: 16, color: Colors.red),
-                                  ),
-                                  SizedBox(height: 50),
-                                  FlatButton(
-                                      color: accentColor2,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: new BorderRadius.circular(30.0)),
-                                      onPressed: () {
-                                        Get.off(MainPage(bottomNavBarIndex: 0));
-                                      },
-                                      child: Text('Go To Home'))
-                                ],
-                              ),
+                    child: FlatButton(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Continue Shopping',
+                            style: blackTextFont.copyWith(
+                              color: HexColor('#4A95E9'),
+                              fontWeight: FontWeight.bold,
                             ),
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
-              ],
+                          ),
+                          SizedBox(width: 5),
+                          Icon(Icons.home, color: HexColor('#4A95E9'))
+                        ],
+                      ),
+                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                      color: Colors.white,
+                      onPressed: () {
+                        Get.to(MainPage(bottomNavBarIndex: 0));
+                        //BUG
+                      },
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                    alignment: Alignment.centerLeft,
+                    child: Text('My Wishlist',
+                        style: blackTextFont.copyWith(fontSize: 22, fontWeight: FontWeight.bold)),
+                  ),
+                  BlocBuilder<WishlistCubit, WishlistState>(builder: (_, state) {
+                    if (state is WishlistLoaded) {
+                      List<Product> wishlist = state.wishlist;
+                      return Container(
+                        width: MediaQuery.of(context).size.width - 2 * defaultMargin,
+                        child: (wishlist.length != 0)
+                            ? GridView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.73,
+                                ),
+                                itemCount: wishlist.length,
+                                itemBuilder: (_, index) => Container(
+                                    child: Wrap(
+                                  alignment: WrapAlignment.center,
+                                  direction: Axis.horizontal,
+                                  spacing: 10,
+                                  runSpacing: 10,
+                                  children: [
+                                    ItemCardWishlist(product: wishlist[index]),
+                                  ],
+                                )),
+                              )
+                            : Center(
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 50),
+                                    Text(
+                                      'Wishlist Empty',
+                                      style:
+                                          blackTextFont.copyWith(fontSize: 16, color: Colors.red),
+                                    ),
+                                    SizedBox(height: 50),
+                                    FlatButton(
+                                        color: accentColor2,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: new BorderRadius.circular(30.0)),
+                                        onPressed: () {
+                                          Get.off(MainPage(bottomNavBarIndex: 0));
+                                        },
+                                        child: Text('Go To Home'))
+                                  ],
+                                ),
+                              ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }),
+                ],
+              ),
             ),
           ),
         ));
@@ -666,19 +777,26 @@ class _CartTabState extends State<CartTab> {
               ListTile(
                 title: Text('POS'),
                 onTap: () async {
-                  showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      });
-                  await getOngkir(
-                      idCityM, mockAddress.idCity.toString(), weightTotal.toString(), 'pos');
-                  Get.back();
-                  _selectedCourier(selectedCourier, selectedSubCourier ?? '', ongkir ?? '0');
-                  setState(() {});
+                  if (mockAddress.address == '') {
+                    Get.back();
+                    Get.back();
+                    Get.snackbar('Pick Address First', 'Address Should be not Empty',
+                        duration: Duration(milliseconds: 800));
+                  } else {
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        });
+                    await getOngkir(
+                        idCityM, mockAddress.idCity.toString(), weightTotal.toString(), 'pos');
+                    Get.back();
+                    _selectedCourier(selectedCourier, selectedSubCourier ?? '', ongkir ?? '0');
+                    setState(() {});
+                  }
                 },
               ),
               ListTile(

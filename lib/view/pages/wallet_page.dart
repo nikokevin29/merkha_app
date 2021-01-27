@@ -10,6 +10,7 @@ class _WalletPageState extends State<WalletPage> with SingleTickerProviderStateM
   TabController controller;
   @override
   void initState() {
+    context.read<VoucherCubit>().showAllVoucher(); //load all Avaiable voucher
     controller = new TabController(length: 3, vsync: this, initialIndex: navBarIndex);
     super.initState();
   }
@@ -40,6 +41,10 @@ class _WalletPageState extends State<WalletPage> with SingleTickerProviderStateM
           labelStyle: blackTextFont.copyWith(fontSize: 12, fontWeight: FontWeight.w600),
           tabs: [
             Tab(
+              icon: Icon(Icons.local_activity_outlined),
+              text: "VOUCHER",
+            ),
+            Tab(
               icon: Icon(Icons.credit_card),
               text: "CREDIT CARD",
             ),
@@ -47,19 +52,15 @@ class _WalletPageState extends State<WalletPage> with SingleTickerProviderStateM
               icon: Icon(Icons.attach_money),
               text: "E-CASH",
             ),
-            Tab(
-              icon: Icon(Icons.local_activity_outlined),
-              text: "VOUCHER",
-            ),
           ],
         ),
       ),
       body: TabBarView(
         controller: controller,
         children: [
+          VoucherPage(),
           CreditCard(),
           ECash(),
-          VoucherPage(),
         ],
       ),
     );
@@ -69,14 +70,14 @@ class _WalletPageState extends State<WalletPage> with SingleTickerProviderStateM
 class CreditCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Center(child: Text('This Feature Not Avaiable For Now', style: blackTextFont));
   }
 }
 
 class ECash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Center(child: Text('This Feature Not Avaiable For Now', style: blackTextFont));
   }
 }
 
@@ -114,19 +115,44 @@ class VoucherPage extends StatelessWidget {
                                         child: Column(
                                           children: [
                                             Divider(),
-                                            Text('Promo Code :', style: redNumberFont),
-                                            Text(voucher[index].voucherCode,
-                                                style: redNumberFont.copyWith(fontSize: 18)),
+                                            Text('Voucher Code :', style: redNumberFont),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  voucher[index].voucherCode,
+                                                  style: redNumberFont.copyWith(fontSize: 18),
+                                                ),
+                                                SizedBox(width: 9),
+                                                OutlineButton(
+                                                  color: Colors.amber,
+                                                  onPressed: () {
+                                                    Get.back();
+                                                    FlutterClipboard.copy(
+                                                            voucher[index].voucherCode)
+                                                        .then((value) => Get.snackbar(
+                                                            'Copied Promo Code To Clipboard',
+                                                            'Promo Code has Been Added to your clipboard',
+                                                            duration:
+                                                                Duration(milliseconds: 1000)));
+                                                  },
+                                                  child: Text(
+                                                    'Copy',
+                                                    style: redNumberFont.copyWith(fontSize: 14),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                             Divider(),
                                             Text('Terms & Conditions',
                                                 style: blackTextFont.copyWith(
                                                     fontWeight: FontWeight.bold)),
                                             SizedBox(height: 5),
                                             Text(
-                                                '1. Voucher hanya bisa digunakan sekali dan tidak dapat diuangkan',
+                                                '1. Voucher hanya bisa digunakan sesuai kuota dan tidak dapat diuangkan',
                                                 style: blackTextFont.copyWith(fontSize: 12)),
                                             Text(
-                                                '2. nilai belanja lebih kecil daripada nilai voucher, maka selisihnya tidak bisa digunakan ataupun diuangkan',
+                                                '2. Nilai belanja lebih kecil daripada nilai voucher, maka selisihnya tidak bisa digunakan ataupun diuangkan',
                                                 style: blackTextFont.copyWith(fontSize: 12)),
                                             QrImage(
                                               data: voucher[index].voucherCode,

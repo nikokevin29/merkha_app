@@ -105,40 +105,40 @@ class _MainTabState extends State<MainTab> {
                       SizedBox(
                         height: 25,
                       ),
-                      // note: User Interest Categories
-                      SizedBox(
-                        height: 100,
-                        child:
-                            BlocBuilder<UserInterestCubit, UserInterestState>(builder: (_, state) {
-                          if (state is UserInterestLoaded) {
-                            List<UserInterest> interest = state.userInterest;
-                            return ListView.builder(
-                                itemBuilder: (_, index) => Container(
-                                    margin: EdgeInsets.only(
-                                        left: (index == 0) ? defaultMargin : 0,
-                                        right: (index == interest.length - 1) ? defaultMargin : 16),
-                                    child: Wrap(children: [
-                                      InterestCard(
-                                        interest[index],
-                                        onTap: () async {
-                                          await context
-                                              .read<ProductByCategoryCubit>()
-                                              .showProductByCategory(
-                                                  categoryId: interest[index].idCategory);
+                      // TODO: User Interest Categories (ganti pake merchant_category join ke merchant join ke product)
+                      // SizedBox(
+                      //   height: 100,
+                      //   child:
+                      //       BlocBuilder<UserInterestCubit, UserInterestState>(builder: (_, state) {
+                      //     if (state is UserInterestLoaded) {
+                      //       List<UserInterest> interest = state.userInterest;
+                      //       return ListView.builder(
+                      //           itemBuilder: (_, index) => Container(
+                      //               margin: EdgeInsets.only(
+                      //                   left: (index == 0) ? defaultMargin : 0,
+                      //                   right: (index == interest.length - 1) ? defaultMargin : 16),
+                      //               child: Wrap(children: [
+                      //                 InterestCard(
+                      //                   interest[index],
+                      //                   onTap: () async {
+                      //                     await context
+                      //                         .read<ProductByCategoryCubit>()
+                      //                         .showProductByCategory(
+                      //                             categoryId: interest[index].idCategory);
 
-                                          Get.to(CategoryPage(
-                                            userInterest: interest[index],
-                                          ));
-                                        },
-                                      ),
-                                    ])),
-                                itemCount: interest.length,
-                                scrollDirection: Axis.horizontal);
-                          } else {
-                            return CircularProgressIndicator();
-                          }
-                        }),
-                      ),
+                      //                     Get.to(CategoryPage(
+                      //                       userInterest: interest[index],
+                      //                     ));
+                      //                   },
+                      //                 ),
+                      //               ])),
+                      //           itemCount: interest.length,
+                      //           scrollDirection: Axis.horizontal);
+                      //     } else {
+                      //       return Center(child: CircularProgressIndicator());
+                      //     }
+                      //   }),
+                      // ),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         alignment: Alignment.centerLeft,

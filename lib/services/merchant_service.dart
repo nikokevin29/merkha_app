@@ -27,7 +27,7 @@ class MerchantService {
     if (client == null) {
       client = http.Client();
     }
-    String url = baseURL + 'product/searchbymerchant/' + keyword;
+    String url = baseURL + 'merchant/searchbymerchant/' + keyword;
     var response = await client.get(url, headers: {
       "Content-Type": "application/json",
       'Authorization': 'Bearer ' + User.token,
@@ -42,5 +42,26 @@ class MerchantService {
     List<Merchant> merchant = (data['data'] as Iterable).map((e) => Merchant.fromJson(e)).toList();
 
     return ApiReturnValue(value: merchant, message: data['meta']['message']);
+  }
+
+  static Future<ApiReturnValue<Merchant>> showByMerchantId(
+      {String merchantId, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'merchant/showbymerchantid/' + merchantId;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode : ${response.statusCode}');
+      print('data : ${response.body}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+
+    Merchant value = Merchant.fromJson(data['data']);
+    return ApiReturnValue(value: value);
   }
 }

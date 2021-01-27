@@ -1,7 +1,5 @@
 part of 'pages.dart';
 
-// typedef void CallbackAddressFeed(
-//     String id, String saveName, String address, String province, String city, String postalCode,String idProvince,String idCity);
 typedef void CallbackAddressFeed(Address address);
 
 class AddressFeedPick extends StatelessWidget {

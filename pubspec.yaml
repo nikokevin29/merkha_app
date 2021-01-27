@@ -26,6 +26,7 @@ dependencies:
   bubble: ^1.1.9+1
   carousel_slider: ^2.3.1
   chat_bubbles: ^0.7.8+2
+  clipboard: ^0.1.2+8
   cloud_firestore: ^0.14.0
   cupertino_icons: ^1.0.0
   date_format: ^1.0.9

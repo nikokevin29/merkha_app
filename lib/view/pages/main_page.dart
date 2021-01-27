@@ -15,6 +15,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   TabController controller;
   @override
   void initState() {
+    context.read<AddressCubit>().showAddress(); //Get All Address
     controller = new TabController(length: 5, vsync: this, initialIndex: widget.bottomNavBarIndex);
     super.initState();
   }

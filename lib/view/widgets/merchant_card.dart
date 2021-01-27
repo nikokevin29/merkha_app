@@ -23,29 +23,47 @@ class MerchantCard extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.all(8),
-              child: CachedNetworkImage(
-                height: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
-                width: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
-                imageUrl: merchant.urlPhoto,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(value: downloadProgress.progress),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(100),
-                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 4,
-                        blurRadius: 4,
-                        offset: Offset(0, 1), // changes position of shadow
+              child: (merchant.merchantLogo != null)
+                  ? CachedNetworkImage(
+                      height: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
+                      width: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
+                      imageUrl: merchant.merchantLogo,
+                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                          CircularProgressIndicator(value: downloadProgress.progress),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(100),
+                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 4,
+                              blurRadius: 4,
+                              offset: Offset(0, 1), // changes position of shadow
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
+                    )
+                  : Container(
+                      height: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
+                      width: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(image: AssetImage('assets/defaultProfile.png')),
+                        border: Border.all(color: Colors.white),
+                        borderRadius: BorderRadius.circular(100),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 4,
+                            blurRadius: 4,
+                            offset: Offset(0, 1), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                    ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -64,7 +82,7 @@ class MerchantCard extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      merchant.bio,
+                      merchant.description,
                       style: blackTextFont.copyWith(fontSize: 11),
                       maxLines: 4,
                       overflow: TextOverflow.clip,

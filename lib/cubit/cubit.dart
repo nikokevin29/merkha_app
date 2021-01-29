@@ -9,3 +9,5 @@ export 'search_product_cubit.dart';
 export 'search_merchant_cubit.dart';
 export 'wishlist_cubit.dart';
 export 'voucher_cubit.dart';
+export 'follow_cubit.dart';
+export 'feed_cubit.dart';

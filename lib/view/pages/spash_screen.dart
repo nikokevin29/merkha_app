@@ -25,6 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
           context.read<BestSellerProductCubit>().showProductbyBestSeller(limit: '21');
           context.read<MerchantRandomOrderCubit>().showMerchantByRandom(limit: '21');
           context.read<VoucherCubit>().showAllVoucher();
+          context.read<FollowCubit>().followList();
 
           Get.offAll(MainPage());
         }

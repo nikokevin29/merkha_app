@@ -70,7 +70,7 @@ class Merchant extends Equatable {
 
   factory Merchant.fromJson(Map<String, dynamic> data) => Merchant(
         idUser: data['id_user'].toString(),
-        merchantId: data['merchant_id'],
+        merchantId: data['id_merchant'].toString(),
         merchantName: data['name'],
         merchantLogo: data['merchant_logo'],
         description: data['description'],

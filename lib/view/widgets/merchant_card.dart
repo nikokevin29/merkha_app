@@ -1,10 +1,15 @@
 part of 'widgets.dart';
 
-class MerchantCard extends StatelessWidget {
+class MerchantCard extends StatefulWidget {
   final Merchant merchant;
   final Function onTap;
   const MerchantCard({@required this.merchant, this.onTap});
 
+  @override
+  _MerchantCardState createState() => _MerchantCardState();
+}
+
+class _MerchantCardState extends State<MerchantCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -23,11 +28,11 @@ class MerchantCard extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.all(8),
-              child: (merchant.merchantLogo != null)
+              child: (widget.merchant.merchantLogo != null)
                   ? CachedNetworkImage(
                       height: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
                       width: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
-                      imageUrl: merchant.merchantLogo,
+                      imageUrl: widget.merchant.merchantLogo,
                       progressIndicatorBuilder: (context, url, downloadProgress) =>
                           CircularProgressIndicator(value: downloadProgress.progress),
                       errorWidget: (context, url, error) => Icon(Icons.error),
@@ -69,7 +74,7 @@ class MerchantCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  merchant.merchantName,
+                  widget.merchant.merchantName,
                   style: blackTextFont.copyWith(fontSize: 12, fontWeight: FontWeight.w600),
                   maxLines: 1,
                   overflow: TextOverflow.clip,
@@ -82,7 +87,7 @@ class MerchantCard extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      merchant.description,
+                      widget.merchant.description,
                       style: blackTextFont.copyWith(fontSize: 11),
                       maxLines: 4,
                       overflow: TextOverflow.clip,
@@ -100,18 +105,20 @@ class MerchantCard extends StatelessWidget {
                 child: SizedBox(
                   width: 80,
                   child: Center(
-                    child: InkWell(
-                      onTap: () {
-                        print('tap follow button');
-                      },
-                      child: Text(
-                        'Follow',
-                        style: whiteNumberFont.copyWith(fontWeight: FontWeight.bold),
-                      ),
+                    child: Text(
+                      'Follow',
+                      style: whiteNumberFont.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  // context
+                  //     .read<FollowCubit>()
+                  //     .checkstatus(id: widget.merchant.merchantId)
+                  //     .toString();
+                  await context.read<FollowCubit>().follow(id: widget.merchant.merchantId);
+                  // print('done');
+                },
               ),
             )
           ],

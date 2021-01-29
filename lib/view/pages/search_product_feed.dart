@@ -19,6 +19,7 @@ class SearchProductFeed extends StatelessWidget {
           color: Colors.grey,
           onPressed: () {
             Get.back();
+            context.read<SearchProductCubit>().clear();
           },
         ),
       ),

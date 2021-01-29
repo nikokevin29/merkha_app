@@ -17,4 +17,8 @@ class SearchMerchantCubit extends Cubit<SearchMerchantState> {
       emit(SearchMerchantLoadingFailed(result.message));
     }
   }
+  Future<void> clear() async {
+    emit(SearchMerchantLoaded([]));
+  }
+  
 }

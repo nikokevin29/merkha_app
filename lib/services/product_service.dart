@@ -120,11 +120,11 @@ class ProductServices {
     var data = jsonDecode(response.body);
     print(data);
     List<Product> product = (data['data'] as Iterable).map((e) => Product.fromJson(e)).toList();
-    
+
     return ApiReturnValue(value: product, message: data['meta']['message']);
   }
-  static Future<ApiReturnValue<List<Product>>> getProductById(
-      {String id, http.Client client}) async {
+
+  static Future<ApiReturnValue<Product>> getProductById({String id, http.Client client}) async {
     if (client == null) {
       client = http.Client();
     }
@@ -140,8 +140,8 @@ class ProductServices {
     }
     var data = jsonDecode(response.body);
     print(data);
-    List<Product> product = (data['data'] as Iterable).map((e) => Product.fromJson(e)).toList();
-    
-    return ApiReturnValue(value: product, message: data['meta']['message']);
+    Product value = Product.fromJson(data['data'][0]);
+
+    return ApiReturnValue(value: value, message: data['meta']['message']);
   }
 }

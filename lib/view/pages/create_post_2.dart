@@ -115,7 +115,6 @@ class _CreatePost2State extends State<CreatePost2> {
                               ),
                             ),
                             hintText: 'Write a caption...',
-                            //labelText: 'Write a caption...',
                           ),
                           keyboardType: TextInputType.multiline,
                           maxLines: 4,
@@ -185,9 +184,16 @@ class _CreatePost2State extends State<CreatePost2> {
               disabledColor: Color(0xFFE4E4E4),
               shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
               color: accentColor2,
-              onPressed: () {
-                //TODO: Tap Share
-                //Tap Share
+              onPressed: () async {
+                print(pId.toString());
+                await context.read<FeedCubit>().createFeed(
+                      urlPhoto: widget.imageFile,
+                      location: location,
+                      idProduct: pId.toString(),
+                      caption: captionController.text,
+                    );
+                Get.offAll(MainPage(bottomNavBarIndex: 4));
+                Get.snackbar('Success posting Feed', 'your feed has been posted');
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

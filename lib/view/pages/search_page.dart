@@ -32,6 +32,8 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
           color: Colors.black,
           onPressed: () {
             Get.back();
+            context.read<SearchProductCubit>().clear();
+            context.read<SearchMerchantCubit>().clear();
           },
         ),
         bottom: TabBar(
@@ -54,5 +56,3 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
     );
   }
 }
-
-

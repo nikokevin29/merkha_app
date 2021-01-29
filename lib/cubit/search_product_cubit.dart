@@ -18,4 +18,8 @@ class SearchProductCubit extends Cubit<SearchProductState> {
       emit(SearchProductLoadingFailed(result.message));
     }
   }
+
+  Future<void> clear() async {
+    emit(SearchProductLoaded([]));
+  }
 }

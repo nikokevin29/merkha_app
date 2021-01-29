@@ -6,6 +6,12 @@ class MainTab extends StatefulWidget {
 }
 
 class _MainTabState extends State<MainTab> {
+  @override
+  void initState() {
+    super.initState();
+    
+  }
+
   final List<String> images = [
     'https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80',
     'https://images.unsplash.com/photo-1586871608370-4adee64d1794?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2862&q=80',
@@ -198,22 +204,26 @@ class _MainTabState extends State<MainTab> {
                             builder: (_, state) {
                           if (state is MerchantByRandomListLoaded) {
                             List<Merchant> merchant = state.merchant;
+
                             return ListView.builder(
                               itemCount: merchant.length,
                               scrollDirection: Axis.horizontal,
-                              itemBuilder: (_, index) => Container(
-                                margin: EdgeInsets.only(
-                                    left: (index == 0) ? defaultMargin : 0,
-                                    right: (index == merchant.length - 1) ? defaultMargin : 16),
-                                child: Wrap(children: [
-                                  MerchantCard(
-                                    merchant: merchant[index],
-                                    onTap: () {
-                                      print('Merchant Card Tapped');
-                                    },
-                                  ),
-                                ]),
-                              ),
+                              itemBuilder: (_, index) {
+                                return Container(
+                                  margin: EdgeInsets.only(
+                                      left: (index == 0) ? defaultMargin : 0,
+                                      right: (index == merchant.length - 1) ? defaultMargin : 16),
+                                  child: Wrap(children: [
+                                    MerchantCard(
+                                      merchant: merchant[index],
+                                      onTap: () {
+                                        print('Merchant Card Tapped');
+                                        //
+                                      },
+                                    ),
+                                  ]),
+                                );
+                              },
                             );
                           } else {
                             return Center(child: CircularProgressIndicator());

@@ -11,3 +11,5 @@ part 'merchant.dart';
 part 'wishlist.dart';
 part 'cart.dart';
 part 'voucher.dart';
+part 'following.dart';
+part 'feed.dart';

@@ -229,6 +229,9 @@ class _SignUp5State extends State<SignUp5> {
                                 .read<MerchantRandomOrderCubit>()
                                 .showMerchantByRandom(limit: '21');
                             await context.read<VoucherCubit>().showAllVoucher();
+                            await context.read<FollowCubit>().followList();
+                            await context.read<FeedCubit>().showAllFeed();
+                            await context.read<OwnfeedCubit>().showOwnFeed();
 
                             Get.back();
                             Get.offAll(SignUp6());

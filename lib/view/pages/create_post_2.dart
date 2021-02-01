@@ -192,6 +192,8 @@ class _CreatePost2State extends State<CreatePost2> {
                       idProduct: pId.toString(),
                       caption: captionController.text,
                     );
+
+                await context.read<OwnfeedCubit>().showOwnFeed();//Get all Feed
                 Get.offAll(MainPage(bottomNavBarIndex: 4));
                 Get.snackbar('Success posting Feed', 'your feed has been posted');
               },

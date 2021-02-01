@@ -50,13 +50,16 @@ class FeedCard extends StatelessWidget {
                       children: [
                         Text(feed.merchantName,
                             style: blackMonstadtTextFont.copyWith(fontSize: 13)),
-                        Text(
-                          feed.location,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: blackMonstadtTextFont.copyWith(
-                            fontSize: 13,
-                            color: Colors.grey,
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - (8 * defaultMargin),
+                          child: Text(
+                            feed.location,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: blackMonstadtTextFont.copyWith(
+                              fontSize: 13,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       ],
@@ -87,7 +90,9 @@ class FeedCard extends StatelessWidget {
                 children: [
                   Wrap(spacing: 15, children: [
                     Icon(Icons.send, color: HexColor('#707070')),
-                    Icon(Icons.chat_bubble_outline, color: HexColor('#707070')),
+                    InkWell(
+                        onTap: () => Get.to(CommentPage(feed: feed)),
+                        child: Icon(Icons.chat_bubble_outline, color: HexColor('#707070'))),
                     Icon(Icons.favorite_border, color: HexColor('#707070')),
                   ]),
                 ],
@@ -110,6 +115,22 @@ class FeedCard extends StatelessWidget {
                         maxLines: 10),
                   ),
                 ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              alignment: Alignment.centerLeft,
+              child: InkWell(
+                onTap: () {
+                  //TODO: tap comment here
+                  print('tap view comment');
+                  Get.to(CommentPage(feed: feed));
+                },
+                child: Text(
+                  'View Comments',
+                  style: blackTextFont.copyWith(fontSize: 13, color: Colors.grey),
+                ),
               ),
             ),
             SizedBox(height: 15),

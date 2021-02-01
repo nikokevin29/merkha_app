@@ -261,9 +261,7 @@ class _CartTabState extends State<CartTab> {
                                           fontWeight: FontWeight.bold, fontSize: 12),
                                     ),
                                   ),
-                                  //TODO:Cart Builder Here
                                   buildCartBuilder(),
-
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     crossAxisAlignment: CrossAxisAlignment.end,

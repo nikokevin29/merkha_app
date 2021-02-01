@@ -11,3 +11,5 @@ export 'wishlist_cubit.dart';
 export 'voucher_cubit.dart';
 export 'follow_cubit.dart';
 export 'feed_cubit.dart';
+export 'ownfeed_cubit.dart';
+export 'comment_cubit.dart';

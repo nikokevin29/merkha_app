@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:merkha_app/shared/shared.dart';
 
 part 'user.dart';
@@ -13,3 +14,4 @@ part 'cart.dart';
 part 'voucher.dart';
 part 'following.dart';
 part 'feed.dart';
+part 'comment.dart';

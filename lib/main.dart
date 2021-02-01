@@ -32,6 +32,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => VoucherCubit()),
         BlocProvider(create: (_) => FollowCubit()),
         BlocProvider(create: (_) => FeedCubit()),
+        BlocProvider(create: (_) => OwnfeedCubit()),
+        BlocProvider(create: (_) => CommentCubit()),
 
         // BlocProvider(create: (_) => TransactionCubit())
       ],

@@ -19,6 +19,15 @@ class FeedListLoaded extends FeedState {
   List<Object> get props => [feed];
 }
 
+// class OwnFeedListLoaded extends FeedState {
+//   final List<Feed> feed;
+
+//   OwnFeedListLoaded(this.feed);
+
+//   @override
+//   List<Object> get props => [feed];
+// }
+
 class FeedLoaded extends FeedState {
   final Feed feed;
 

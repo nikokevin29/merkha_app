@@ -124,24 +124,28 @@ class _SignInPageState extends State<SignInPage> {
                               await context
                                   .read<UserCubit>()
                                   .signIn(emailController.text, passwordController.text);
-                              Navigator.pop(context);
+
                               UserState state = context.read<UserCubit>().state;
                               if (state is UserLoaded) {
                                 //TODO: SHOULD ADD More Cubit Here
-                                context.read<UserInterestCubit>().loadInterest();
-                                context.read<VoucherCubit>().showAllVoucher();
-                                context.read<ProductCubit>().showProductDiscover(limit: '20');
-                                context
+                                await context.read<UserInterestCubit>().loadInterest();
+                                await context.read<VoucherCubit>().showAllVoucher();
+                                await context.read<ProductCubit>().showProductDiscover(limit: '21');
+                                await context
                                     .read<BestSellerProductCubit>()
-                                    .showProductbyBestSeller(limit: '20');
-                                context
+                                    .showProductbyBestSeller(limit: '21');
+                                await context
                                     .read<MerchantRandomOrderCubit>()
-                                    .showMerchantByRandom(limit: '20');
+                                    .showMerchantByRandom(limit: '21');
+                                await context.read<FollowCubit>().followList();
+                                await context.read<FeedCubit>().showAllFeed();
+                                await context.read<OwnfeedCubit>().showOwnFeed();
                                 //context.read<ProductCubit>().getProduct();
                                 //context.read<OrderCubit>().getOrder();
                                 SharedPreferences autologin = await SharedPreferences.getInstance();
                                 await autologin.setString('email', emailController.text);
                                 await autologin.setString('password', passwordController.text);
+                                Navigator.pop(context);
                                 Get.offAll(MainPage());
                               } else {
                                 Get.snackbar(

@@ -7,6 +7,16 @@ class ProfileTab extends StatefulWidget {
 
 class _ProfileTabState extends State<ProfileTab> {
   List<Widget> _randomChildren;
+  int countPost;
+
+  @override
+  void initState() {
+    super.initState();
+    // _initFeed();
+  }
+
+  
+
   List<Widget> _randomHeightWidgets(BuildContext context) {
     _randomChildren = List.generate(1, (index) => buildHeader(context));
     return _randomChildren;
@@ -325,8 +335,10 @@ Column buildHeader(BuildContext context) {
                             children: [
                               Row(
                                 children: [
-                                  Text(NumberFormat.compactCurrency(decimalDigits: 0, symbol: '')
-                                      .format(99999999)),
+                                  Text((context.watch<OwnfeedCubit>().state as OwnFeedListLoaded)
+                                      .feed
+                                      .length
+                                      .toString()),
                                   Text(' Posts'),
                                 ],
                               ),

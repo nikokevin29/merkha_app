@@ -30,3 +30,4 @@ part 'full_photo.dart';
 part 'address_pick_card.dart';
 part 'voucher_card.dart';
 part 'feed_card.dart';
+part 'feed_own_card.dart';

@@ -71,3 +71,5 @@ part 'tab_wishlist.dart';
 part 'wallet_page.dart';
 part 'details_own_feed.dart';
 part 'comment_page.dart';
+part 'detail_merchant.dart';
+part 'detail_user.dart';

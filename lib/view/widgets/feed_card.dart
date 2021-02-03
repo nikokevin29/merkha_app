@@ -16,55 +16,65 @@ class FeedCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: (feed.merchantLogo != null)
-                          ? BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage(feed.merchantLogo),
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          : BoxDecoration(
-                              image:
-                                  DecorationImage(image: AssetImage('assets/defaultProfile.png')),
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(100),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  spreadRadius: 4,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 1), // changes position of shadow
+                GestureDetector(
+                  onTap: () {
+                    if (feed.idMerchant != 0 || feed.idMerchant == null) {
+                      //
+                      Get.to(DetailMerchant());
+                    } else {
+                      Get.to(DetailUser());
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: (feed.merchantLogo != null)
+                            ? BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: NetworkImage(feed.merchantLogo),
+                                  fit: BoxFit.cover,
                                 ),
-                              ],
-                            ),
-                    ),
-                    SizedBox(width: 5),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(feed.merchantName,
-                            style: blackMonstadtTextFont.copyWith(fontSize: 13)),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - (8 * defaultMargin),
-                          child: Text(
-                            feed.location,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: blackMonstadtTextFont.copyWith(
-                              fontSize: 13,
-                              color: Colors.grey,
+                              )
+                            : BoxDecoration(
+                                image:
+                                    DecorationImage(image: AssetImage('assets/defaultProfile.png')),
+                                border: Border.all(color: Colors.white),
+                                borderRadius: BorderRadius.circular(100),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    spreadRadius: 4,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 1), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                      ),
+                      SizedBox(width: 5),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(feed.merchantName,
+                              style: blackMonstadtTextFont.copyWith(fontSize: 13)),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width - (8 * defaultMargin),
+                            child: Text(
+                              feed.location,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: blackMonstadtTextFont.copyWith(
+                                fontSize: 13,
+                                color: Colors.grey,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 Icon(
                   Icons.more_horiz,

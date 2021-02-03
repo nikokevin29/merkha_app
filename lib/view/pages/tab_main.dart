@@ -81,7 +81,7 @@ class _MainTabState extends State<MainTab> {
                               ),
                               Text(
                                 'What are you looking for ?',
-                                style: greyTextFont.copyWith(fontSize: 14),
+                                style: greyTextFont.copyWith(fontSize: 12),
                               ),
                             ],
                           ),
@@ -160,14 +160,23 @@ class _MainTabState extends State<MainTab> {
                                       MerchantCategoryCard(
                                         merchantCat[index],
                                         onTap: () async {
-                                          // await context
-                                          //     .read<ProductByCategoryCubit>()
-                                          //     .showProductByCategory(
-                                          //         categoryId: merchantCat[index].idCategory);
-
-                                          // Get.to(CategoryPage(
-                                          //   userInterest: merchantCat[index],
-                                          // ));
+                                          showDialog(
+                                              barrierDismissible: false,
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Center(
+                                                  child: CircularProgressIndicator(),
+                                                );
+                                              });
+                                          await context
+                                              .read<ProductbymerchatcatCubit>()
+                                              .showMerchantCategorybyId(
+                                                  id: merchantCat[index].id.toString());
+                                          Get.back();
+                                          //buat loading disini
+                                          Get.to(CategoryPage(
+                                            merchantCategory: merchantCat[index],
+                                          ));
                                         },
                                       ),
                                     ])),

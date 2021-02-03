@@ -4,6 +4,7 @@ import 'package:merkha_app/models/models.dart';
 import 'package:merkha_app/services/services.dart';
 
 part 'product_state.dart';
+
 //Discover
 class ProductCubit extends Cubit<ProductState> {
   ProductCubit() : super(ProductInitial());

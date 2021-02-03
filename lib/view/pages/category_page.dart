@@ -1,8 +1,8 @@
 part of 'pages.dart';
 
 class CategoryPage extends StatefulWidget {
-  final UserInterest userInterest;
-  CategoryPage({this.userInterest});
+  final MerchantCategory merchantCategory;
+  CategoryPage({this.merchantCategory});
 
   @override
   _CategoryPageState createState() => _CategoryPageState();
@@ -12,7 +12,6 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   void initState() {
     super.initState();
-    
   }
 
   @override
@@ -20,7 +19,7 @@ class _CategoryPageState extends State<CategoryPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text(widget.userInterest.category, style: blackTextFont.copyWith()),
+        title: Text(widget.merchantCategory.categoryName, style: blackTextFont.copyWith()),
         backgroundColor: Colors.white,
         leading: BackButton(
           color: Colors.black,
@@ -31,8 +30,8 @@ class _CategoryPageState extends State<CategoryPage> {
       ),
       body: Column(
         children: [
-          BlocBuilder<ProductByCategoryCubit, ProductByCategoryState>(builder: (_, state) {
-            if (state is ProductByCategoryListLoaded) {
+          BlocBuilder<ProductbymerchatcatCubit, ProductbymerchatcatState>(builder: (_, state) {
+            if (state is ProductByMerchantCatIdListLoaded) {
               List<Product> product = state.product;
               return Container(
                 width: MediaQuery.of(context).size.width - 2 * defaultMargin,

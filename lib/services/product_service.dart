@@ -144,4 +144,24 @@ class ProductServices {
 
     return ApiReturnValue(value: value, message: data['meta']['message']);
   }
+
+  static Future<ApiReturnValue<List<Product>>> showMerchantCategorybyId(
+      {http.Client client, String id}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'product/showbymerchantcategory/' + id;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode Merchant Category By Id : ${response.statusCode}');
+      //print('data : ${response.body}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    List<Product> catProduct = (data['data'] as Iterable).map((e) => Product.fromJson(e)).toList();
+    return ApiReturnValue(value: catProduct);
+  }
 }

@@ -232,6 +232,7 @@ class _SignUp5State extends State<SignUp5> {
                             await context.read<FollowCubit>().followList();
                             await context.read<FeedCubit>().showAllFeed();
                             await context.read<OwnfeedCubit>().showOwnFeed();
+                            await context.read<MerchantcategoryCubit>().showAllMerchantCategory();
 
                             Get.back();
                             Get.offAll(SignUp6());

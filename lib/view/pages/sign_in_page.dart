@@ -140,6 +140,9 @@ class _SignInPageState extends State<SignInPage> {
                                 await context.read<FollowCubit>().followList();
                                 await context.read<FeedCubit>().showAllFeed();
                                 await context.read<OwnfeedCubit>().showOwnFeed();
+                                await context
+                                    .read<MerchantcategoryCubit>()
+                                    .showAllMerchantCategory();
                                 //context.read<ProductCubit>().getProduct();
                                 //context.read<OrderCubit>().getOrder();
                                 SharedPreferences autologin = await SharedPreferences.getInstance();

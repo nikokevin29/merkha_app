@@ -28,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
           await context.read<FollowCubit>().followList();
           await context.read<FeedCubit>().showAllFeed();
           await context.read<OwnfeedCubit>().showOwnFeed();
+          await context.read<MerchantcategoryCubit>().showAllMerchantCategory();
           Get.offAll(MainPage());
         }
       } else {

@@ -64,4 +64,25 @@ class MerchantService {
     Merchant value = Merchant.fromJson(data['data']);
     return ApiReturnValue(value: value);
   }
+
+  static Future<ApiReturnValue<List<MerchantCategory>>> showAllMerchantCategory(
+      {http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'merchant_category/showall';
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode Merchant Category : ${response.statusCode}');
+      //print('data : ${response.body}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    List<MerchantCategory> merchantcat =
+        (data['data'] as Iterable).map((e) => MerchantCategory.fromJson(e)).toList();
+    return ApiReturnValue(value: merchantcat);
+  }
 }

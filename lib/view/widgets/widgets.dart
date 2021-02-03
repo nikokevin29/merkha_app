@@ -31,3 +31,4 @@ part 'address_pick_card.dart';
 part 'voucher_card.dart';
 part 'feed_card.dart';
 part 'feed_own_card.dart';
+part 'merchant_category_card.dart';

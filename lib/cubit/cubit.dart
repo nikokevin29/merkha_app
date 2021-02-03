@@ -13,3 +13,4 @@ export 'follow_cubit.dart';
 export 'feed_cubit.dart';
 export 'ownfeed_cubit.dart';
 export 'comment_cubit.dart';
+export 'merchantcategory_cubit.dart';

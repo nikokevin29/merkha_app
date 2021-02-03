@@ -9,7 +9,6 @@ class _MainTabState extends State<MainTab> {
   @override
   void initState() {
     super.initState();
-    
   }
 
   final List<String> images = [
@@ -145,6 +144,40 @@ class _MainTabState extends State<MainTab> {
                       //     }
                       //   }),
                       // ),
+                      SizedBox(
+                        height: 100,
+                        child: BlocBuilder<MerchantcategoryCubit, MerchantcategoryState>(
+                            builder: (_, state) {
+                          if (state is MerchantCategoryListLoaded) {
+                            List<MerchantCategory> merchantCat = state.merchantCategory;
+                            return ListView.builder(
+                                itemBuilder: (_, index) => Container(
+                                    margin: EdgeInsets.only(
+                                        left: (index == 0) ? defaultMargin : 0,
+                                        right:
+                                            (index == merchantCat.length - 1) ? defaultMargin : 16),
+                                    child: Wrap(children: [
+                                      MerchantCategoryCard(
+                                        merchantCat[index],
+                                        onTap: () async {
+                                          // await context
+                                          //     .read<ProductByCategoryCubit>()
+                                          //     .showProductByCategory(
+                                          //         categoryId: merchantCat[index].idCategory);
+
+                                          // Get.to(CategoryPage(
+                                          //   userInterest: merchantCat[index],
+                                          // ));
+                                        },
+                                      ),
+                                    ])),
+                                itemCount: merchantCat.length,
+                                scrollDirection: Axis.horizontal);
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        }),
+                      ),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         alignment: Alignment.centerLeft,

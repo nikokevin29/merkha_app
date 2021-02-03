@@ -15,8 +15,6 @@ class _ProfileTabState extends State<ProfileTab> {
     // _initFeed();
   }
 
-  
-
   List<Widget> _randomHeightWidgets(BuildContext context) {
     _randomChildren = List.generate(1, (index) => buildHeader(context));
     return _randomChildren;
@@ -342,21 +340,24 @@ Column buildHeader(BuildContext context) {
                                   Text(' Posts'),
                                 ],
                               ),
+                              //await context.read<FollowCubit>().followList();
                               Row(
                                 children: [
                                   Text(NumberFormat.compactCurrency(decimalDigits: 0, symbol: '')
-                                      .format((context.watch<UserCubit>().state as UserLoaded)
-                                          .user
-                                          .followers_count)),
+                                      .format(
+                                          (context.watch<FollowCubit>().state as FollowListLoaded)
+                                              .follow
+                                              .length)),
                                   Text(' Follwers'),
                                 ],
                               ),
                               Row(
                                 children: [
                                   Text(NumberFormat.compactCurrency(decimalDigits: 0, symbol: '')
-                                      .format((context.watch<UserCubit>().state as UserLoaded)
-                                          .user
-                                          .following_count)),
+                                      .format(
+                                          (context.watch<FollowCubit>().state as FollowListLoaded)
+                                              .follow
+                                              .length)),
                                   Text(' Following'),
                                 ],
                               ),

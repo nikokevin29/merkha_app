@@ -15,3 +15,4 @@ part 'voucher.dart';
 part 'following.dart';
 part 'feed.dart';
 part 'comment.dart';
+part 'merchant_category.dart';

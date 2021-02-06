@@ -42,11 +42,11 @@ class ProductServices {
   }
 
   static Future<ApiReturnValue<List<Product>>> showProductbyMerchant(
-      {int idMerhcant, http.Client client}) async {
+      {String idMerhcant, http.Client client}) async {
     if (client == null) {
       client = http.Client();
     }
-    String url = baseURL + 'product/showbymerchant/' + idMerhcant.toString();
+    String url = baseURL + 'product/showbymerchant/' + idMerhcant;
     var response = await client.get(url, headers: {
       "Content-Type": "application/json",
       'Authorization': 'Bearer ' + User.token,
@@ -83,11 +83,11 @@ class ProductServices {
   }
 
   static Future<ApiReturnValue<List<Product>>> showProductbyBestSeller(
-      {String limit, http.Client client}) async {
+      {String id, http.Client client}) async {
     if (client == null) {
       client = http.Client();
     }
-    String url = baseURL + 'product/showbybestseller/' + limit;
+    String url = baseURL + 'product/showbestsellerbymerchant/' + id;
     var response = await client.get(url, headers: {
       "Content-Type": "application/json",
       'Authorization': 'Bearer ' + User.token,

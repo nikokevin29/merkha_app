@@ -19,8 +19,7 @@ class FeedCard extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     if (feed.idMerchant != 0 || feed.idMerchant == null) {
-                      //
-                      Get.to(DetailMerchant());
+                      Get.to(DetailMerchant(feed: feed));
                     } else {
                       Get.to(DetailUser());
                     }

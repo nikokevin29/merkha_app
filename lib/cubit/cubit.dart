@@ -15,3 +15,6 @@ export 'ownfeed_cubit.dart';
 export 'comment_cubit.dart';
 export 'merchantcategory_cubit.dart';
 export 'productbymerchatcat_cubit.dart';
+export 'merchantbyid_cubit.dart';
+export 'feedbymerchantid_cubit.dart';
+export 'productbymerchant_cubit.dart';

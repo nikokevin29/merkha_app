@@ -3,7 +3,8 @@ part of 'widgets.dart';
 class ItemCard extends StatelessWidget {
   final Product product;
   final Function onTap;
-  ItemCard({this.product, this.onTap});
+  final int heightCard;
+  ItemCard({this.product, this.onTap, this.heightCard = 215});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -12,7 +13,7 @@ class ItemCard extends StatelessWidget {
       },
       child: Container(
         width: (MediaQuery.of(context).size.width - 4 * defaultMargin) / 2,
-        height: 215,
+        height: double.parse(heightCard.toString()),
         child: Column(
           children: [
             Stack(

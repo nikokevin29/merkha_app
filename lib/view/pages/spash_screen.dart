@@ -22,7 +22,6 @@ class _SplashScreenState extends State<SplashScreen> {
           //TODO: SHOULD ADD More Cubit Here
           await context.read<UserInterestCubit>().loadInterest();
           await context.read<ProductCubit>().showProductDiscover(limit: '21');
-          await context.read<BestSellerProductCubit>().showProductbyBestSeller(limit: '21');
           await context.read<MerchantRandomOrderCubit>().showMerchantByRandom(limit: '21');
           await context.read<VoucherCubit>().showAllVoucher();
           await context.read<FollowCubit>().followList();

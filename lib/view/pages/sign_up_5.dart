@@ -223,9 +223,6 @@ class _SignUp5State extends State<SignUp5> {
                             await context.read<UserInterestCubit>().loadInterest();
                             await context.read<ProductCubit>().showProductDiscover(limit: '21');
                             await context
-                                .read<BestSellerProductCubit>()
-                                .showProductbyBestSeller(limit: '21');
-                            await context
                                 .read<MerchantRandomOrderCubit>()
                                 .showMerchantByRandom(limit: '21');
                             await context.read<VoucherCubit>().showAllVoucher();

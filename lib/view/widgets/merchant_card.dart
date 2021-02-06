@@ -89,7 +89,7 @@ class _MerchantCardState extends State<MerchantCard> {
                     child: Text(
                       widget.merchant.description,
                       style: blackTextFont.copyWith(fontSize: 11),
-                      maxLines: 4,
+                      maxLines: 3,
                       overflow: TextOverflow.clip,
                     ),
                   ),

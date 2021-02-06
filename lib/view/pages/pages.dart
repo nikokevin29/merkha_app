@@ -11,7 +11,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fb_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_greetings/flutter_greetings.dart';
 import 'package:geocoder/geocoder.dart' as geocode;
@@ -31,7 +30,6 @@ import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:merkha_app/cubit/cubit.dart';
-import 'package:merkha_app/cubit/product_cubit.dart';
 import 'package:merkha_app/models/models.dart';
 import 'package:merkha_app/services/services.dart';
 import 'package:merkha_app/shared/shared.dart';

@@ -187,20 +187,16 @@ class _MainTabState extends State<MainTab> {
                           }
                         }),
                       ),
+
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Discover',
-                          style: blackTextFont.copyWith(
-                            fontSize: 25,
-                          ),
-                        ),
+                        child: Text('Trending', style: blackTextFont.copyWith(fontSize: 25)),
                       ),
-                      //Discover Product (Random)
-                      BlocBuilder<ProductCubit, ProductState>(builder: (_, state) {
-                        if (state is ProductListLoaded) {
-                          List<Product> product = state.product;
+                      //note: Trending Feed
+                      BlocBuilder<FeedbestsellerCubit, FeedbestsellerState>(builder: (_, state) {
+                        if (state is FeedByBestSellerListLoaded) {
+                          List<Feed> feed = state.feed;
                           return Container(
                             width: MediaQuery.of(context).size.width - 2 * defaultMargin,
                             child: GridView.builder(
@@ -210,7 +206,7 @@ class _MainTabState extends State<MainTab> {
                                   crossAxisCount: 3,
                                   childAspectRatio: 1,
                                 ),
-                                itemCount: product.length,
+                                itemCount: feed.length,
                                 itemBuilder: (_, index) => Container(
                                       child: Wrap(
                                         alignment: WrapAlignment.center,
@@ -218,9 +214,7 @@ class _MainTabState extends State<MainTab> {
                                         spacing: 10,
                                         runSpacing: 10,
                                         children: [
-                                          ProductCard(product[index], onTap: () {
-                                            //Navigate to Details Here
-                                          }),
+                                          FeedBox(feed[index]),
                                         ],
                                       ),
                                     )),
@@ -276,13 +270,42 @@ class _MainTabState extends State<MainTab> {
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'Best Seller',
+                          'Discover',
                           style: blackTextFont.copyWith(
                             fontSize: 25,
                           ),
                         ),
                       ),
-                      
+                      //Discover Feed Limit 21 (Random)
+                      BlocBuilder<FeedrandomCubit, FeedrandomState>(builder: (_, state) {
+                        if (state is FeedRandomListLoaded) {
+                          List<Feed> feed = state.feed;
+                          return Container(
+                            width: MediaQuery.of(context).size.width - 2 * defaultMargin,
+                            child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  childAspectRatio: 1,
+                                ),
+                                itemCount: feed.length,
+                                itemBuilder: (_, index) => Container(
+                                      child: Wrap(
+                                        alignment: WrapAlignment.center,
+                                        direction: Axis.vertical,
+                                        spacing: 10,
+                                        runSpacing: 10,
+                                        children: [
+                                          FeedBox(feed[index]),
+                                        ],
+                                      ),
+                                    )),
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      }),
                     ],
                   ),
                 ),

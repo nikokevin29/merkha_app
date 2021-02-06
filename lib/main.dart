@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => UserCubit()),
         BlocProvider(create: (_) => AddressCubit()),
         BlocProvider(create: (_) => UserInterestCubit()),
-        BlocProvider(create: (_) => ProductCubit()),
+        BlocProvider(create: (_) => FeedrandomCubit()),
         BlocProvider(create: (_) => BestSellerProductCubit()),
         BlocProvider(create: (_) => ProductByCategoryCubit()),
         BlocProvider(create: (_) => MerchantRandomOrderCubit()),
@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => MerchantbyidCubit()),
         BlocProvider(create: (_) => FeedbymerchantidCubit()),
         BlocProvider(create: (_) => ProductbymerchantCubit()),
+        BlocProvider(create: (_) => FeedbestsellerCubit()),
         //TODO:: insert Bloc Here
       ],
       child: GetMaterialApp(

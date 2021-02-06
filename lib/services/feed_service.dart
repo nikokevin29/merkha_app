@@ -109,4 +109,44 @@ class FeedServices {
     List<Feed> feed = (data['data'] as Iterable).map((e) => Feed.fromJson(e)).toList();
     return ApiReturnValue(value: feed);
   }
+
+  static Future<ApiReturnValue<List<Feed>>> showFeedByBestSeller(
+      {String limit, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'feed/showbestseller/' + limit;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+
+    if (response.statusCode != 200) {
+      print('StatusCode Feed Best Seller: ${response.statusCode}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    List<Feed> feed = (data['data'] as Iterable).map((e) => Feed.fromJson(e)).toList();
+    return ApiReturnValue(value: feed);
+  }
+
+  static Future<ApiReturnValue<List<Feed>>> showFeedRandom(
+      {String limit, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'feed/showrandom/' + limit;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+
+    if (response.statusCode != 200) {
+      print('StatusCode Feed Best Seller: ${response.statusCode}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    List<Feed> feed = (data['data'] as Iterable).map((e) => Feed.fromJson(e)).toList();
+    return ApiReturnValue(value: feed);
+  }
 }

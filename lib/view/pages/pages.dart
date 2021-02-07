@@ -73,3 +73,7 @@ part 'details_own_feed.dart';
 part 'comment_page.dart';
 part 'detail_merchant.dart';
 part 'detail_user.dart';
+part 'search_product_merchant.dart';
+part 'feed_merchant.dart';
+part 'product_merchant.dart';
+part 'review_merchant_page.dart';

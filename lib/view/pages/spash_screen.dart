@@ -14,7 +14,6 @@ class _SplashScreenState extends State<SplashScreen> {
     sharedPreferences();
     Future.delayed(Duration(seconds: 1), () async {
       print(email);
-      //print(password);
       if (email != null && password != null) {
         await context.read<UserCubit>().signIn(email, password);
         UserState state = context.read<UserCubit>().state;
@@ -23,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
           await context.read<UserInterestCubit>().loadInterest();
           await context.read<FeedrandomCubit>().showFeedRandom(limit: '21');
           await context.read<MerchantRandomOrderCubit>().showMerchantByRandom(limit: '21');
-          await context.read<FeedbestsellerCubit>().showFeedByBestSeller(limit: '9');
+          await context.read<FeedbestsellerCubit>().showFeedByBestSeller(limit: '12');
           await context.read<VoucherCubit>().showAllVoucher();
           await context.read<FollowCubit>().followList();
           await context.read<FeedCubit>().showAllFeed();

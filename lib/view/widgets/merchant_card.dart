@@ -26,21 +26,43 @@ class _MerchantCardState extends State<MerchantCard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              padding: EdgeInsets.all(8),
-              child: (widget.merchant.merchantLogo != null)
-                  ? CachedNetworkImage(
-                      height: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
-                      width: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
-                      imageUrl: widget.merchant.merchantLogo,
-                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                          CircularProgressIndicator(value: downloadProgress.progress),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      imageBuilder: (context, imageProvider) => Container(
+            GestureDetector(
+              onTap: () {
+                Get.to(DetailMerchant(merchant: widget.merchant));
+              },
+              child: Container(
+                padding: EdgeInsets.all(8),
+                child: (widget.merchant.merchantLogo != null)
+                    ? CachedNetworkImage(
+                        height: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
+                        width: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
+                        imageUrl: widget.merchant.merchantLogo,
+                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                            CircularProgressIndicator(value: downloadProgress.progress),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(100),
+                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 4,
+                                blurRadius: 4,
+                                offset: Offset(0, 1), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
+                        width: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
                         decoration: BoxDecoration(
+                          image: DecorationImage(image: AssetImage('assets/defaultProfile.png')),
                           border: Border.all(color: Colors.white),
                           borderRadius: BorderRadius.circular(100),
-                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey.withOpacity(0.2),
@@ -51,24 +73,7 @@ class _MerchantCardState extends State<MerchantCard> {
                           ],
                         ),
                       ),
-                    )
-                  : Container(
-                      height: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
-                      width: (MediaQuery.of(context).size.width - 2 * defaultMargin) / 6,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(image: AssetImage('assets/defaultProfile.png')),
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(100),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 4,
-                            blurRadius: 4,
-                            offset: Offset(0, 1), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                    ),
+              ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,

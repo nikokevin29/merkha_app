@@ -164,4 +164,24 @@ class ProductServices {
     List<Product> catProduct = (data['data'] as Iterable).map((e) => Product.fromJson(e)).toList();
     return ApiReturnValue(value: catProduct);
   }
+
+  static Future<ApiReturnValue<List<Product>>> searchProductByMerchant(
+      {http.Client client, String id, String productName}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'product/searchproductbymerchant/' + productName + '/' + id;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode Search Product Merchant : ${response.statusCode}');
+      //print('data : ${response.body}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    List<Product> value = (data['data'] as Iterable).map((e) => Product.fromJson(e)).toList();
+    return ApiReturnValue(value: value);
+  }
 }

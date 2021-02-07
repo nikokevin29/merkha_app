@@ -9,6 +9,7 @@ class MerchantSearchCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         print('tap merchant');
+        Get.to(DetailMerchant(merchant: merchant));
       },
       child: Card(
         elevation: 5,
@@ -21,31 +22,48 @@ class MerchantSearchCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-                child: CachedNetworkImage(
-                  height: 40,
-                  width: 40,
-                  imageUrl: merchant.merchantLogo,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(value: downloadProgress.progress),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(30),
-                      image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 4,
-                          blurRadius: 4,
-                          offset: Offset(0, 1), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                  padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+                  child: (merchant.merchantLogo != null)
+                      ? CachedNetworkImage(
+                          height: 40,
+                          width: 40,
+                          imageUrl: merchant.merchantLogo,
+                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                              CircularProgressIndicator(value: downloadProgress.progress),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(30),
+                              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 4,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 1), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(image: AssetImage('assets/defaultProfile.png')),
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(100),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 4,
+                                blurRadius: 4,
+                                offset: Offset(0, 1), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                        )),
               Container(
                 padding: EdgeInsets.symmetric(vertical: defaultMargin),
                 child: Column(

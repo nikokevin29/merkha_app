@@ -83,4 +83,22 @@ class FollowingService {
         (data['data'] as Iterable).map((e) => Following.fromJson(e)).toList();
     return ApiReturnValue(value: followlist);
   }
+
+  static Future<int> countFollowersMerchant({String idMerchant, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'following/countFollowersMerchant/' + idMerchant;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode Count : ${response.statusCode}');
+      return 0;
+    }
+    var data = jsonDecode(response.body);
+    print('count followers = ' + data.toString());
+    return data;
+  }
 }

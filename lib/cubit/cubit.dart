@@ -19,3 +19,4 @@ export 'feedbymerchantid_cubit.dart';
 export 'productbymerchant_cubit.dart';
 export 'feedbestseller_cubit.dart';
 export 'feedrandom_cubit.dart';
+export 'search_product_merchant_cubit.dart';

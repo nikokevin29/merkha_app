@@ -2,17 +2,67 @@ part of 'pages.dart';
 
 class DetailMerchant extends StatefulWidget {
   final Feed feed;
-  DetailMerchant({this.feed});
+  final Merchant merchant;
+  DetailMerchant({this.feed, this.merchant});
 
   @override
   _DetailMerchantState createState() => _DetailMerchantState();
 }
 
 class _DetailMerchantState extends State<DetailMerchant> {
+  String merchantName;
+  String idMerchant;
+  String merchantLogo;
+  String merchantDescription;
+  String merchantWebsite;
+  String merchantLastAccess;
+  String merchantLocation;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.feed == null) {
+      merchantName = widget.merchant.merchantName;
+      idMerchant = widget.merchant.merchantId;
+      merchantLogo = widget.merchant.merchantLogo;
+      merchantDescription = widget.merchant.description;
+      merchantWebsite = widget.merchant.website;
+      merchantLastAccess = widget.merchant.lastAccess;
+      merchantLocation = widget.merchant.province;
+    } else {
+      merchantName = widget.feed.merchantName;
+      idMerchant = widget.feed.idMerchant.toString();
+      merchantLogo = widget.feed.merchantLogo;
+      merchantDescription = widget.feed.merchantDescription;
+      merchantWebsite = widget.feed.merchantWebsite;
+      merchantLastAccess = widget.feed.merchantLastAccess;
+      merchantLocation = widget.feed.location;
+    }
+  }
+
   List<Widget> _randomChildren;
 
-  List<Widget> _randomHeightWidgets(BuildContext context, Feed feed) {
-    _randomChildren = List.generate(1, (index) => buildHeaderMerchant(context, feed));
+  List<Widget> _randomHeightWidgets(
+    BuildContext context,
+    String merchantName,
+    String idMerchant,
+    String merchantLogo,
+    String merchantDescription,
+    String merchantWebsite,
+    String merchantLastAccess,
+    String merchantLocation,
+  ) {
+    _randomChildren = List.generate(
+        1,
+        (index) => buildHeaderMerchant(
+              context,
+              merchantName,
+              idMerchant,
+              merchantLogo,
+              merchantDescription,
+              merchantWebsite,
+              merchantLastAccess,
+              merchantLocation,
+            ));
     return _randomChildren;
   }
 
@@ -21,7 +71,7 @@ class _DetailMerchantState extends State<DetailMerchant> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text(widget.feed.merchantName, style: blackTextFont.copyWith()),
+        title: Text(merchantName, style: blackTextFont.copyWith()),
         backgroundColor: Colors.white,
         leading: BackButton(
           color: Colors.black,
@@ -31,8 +81,11 @@ class _DetailMerchantState extends State<DetailMerchant> {
         ),
         actions: [
           FlatButton(
-            onPressed: () {
+            onPressed: () async {
               print('tap Follow');
+              int followersCount =
+                  await FollowingService.countFollowersMerchant(idMerchant: idMerchant.toString());
+              print(followersCount);
             },
             child: Text(
               'Follow +',
@@ -59,7 +112,16 @@ class _DetailMerchantState extends State<DetailMerchant> {
           headerSliverBuilder: (context, _) {
             return [
               SliverList(
-                  delegate: SliverChildListDelegate(_randomHeightWidgets(context, widget.feed))),
+                  delegate: SliverChildListDelegate(_randomHeightWidgets(
+                context,
+                merchantName,
+                idMerchant,
+                merchantLogo,
+                merchantDescription,
+                merchantWebsite,
+                merchantLastAccess,
+                merchantLocation,
+              ))),
             ];
           },
           body: Column(
@@ -93,9 +155,15 @@ class _DetailMerchantState extends State<DetailMerchant> {
               ),
               Expanded(
                 child: TabBarView(children: [
-                  HomeMerchant(feed: widget.feed),
-                  FeedMerchant(feed: widget.feed),
-                  ProductMerchant(idMerch: widget.feed.idMerchant.toString()),
+                  HomeMerchant(
+                    feed: widget.feed,
+                    idMerchant: idMerchant,
+                    merchantName: merchantName,
+                    merchantWebsite: merchantWebsite,
+                    description: merchantDescription,
+                  ), //used id_merchant, merchant_name, website, description
+                  FeedMerchant(feed: widget.feed, idMerchant: idMerchant),
+                  ProductMerchant(idMerch: idMerchant),
                   ReviewMerchant(),
                 ]),
               ),
@@ -109,7 +177,17 @@ class _DetailMerchantState extends State<DetailMerchant> {
 
 class HomeMerchant extends StatefulWidget {
   final Feed feed;
-  HomeMerchant({this.feed});
+  final String idMerchant;
+  final String merchantName;
+  final String merchantWebsite;
+  final String description;
+  HomeMerchant({
+    this.feed,
+    this.idMerchant,
+    this.merchantName,
+    this.merchantWebsite,
+    this.description,
+  });
   @override
   _HomeMerchantState createState() => _HomeMerchantState();
 }
@@ -120,7 +198,7 @@ class _HomeMerchantState extends State<HomeMerchant> {
     super.initState();
     context
         .read<BestSellerProductCubit>()
-        .showProductbyBestSeller(id: widget.feed.idMerchant.toString());
+        .showProductbyBestSeller(id: widget.idMerchant.toString());
   }
 
   @override
@@ -137,7 +215,7 @@ class _HomeMerchantState extends State<HomeMerchant> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.feed.merchantName,
+                    widget.merchantName,
                     style: blackTextFont.copyWith(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -145,7 +223,7 @@ class _HomeMerchantState extends State<HomeMerchant> {
                   ),
                   SizedBox(height: 3),
                   ReadMoreText(
-                    widget.feed.merchantDescription,
+                    widget.description,
                     textAlign: TextAlign.justify,
                     trimLines: 2,
                     colorClickableText: Colors.pink,
@@ -156,19 +234,19 @@ class _HomeMerchantState extends State<HomeMerchant> {
                   ),
                   SizedBox(height: 5),
                   InkWell(
-                      child: Text(widget.feed.merchantWebsite,
+                      child: Text(widget.merchantWebsite,
                           style: blackTextFont.copyWith(color: Colors.blueAccent)),
                       onTap: () async {
-                        if (await canLaunch('http:' + widget.feed.merchantWebsite)) {
+                        if (await canLaunch('http:' + widget.merchantWebsite)) {
                           await launch(
-                            'http:' + widget.feed.merchantWebsite,
+                            'http:' + widget.merchantWebsite,
                             // forceSafariVC: false,
                             // forceWebView: false,
                           );
                         } else {
                           Get.snackbar('Could Not Launch', 'Cannot Launch this url',
                               snackPosition: SnackPosition.BOTTOM);
-                          throw 'Could not launch ' + widget.feed.merchantWebsite;
+                          throw 'Could not launch ' + widget.merchantWebsite;
                         }
                       }),
                 ],
@@ -187,7 +265,7 @@ class _HomeMerchantState extends State<HomeMerchant> {
                         alignment: Alignment.topLeft,
                         padding: EdgeInsets.symmetric(horizontal: defaultMargin),
                         child: Text(
-                          widget.feed.merchantName + '`s' + ' Best Seller',
+                          widget.merchantName + '`s' + ' Best Seller',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: blackTextFont.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
@@ -231,124 +309,10 @@ class _HomeMerchantState extends State<HomeMerchant> {
   }
 }
 
-class FeedMerchant extends StatefulWidget {
-  final Feed feed;
-  FeedMerchant({this.feed});
-  @override
-  _FeedMerchantState createState() => _FeedMerchantState();
-}
-
-class _FeedMerchantState extends State<FeedMerchant> {
-  @override
-  void initState() {
-    super.initState();
-    context
-        .read<FeedbymerchantidCubit>()
-        .showFeedByMerchantId(id: widget.feed.idMerchant.toString());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<FeedbymerchantidCubit, FeedbymerchantidState>(builder: (_, state) {
-        if (state is FeedByIdMerchantListLoaded) {
-          List<Feed> feed = state.feed;
-          return Container(
-            width: MediaQuery.of(context).size.width - 2 * defaultMargin,
-            child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 1,
-                ),
-                itemCount: feed.length,
-                itemBuilder: (_, index) => Container(
-                      child: Wrap(
-                        alignment: WrapAlignment.center,
-                        direction: Axis.vertical,
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: [
-                          FeedBox(feed[index]),
-                        ],
-                      ),
-                    )),
-          );
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      }),
-    );
-  }
-}
-
-class ProductMerchant extends StatefulWidget {
-  final Product product;
-  final String idMerch;
-  ProductMerchant({this.product, this.idMerch});
-  @override
-  _ProductMerchantState createState() => _ProductMerchantState();
-}
-
-class _ProductMerchantState extends State<ProductMerchant> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<ProductbymerchantCubit>().showProductByMerchant(id: widget.idMerch);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        alignment: Alignment.topCenter,
-        child: BlocBuilder<ProductbymerchantCubit, ProductbymerchantState>(builder: (_, state) {
-          if (state is ProductByMerchantListLoaded) {
-            List<Product> product = state.product;
-            return Container(
-              width: MediaQuery.of(context).size.width - 2 * defaultMargin,
-              child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.73,
-                  ),
-                  itemCount: product.length,
-                  itemBuilder: (_, index) => Container(
-                        child: Wrap(
-                          alignment: WrapAlignment.center,
-                          direction: Axis.vertical,
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: [
-                            ItemCard(product: product[index]),
-                          ],
-                        ),
-                      )),
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        }),
-      ),
-    );
-  }
-}
-
-class ReviewMerchant extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Text('Review'),
-    );
-  }
-}
-
-Widget buildHeaderMerchant(BuildContext context, Feed feed) {
+Widget buildHeaderMerchant(BuildContext context, merchantName, idMerchant, merchantLogo,
+    merchantDescription, merchantWebsite, merchantLastAccess, merchantLocation) {
   var lastOnlineFormated = DateTime.now()
-      .difference(DateFormat("yyyy-MM-dd hh:mm:ss").parse(feed.merchantLastAccess))
+      .difference(DateFormat("yyyy-MM-dd hh:mm:ss").parse(merchantLastAccess))
       .inHours;
   return Container(
     child: Column(
@@ -358,38 +322,43 @@ Widget buildHeaderMerchant(BuildContext context, Feed feed) {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) * 0.75,
-                height: 35,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(18)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.25),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: defaultMargin - 7),
-                      child: Icon(Icons.search, color: Colors.grey),
-                    ),
-                    Flexible(
-                      child: Text(
-                        'Search ' + feed.merchantName,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: greyTextFont.copyWith(fontSize: 14),
+              GestureDetector(
+                onTap: () {
+                  Get.to(SearchProductMerchant(idMerchant: idMerchant, merchantName: merchantName));
+                },
+                child: Container(
+                  width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) * 0.75,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.25),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: defaultMargin - 7),
+                        child: Icon(Icons.search, color: Colors.grey),
+                      ),
+                      Flexible(
+                        child: Text(
+                          'Search ' + merchantName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: greyTextFont.copyWith(fontSize: 14),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               FlatButton(
@@ -401,7 +370,30 @@ Widget buildHeaderMerchant(BuildContext context, Feed feed) {
                 child: SizedBox(
                   height: 35,
                   width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) * 0.1,
-                  child: Icon(Icons.chat, color: HexColor('#373E4C')),
+                  child: InkWell(
+                      onTap: () {
+                        FirebaseFirestore.instance
+                            .collection('rooms')
+                            .doc(idMerchant +
+                                '-' +
+                                (context.read<UserCubit>().state as UserLoaded)
+                                    .user
+                                    .id
+                                    .toString()) //idMerchant-idUser
+                            .set({
+                          'id_merchant': idMerchant, //Id Merchant
+                          'id_user': (context.read<UserCubit>().state as UserLoaded)
+                              .user
+                              .id
+                              .toString(), //Id Merchant
+                          'url_photo': merchantLogo,
+                          'merchant_name': merchantName,
+                          'created_at': DateTime.now(),
+                        });
+                        Get.to(DetailChat(
+                            peerId: idMerchant, peerAvatar: merchantLogo, peerName: merchantName));
+                      },
+                      child: Icon(Icons.chat, color: HexColor('#373E4C'))),
                 ),
               ),
             ],
@@ -426,8 +418,8 @@ Widget buildHeaderMerchant(BuildContext context, Feed feed) {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                                image: (feed.merchantLogo != null)
-                                    ? NetworkImage(feed.merchantLogo)
+                                image: (merchantLogo != null)
+                                    ? NetworkImage(merchantLogo)
                                     : AssetImage("assets/defaultProfile.png"),
                                 fit: BoxFit.cover),
                           ),
@@ -442,7 +434,7 @@ Widget buildHeaderMerchant(BuildContext context, Feed feed) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    feed.merchantName,
+                    merchantName,
                     style: blackTextFont.copyWith(fontSize: 16),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -451,7 +443,7 @@ Widget buildHeaderMerchant(BuildContext context, Feed feed) {
                     children: [
                       Icon(Icons.location_on, size: 15, color: Colors.grey),
                       Text(
-                        feed.location,
+                        merchantLocation,
                         style: blackTextFont.copyWith(
                           fontSize: 10,
                           color: Colors.grey,
@@ -469,11 +461,28 @@ Widget buildHeaderMerchant(BuildContext context, Feed feed) {
                       children: [
                         Row(
                           children: [
-                            Text(
-                                NumberFormat.compactCurrency(decimalDigits: 0, symbol: '')
-                                    .format(999),
-                                style: whiteNumberFont.copyWith(fontSize: 10, color: Colors.black)),
-                            Text(' Follwers ', style: blackTextFont.copyWith(fontSize: 10))
+                            //
+                            FutureBuilder(
+                                future: FollowingService.countFollowersMerchant(
+                                    idMerchant: idMerchant.toString()),
+                                builder: (BuildContext context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    int data = snapshot.data;
+                                    return Text(
+                                      NumberFormat.compactCurrency(decimalDigits: 0, symbol: '')
+                                          .format(data),
+                                      style: whiteNumberFont.copyWith(
+                                          fontSize: 10, color: Colors.black),
+                                    );
+                                  } else {
+                                    Text('0',
+                                        style: whiteNumberFont.copyWith(
+                                            fontSize: 10, color: Colors.black));
+                                  }
+                                  return SizedBox(
+                                      width: 10, height: 10, child: CircularProgressIndicator());
+                                }),
+                            Text(' Followers ', style: blackTextFont.copyWith(fontSize: 10))
                           ],
                         ),
                         Row(

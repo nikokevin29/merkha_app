@@ -23,35 +23,38 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text('Search', style: blackTextFont),
-        backgroundColor: Colors.white,
-        leading: BackButton(
-          color: Colors.black,
-          onPressed: () {
-            Get.back();
-            context.read<SearchProductCubit>().clear();
-            context.read<SearchMerchantCubit>().clear();
-          },
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          title: Text('Search', style: blackTextFont),
+          backgroundColor: Colors.white,
+          leading: BackButton(
+            color: Colors.black,
+            onPressed: () {
+              Get.back();
+              context.read<SearchProductCubit>().clear();
+              context.read<SearchMerchantCubit>().clear();
+            },
+          ),
+          bottom: TabBar(
+            unselectedLabelColor: Colors.grey,
+            labelColor: Colors.black,
+            controller: controller,
+            tabs: [
+              Tab(text: 'Product'),
+              Tab(text: 'Merchant'),
+            ],
+          ),
         ),
-        bottom: TabBar(
-          unselectedLabelColor: Colors.grey,
-          labelColor: Colors.black,
+        body: TabBarView(
           controller: controller,
-          tabs: [
-            Tab(text: 'Product'),
-            Tab(text: 'Merchant'),
+          children: [
+            SearchProduct(),
+            SearchMerchant(),
           ],
         ),
-      ),
-      body: TabBarView(
-        controller: controller,
-        children: [
-          SearchProduct(),
-          SearchMerchant(),
-        ],
       ),
     );
   }

@@ -10,6 +10,7 @@ class Merchant extends Equatable {
   final String province;
   final String city;
   final String country;
+  final String website;
   final String followersCount;
   final String lastAccess;
   final String activeStatus;
@@ -27,6 +28,7 @@ class Merchant extends Equatable {
     this.province,
     this.city,
     this.country,
+    this.website,
     this.followersCount,
     this.lastAccess,
     this.activeStatus,
@@ -46,6 +48,7 @@ class Merchant extends Equatable {
         province,
         city,
         country,
+        website,
         followersCount,
         lastAccess,
         activeStatus,
@@ -77,6 +80,7 @@ class Merchant extends Equatable {
         province: data['province'],
         city: data['city'],
         country: data['country'],
+        website: data['website'],
         followersCount: data['followers_count'].toString(),
         lastAccess: data['last_access'],
         activeStatus: data['active_status'].toString(),

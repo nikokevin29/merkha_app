@@ -28,6 +28,8 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shimmer/shimmer.dart';
+
 
 import 'package:merkha_app/cubit/cubit.dart';
 import 'package:merkha_app/models/models.dart';
@@ -77,3 +79,4 @@ part 'search_product_merchant.dart';
 part 'feed_merchant.dart';
 part 'product_merchant.dart';
 part 'review_merchant_page.dart';
+part 'payment_page.dart';

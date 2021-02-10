@@ -6,31 +6,42 @@ class MainTab extends StatefulWidget {
 }
 
 class _MainTabState extends State<MainTab> {
+  var appContent;
   @override
   void initState() {
     super.initState();
+    appContentAPI();
   }
 
-  final List<String> images = [
-    'https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80',
-    'https://images.unsplash.com/photo-1586871608370-4adee64d1794?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2862&q=80',
-    'https://images.unsplash.com/photo-1586901533048-0e856dff2c0d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
-    'https://images.unsplash.com/photo-1586902279476-3244d8d18285?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80',
-    'https://images.unsplash.com/photo-1586943101559-4cdcf86a6f87?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1556&q=80',
-    'https://images.unsplash.com/photo-1586951144438-26d4e072b891?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
-    'https://images.unsplash.com/photo-1586953983027-d7508a64f4bb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
-  ];
+  Future<dynamic> appContentAPI() async {
+    String url = baseURL + 'app_content/main_page';
+    var response = await http.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode : ${response.statusCode}');
+      return response.statusCode.toString();
+    }
+    var data = await jsonDecode(response.body);
+    setState(() {
+      appContent = List<String>.from(data);
+    });
+    return data;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+            //padding: EdgeInsets.symmetric(horizontal: defaultMargin),
             child: Column(
               children: [
                 Container(
                   //note: Greetings + Fistname User From Userstate
+                  padding: EdgeInsets.symmetric(horizontal: defaultMargin),
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(top: 5),
                   child: Text(
@@ -90,22 +101,50 @@ class _MainTabState extends State<MainTab> {
                       SizedBox(
                         height: 25,
                       ),
-                      //Carousel Photo
-                      CarouselSlider.builder(
-                        itemCount: images.length,
-                        options: CarouselOptions(
-                          height: 200.0,
-                          autoPlay: true,
-                          autoPlayInterval: Duration(seconds: 3),
-                          enlargeCenterPage: true,
-                        ),
-                        itemBuilder: (context, index) {
-                          return Container(
-                            child: Center(
-                                child:
-                                    Image.network(images[index], fit: BoxFit.cover, width: 1200)),
-                          );
-                        },
+                      //note::Carousel Photo
+                      Container(
+                        child: (appContent != null)
+                            ? CarouselSlider(
+                                options: CarouselOptions(
+                                  autoPlay: true,
+                                  autoPlayInterval: Duration(seconds: 3),
+                                  height: MediaQuery.of(context).size.width * 0.5,
+                                ),
+                                items: appContent.map<Widget>((i) {
+                                  print(i);
+                                  return Builder(
+                                    builder: (BuildContext context) {
+                                      return Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(15),
+                                          image: DecorationImage(
+                                            image: NetworkImage(i),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        //child: Text(i ?? 'Image not Found'), //Debug Show Link image
+                                      );
+                                    },
+                                  );
+                                }).toList(),
+                              )
+                            : SizedBox(
+                                width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+                                height: MediaQuery.of(context).size.width * 0.5,
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.grey,
+                                  highlightColor: Colors.white,
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+                                    height: MediaQuery.of(context).size.width * 0.5,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
                       ),
                       SizedBox(
                         height: 25,
@@ -189,7 +228,7 @@ class _MainTabState extends State<MainTab> {
                       ),
 
                       Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(horizontal: defaultMargin, vertical: 16),
                         alignment: Alignment.centerLeft,
                         child: Text('Trending', style: blackTextFont.copyWith(fontSize: 25)),
                       ),
@@ -224,7 +263,7 @@ class _MainTabState extends State<MainTab> {
                         }
                       }),
                       Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(horizontal: defaultMargin, vertical: 16),
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Who to Follow',
@@ -267,7 +306,7 @@ class _MainTabState extends State<MainTab> {
                         }),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(horizontal: defaultMargin, vertical: 16),
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Discover',

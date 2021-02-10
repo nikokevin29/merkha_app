@@ -10,7 +10,6 @@ class AddressService {
       "Content-Type": "application/json",
       'Authorization': 'Bearer ' + User.token,
     });
-
     if (response.statusCode != 200) {
       print('StatusCode : ${response.statusCode}');
       print('data : ${response.body}');

@@ -471,7 +471,6 @@ class _CartTabState extends State<CartTab> {
                                       return Container(child: Text('Voucher Not Applied'));
                                     }
                                   }),
-
                                   Divider(),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 15),
@@ -504,14 +503,14 @@ class _CartTabState extends State<CartTab> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: new BorderRadius.circular(30.0)),
                                     child: Text(
-                                      'Payment',
+                                      'Sumbit and Go To Payment',
                                       style: blackTextFont.copyWith(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white),
                                     ),
                                     onPressed: () {
-                                      //
+                                      Get.to(PaymentPage());
                                     },
                                   ),
                                 ],
@@ -845,4 +844,12 @@ class _CartTabState extends State<CartTab> {
       ongkir = price;
     });
   }
+}
+
+void _orderSubmit() {
+  //
+  
+}
+void _detailOrderSubmit(){
+  //
 }

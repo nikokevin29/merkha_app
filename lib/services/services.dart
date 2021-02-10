@@ -16,6 +16,8 @@ part 'voucher_service.dart';
 part 'following_service.dart';
 part 'feed_service.dart';
 part 'comment_service.dart';
+part 'appcontent_service.dart';
+part 'order_service.dart';
 
 String baseURL = "http://192.168.0.56:8000/api/";
 

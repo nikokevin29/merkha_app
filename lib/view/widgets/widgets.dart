@@ -14,6 +14,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:date_format/date_format.dart';
+import 'package:expansion_card/expansion_card.dart';
 
 part 'selectable_box.dart';
 part 'item_card.dart';
@@ -33,3 +34,5 @@ part 'feed_card.dart';
 part 'feed_own_card.dart';
 part 'merchant_category_card.dart';
 part 'feed_box.dart';
+part 'text_divider_order.dart';
+part 'order_card.dart';

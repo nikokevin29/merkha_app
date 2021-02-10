@@ -13,7 +13,11 @@ class _SearchProductMerchantState extends State<SearchProductMerchant> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async {
+        Get.back();
+        context.read<SearchProductMerchantCubit>().clear();
+        return false;
+      },
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,

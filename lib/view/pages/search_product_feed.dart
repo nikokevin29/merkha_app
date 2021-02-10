@@ -10,7 +10,11 @@ class SearchProductFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async {
+        Get.back();
+        context.read<SearchProductCubit>().clear();
+        return false;
+      },
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,

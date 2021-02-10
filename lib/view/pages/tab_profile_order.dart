@@ -1,22 +1,21 @@
 part of 'pages.dart';
 
-class Order extends StatefulWidget {
-  const Order({
+class OrderPage extends StatefulWidget {
+  const OrderPage({
     Key key,
   }) : super(key: key);
 
   @override
-  _OrderState createState() => _OrderState();
+  _OrderPageState createState() => _OrderPageState();
 }
 
-class _OrderState extends State<Order> {
+class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.zero,
-      children: Colors.primaries.map((color) {
-        return Container(color: color, height: 150.0);
-      }).toList(),
-    );
+    return ListView(padding: EdgeInsets.zero, children: [
+      TextDividerOrder(text: 'ACTIVE ORDER'),
+      OrderCard(),
+      TextDividerOrder(text: 'FINISHED'),
+    ]);
   }
 }

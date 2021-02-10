@@ -24,7 +24,12 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async {
+        Get.back();
+        context.read<SearchProductCubit>().clear();
+        context.read<SearchMerchantCubit>().clear();
+        return false;
+      },
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,

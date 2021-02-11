@@ -49,13 +49,13 @@ class OrderCard extends StatelessWidget {
                       maxLines: 1,
                     ),
                     Text(
-                      'To: Jl Bangke No 6969 ssssssssssssssssssss',
+                      'To: Jl Bank No 6969 ssssssssssssssssssss',
                       style: blackTextFont.copyWith(fontSize: 12),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
                     Text(
-                      'Mamprang Kabupaten ssssssssssssssssssssssss',
+                      'Mampang Kabupaten ssssssssssssssssssssssss',
                       style: blackTextFont.copyWith(fontSize: 12),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
@@ -78,6 +78,16 @@ class OrderCard extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: defaultMargin),
           child: Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Subtotal : ", style: blackTextFont),
+                  Text(
+                      NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                          .format(5000),
+                      style: redNumberFont.copyWith()),
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

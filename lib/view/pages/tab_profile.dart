@@ -68,7 +68,7 @@ class _ProfileTabState extends State<ProfileTab> {
               Expanded(
                 child: TabBarView(children: [
                   Post(),
-                  Order(),
+                  OrderPage(),
                 ]),
               ),
             ],

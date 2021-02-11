@@ -36,10 +36,11 @@ class VoucherServices {
       return ApiReturnValue(message: 'Not Found');
     } else if (response.statusCode == 406) {
       return ApiReturnValue(message: 'Voucher Sold Out or Reach Max Usage');
-    } else if(response.statusCode != 200){
+    } else if (response.statusCode != 200) {
       return ApiReturnValue(message: 'Something Wrong');
     }
     var data = jsonDecode(response.body);
+
     Voucher voucher = Voucher.fromJson(data['data']);
     return ApiReturnValue(value: voucher);
   }
@@ -60,10 +61,11 @@ class VoucherServices {
       return ApiReturnValue(message: 'Not Found');
     } else if (response.statusCode == 406) {
       return ApiReturnValue(message: 'Voucher Sold Out or Reach Max Usage');
-    } else if(response.statusCode != 200){
+    } else if (response.statusCode != 200) {
       return ApiReturnValue(message: 'Something Wrong');
     }
     var data = jsonDecode(response.body);
+    print(data);
     Voucher voucher = Voucher.fromJson(data['data']);
     return ApiReturnValue(value: voucher);
   }

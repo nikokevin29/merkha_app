@@ -46,7 +46,7 @@ class Voucher extends Equatable {
       ];
 
   factory Voucher.fromJson(Map<String, dynamic> data) => Voucher(
-        id: data['id_user'],
+        id: data['id'],
         merchant: data['merchant'],
         merchantLogo: data['merchant_logo'],
         voucherName: data['voucher_name'],

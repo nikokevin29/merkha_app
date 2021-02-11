@@ -20,3 +20,4 @@ export 'productbymerchant_cubit.dart';
 export 'feedbestseller_cubit.dart';
 export 'feedrandom_cubit.dart';
 export 'search_product_merchant_cubit.dart';
+export 'order_cubit.dart';

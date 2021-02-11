@@ -6,15 +6,18 @@ class CartTab extends StatefulWidget {
 }
 
 class _CartTabState extends State<CartTab> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   TextEditingController promoController = TextEditingController();
   bool isempty = false;
   bool voucherCheck = false;
+  bool isLoading = false;
   Address mockAddress;
   List<Cart> _cart = [];
 
   double subtotal;
   double weightTotal;
-
+  int idVoucher;
+  int idMerchant;
   String merchantName;
   String urlMerchant;
   String idProvinceM;
@@ -48,6 +51,7 @@ class _CartTabState extends State<CartTab> {
     LocalStorage.db.getCart().then((cartList) {
       if (cartList.length != 0) {
         _cart = cartList;
+        idMerchant = cartList.first.idMerchant; //Get Id Merchant
         merchantName = cartList.first.merchantName; //Get Merchant name
         urlMerchant = cartList.first.merchantLogo; // Get Merchant Url Logo
         idProvinceM = cartList.first.idProvinceM; //Get idProvince Merhcant
@@ -106,6 +110,7 @@ class _CartTabState extends State<CartTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
             backgroundColor: Colors.white,
             elevation: 0,
@@ -311,7 +316,8 @@ class _CartTabState extends State<CartTab> {
                                           onTap: () {
                                             if (mockAddress.id == '') {
                                               Get.snackbar('No Address Assign',
-                                                  'Please Pick Shipping Address');
+                                                  'Please Pick Shipping Address',
+                                                  snackPosition: SnackPosition.BOTTOM);
                                             } else {
                                               _onEditShipping();
                                               setState(() {});
@@ -426,10 +432,11 @@ class _CartTabState extends State<CartTab> {
                                   BlocBuilder<VoucherCubit, VoucherState>(
                                       builder: (context, state) {
                                     if (state is VoucherUsed) {
-                                      // (context.watch<VoucherCubit>().state as VoucherUsed)
+                                      idVoucher = state.voucher.id;
                                       amountVoucher = state.voucher.discAmount;
-                                      print(amountVoucher);
                                       rateVoucher = state.voucher.discRate;
+                                      print(idVoucher);
+                                      print(amountVoucher);
                                       print(rateVoucher);
                                       return Container(
                                         child: Column(
@@ -509,8 +516,31 @@ class _CartTabState extends State<CartTab> {
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white),
                                     ),
-                                    onPressed: () {
-                                      Get.to(PaymentPage());
+                                    onPressed: () async {
+                                      //id_merchant,id_destination, id_voucher, order_status,shipping_price, discount_price, total_price
+                                      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+                                        // duration: new Duration(seconds: 4),
+                                        content: new Row(
+                                          children: <Widget>[
+                                            new CircularProgressIndicator(),
+                                            new Text("  Submitting Order...")
+                                          ],
+                                        ),
+                                      ));
+                                      print('miaw  ' + idVoucher.toString());
+
+                                      await _orderSubmit(
+                                          Order(
+                                              idMerchant: idMerchant,
+                                              idDestination: int.parse(mockAddress.id),
+                                              idVoucher: idVoucher, // Id Voucher masih 0
+                                              orderStatus: 'WAITING FOR PAYMENT',
+                                              shippingPrice: double.parse(ongkir),
+                                              discountPrice: (amountVoucher != 0)
+                                                  ? (subtotal * rateVoucher)
+                                                  : amountVoucher,
+                                              totalPrice: total),
+                                          _cart);
                                     },
                                   ),
                                 ],
@@ -846,10 +876,24 @@ class _CartTabState extends State<CartTab> {
   }
 }
 
-void _orderSubmit() {
-  //
-  
+Future<void> _orderSubmit(Order order, List<Cart> cart) {
+  //id_merchant, id_buyer(auto), id_destination, id_voucher,order_number(auto), order_status,shipping_price, discount_price, total_price
+  OrderServices.createOrder(order: order);
+  //Order Tested, detail Order not tested
+  for (int i; i < cart.length; i++) {
+    _detailOrderSubmit(
+      DetailOrder(
+        idOrder: order.id,
+        idProduct: cart[i].id,
+        amount: cart[i].qty,
+        subtotal: (cart[i].qty * cart[i].price),
+      ),
+    );
+  }
+  return null;
 }
-void _detailOrderSubmit(){
-  //
+
+Future<void> _detailOrderSubmit(DetailOrder detail) {
+  OrderServices.createDetailOrder(detail: detail);
+  return null;
 }

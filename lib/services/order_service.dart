@@ -19,7 +19,7 @@ class OrderServices {
         'shipping_price': order.shippingPrice.toString(),
         'discount_price': order.discountPrice.toString(),
         'total_price': order.totalPrice.toString(),
-        'id_voucher': order.idVoucher.toString(),
+        (order.idVoucher.toString() != null) ? 'id_voucher' : order.idVoucher.toString(): null,
         'order_status': order.orderStatus,
       }),
     );
@@ -30,6 +30,7 @@ class OrderServices {
     }
     var data = jsonDecode(response.body);
     Order value = Order.fromJson(data['data']);
+    print('Order Created');
     return ApiReturnValue(value: value);
   }
 
@@ -55,6 +56,7 @@ class OrderServices {
       print('data : ${response.body}');
       return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
     }
+    print('Create Detail Product Id : ' + detail.idProduct.toString());
     var data = jsonDecode(response.body);
     DetailOrder value = DetailOrder.fromJson(data['data']);
     return ApiReturnValue(value: value);

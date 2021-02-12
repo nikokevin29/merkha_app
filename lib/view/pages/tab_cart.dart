@@ -107,6 +107,37 @@ class _CartTabState extends State<CartTab> {
     selectedCourier = data[0]['name'];
   }
 
+  Future<void> _orderSubmit(Order order) async {
+    //id_merchant, id_buyer(auto), id_destination, id_voucher,order_number(auto), order_status,shipping_price, discount_price, total_price
+    //note: API create Order
+    // OrderServices.createOrder(order: order);
+    await context.read<OrderCubit>().createOrder(order);
+    print('Cart length  =  ' + _cart.length.toString());
+    SharedPreferences orders = await SharedPreferences.getInstance();
+    int lastId = orders.getInt('lastId');
+
+    for (int i = 0; i <= _cart.length - 1; i++) {
+      // print('id product' + _cart[i].id.toString());
+      // print('amount ' + _cart[i].qty.toString());
+      // print('subtot ' + (_cart[i].qty * _cart[i].price).toString());
+      _detailOrderSubmit(
+        DetailOrder(
+          idOrder: lastId,
+          idProduct: _cart[i].id,
+          amount: _cart[i].qty,
+          subtotal: (_cart[i].qty * _cart[i].price),
+        ),
+      );
+    }
+    return null;
+  }
+
+  Future<void> _detailOrderSubmit(DetailOrder detail) {
+    //note: API create Detail Order
+    OrderServices.createDetailOrder(detail: detail);
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -518,29 +549,51 @@ class _CartTabState extends State<CartTab> {
                                     ),
                                     onPressed: () async {
                                       //id_merchant,id_destination, id_voucher, order_status,shipping_price, discount_price, total_price
-                                      _scaffoldKey.currentState.showSnackBar(new SnackBar(
-                                        // duration: new Duration(seconds: 4),
-                                        content: new Row(
-                                          children: <Widget>[
-                                            new CircularProgressIndicator(),
-                                            new Text("  Submitting Order...")
-                                          ],
-                                        ),
-                                      ));
-                                      print('miaw  ' + idVoucher.toString());
-
-                                      await _orderSubmit(
+                                      if (ongkir != null) {
+                                        _scaffoldKey.currentState.showSnackBar(new SnackBar(
+                                          // duration: new Duration(seconds: 4),
+                                          content: new Row(
+                                            children: <Widget>[
+                                              new CircularProgressIndicator(),
+                                              new Text("  Submitting Order...")
+                                            ],
+                                          ),
+                                        ));
+                                        // note: Voucher Debug
+                                        if (idVoucher != null) {
+                                          print('Voucher Used id :' + idVoucher.toString());
+                                        } else {
+                                          print('Voucher Not Used');
+                                        }
+                                        await _orderSubmit(
                                           Order(
-                                              idMerchant: idMerchant,
-                                              idDestination: int.parse(mockAddress.id),
-                                              idVoucher: idVoucher, // Id Voucher masih 0
-                                              orderStatus: 'WAITING FOR PAYMENT',
-                                              shippingPrice: double.parse(ongkir),
-                                              discountPrice: (amountVoucher != 0)
-                                                  ? (subtotal * rateVoucher)
-                                                  : amountVoucher,
-                                              totalPrice: total),
-                                          _cart);
+                                            idMerchant: idMerchant,
+                                            idDestination: int.parse(mockAddress.id),
+                                            idVoucher: idVoucher,
+                                            orderStatus: 'WAITING FOR PAYMENT',
+                                            shippingPrice: double.parse(ongkir),
+                                            discountPrice: (amountVoucher != 0)
+                                                ? ((subtotal * rateVoucher))
+                                                : amountVoucher,
+                                            totalPrice: total,
+                                          ),
+                                        );
+                                      } else if ((context.read<UserCubit>().state as UserLoaded)
+                                              .user
+                                              .email_verified_at ==
+                                          null) {
+                                        Get.snackbar(
+                                          'Your Account Not Verified',
+                                          'Please Verify Email in Edit Profile',
+                                          snackPosition: SnackPosition.TOP,
+                                        );
+                                      } else {
+                                        Get.snackbar(
+                                          'Missing Address or Courier',
+                                          'Please Fill your Shipping and Address',
+                                          snackPosition: SnackPosition.TOP,
+                                        );
+                                      }
                                     },
                                   ),
                                 ],
@@ -874,26 +927,4 @@ class _CartTabState extends State<CartTab> {
       ongkir = price;
     });
   }
-}
-
-Future<void> _orderSubmit(Order order, List<Cart> cart) {
-  //id_merchant, id_buyer(auto), id_destination, id_voucher,order_number(auto), order_status,shipping_price, discount_price, total_price
-  OrderServices.createOrder(order: order);
-  //Order Tested, detail Order not tested
-  for (int i; i < cart.length; i++) {
-    _detailOrderSubmit(
-      DetailOrder(
-        idOrder: order.id,
-        idProduct: cart[i].id,
-        amount: cart[i].qty,
-        subtotal: (cart[i].qty * cart[i].price),
-      ),
-    );
-  }
-  return null;
-}
-
-Future<void> _detailOrderSubmit(DetailOrder detail) {
-  OrderServices.createDetailOrder(detail: detail);
-  return null;
 }

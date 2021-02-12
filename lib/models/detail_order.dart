@@ -14,16 +14,15 @@ class DetailOrder extends Equatable {
     this.amount,
     this.subtotal,
   });
-  
+
   @override
   List<Object> get props => [id, idOrder, idProduct, amount, subtotal];
 
   factory DetailOrder.fromJson(Map<String, dynamic> data) => DetailOrder(
         id: data['id'],
-        idOrder: data['id_order'],
-        idProduct: data['id_product'],
-        amount: data['amount'],
-        subtotal: data['subtotal'],
+        idOrder: int.parse(data['id_order']),
+        idProduct: int.parse(data['id_product']),
+        amount: int.parse(data['amount']),
+        subtotal: double.parse(data['subtotal']),
       );
-      
 }

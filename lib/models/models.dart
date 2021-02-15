@@ -17,3 +17,4 @@ part 'comment.dart';
 part 'merchant_category.dart';
 part 'order.dart';
 part 'detail_order.dart';
+part 'payment.dart';

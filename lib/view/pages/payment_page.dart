@@ -1,6 +1,8 @@
 part of 'pages.dart';
 
 class PaymentPage extends StatefulWidget {
+  final double total;
+  PaymentPage({this.total});
   @override
   _PaymentPageState createState() => _PaymentPageState();
 }
@@ -8,57 +10,73 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: Text('Payment Bank Transfer', style: blackTextFont.copyWith()),
-          backgroundColor: Colors.white,
-          leading: BackButton(
-            color: Colors.black,
-            onPressed: () {
-              Get.back();
-            },
-          ),
-        ),
-        body: WillPopScope(
-          onWillPop: () async {
-            Get.back();
-            return false;
-          },
-          child: SingleChildScrollView(
-            child: Container(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  BankCard(
-                    color: '#A7A0BA',
-                    cardNumber: '1234 1234 1234 1234',
-                    assetIcon: 'assets/bca.png',
-                    value: '100000000',
-                  ),
-                  BankCard(
-                    color: '#0C2855',
-                    cardNumber: '1234 1234 1234 1234',
-                    assetIcon: 'assets/mandiri.png',
-                    value: '100000000',
-                  ),
-                  //
-                  OutlineButton(
-                      child: Text("Choose Payment",
-                          style: blackTextFont.copyWith(
-                            fontSize: 14,
-                          )),
-                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                      onPressed: () {
-                        //
-                      }),
-                ],
-              ),
+    return WillPopScope(
+      onWillPop: () async {
+        Get.offAll(MainPage(bottomNavBarIndex: 4));
+        return false;
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: Text('Payment Bank Transfer', style: blackTextFont.copyWith()),
+            backgroundColor: Colors.white,
+            leading: BackButton(
+              color: Colors.black,
+              onPressed: () {
+                Get.offAll(MainPage(bottomNavBarIndex: 4));
+              },
             ),
           ),
-        ));
+          body: WillPopScope(
+            onWillPop: () async {
+              Get.back();
+              return false;
+            },
+            child: SingleChildScrollView(
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    BankCard(
+                      color: '#A7A0BA',
+                      cardNumber: '1234 1234 1234 1234',
+                      assetIcon: 'assets/bca.png',
+                      value: widget.total.toString(),
+                    ),
+                    BankCard(
+                      color: '#0C2855',
+                      cardNumber: '1234 1234 1234 1234',
+                      assetIcon: 'assets/mandiri.png',
+                      value: widget.total.toString(),
+                    ),
+                    //
+                    Divider(),
+                    Text('You Need to Transfer :', style: blackMonstadtTextFont.copyWith()),
+                    Text(
+                        NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                            .format(widget.total ?? 0),
+                        style: redNumberFont.copyWith()),
+                    Divider(),
+                    OutlineButton(
+                      child: Text(
+                        "Confirm Payment",
+                        style: blackTextFont.copyWith(
+                          fontSize: 14,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                      onPressed: () {
+                        Get.to(ConfirmPaymentPage());
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )),
+    );
   }
 }
 

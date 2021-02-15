@@ -19,18 +19,87 @@ class OrderServices {
         'shipping_price': order.shippingPrice.toString(),
         'discount_price': order.discountPrice.toString(),
         'total_price': order.totalPrice.toString(),
-        (order.idVoucher.toString() != null) ? 'id_voucher' : order.idVoucher.toString(): null,
         'order_status': order.orderStatus,
+        //'id_voucher': order.idVoucher.toString(),
       }),
     );
+
     if (response.statusCode != 200) {
-      print('StatusCode Order Create : ${response.statusCode}');
+      print('StatusCode Order Create : ${response.statusCode}  ${order.idVoucher}');
       print('data : ${response.body}');
       return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
     }
     var data = jsonDecode(response.body);
     Order value = Order.fromJson(data['data']);
+
+    if (order.idVoucher.toString() != null) {
+      //note: Edit id Voucher Database
+      String url = baseURL + 'order/editvoucher/' + value.id.toString();
+      var response = await client.put(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + User.token,
+        },
+        body: jsonEncode(<String, String>{'id_voucher': order.idVoucher.toString()}),
+      );
+      if (response.statusCode != 200) {
+        print('Voucher Id Update Error');
+      } else {
+        print('Voucher Id Update Success');
+      }
+      //note: Decrement Qty and Max Usage Voucher Database
+      VoucherServices.useVoucher(id: order.idVoucher.toString());
+    }
     print('Order Created');
+    return ApiReturnValue(value: value);
+  }
+
+  static Future<ApiReturnValue<Order>> updateStatusOrder({Order order, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'order/editstatus/' + order.id.toString();
+    var response = await client.put(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer ' + User.token,
+      },
+      body: jsonEncode(<String, String>{'order_status': order.orderStatus}),
+    );
+    if (response.statusCode != 200) {
+      print('StatusCode Update Status Order : ${response.statusCode}');
+      print('data : ${response.body}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    Order value = Order.fromJson(data['data']);
+    print('Order Status Edited');
+    return ApiReturnValue(value: value);
+  }
+
+  static Future<ApiReturnValue<Order>> updateIdVoucher({Order order, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'order/editvoucher/' + order.id.toString();
+    var response = await client.put(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer ' + User.token,
+      },
+      body: jsonEncode(<String, String>{'id_voucher': order.orderStatus}),
+    );
+    if (response.statusCode != 200) {
+      print('StatusCode Id Voucher Edit : ${response.statusCode}');
+      print('data : ${response.body}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    Order value = Order.fromJson(data['data']);
+    print('Voucher Id Edited');
     return ApiReturnValue(value: value);
   }
 
@@ -39,6 +108,7 @@ class OrderServices {
     if (client == null) {
       client = http.Client();
     }
+    print('idOrder di Detail Order' + detail.idOrder.toString());
     String url = baseURL + 'orderdetail/create';
     var response = await client.post(url,
         headers: {
@@ -62,7 +132,7 @@ class OrderServices {
     return ApiReturnValue(value: value);
   }
 
-  static Future<ApiReturnValue<List<Order>>> showOrder({Order order, http.Client client}) async {
+  static Future<ApiReturnValue<List<Order>>> showOrder({http.Client client}) async {
     if (client == null) {
       client = http.Client();
     }
@@ -72,10 +142,11 @@ class OrderServices {
       'Authorization': 'Bearer ' + User.token,
     });
     if (response.statusCode != 200) {
-      print('StatusCode : ${response.statusCode}');
+      print('StatusCode Show Order: ${response.statusCode}');
       return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
     }
     var data = jsonDecode(response.body);
+    print(data);
     List<Order> value = (data['data'] as Iterable).map((e) => Order.fromJson(e)).toList();
     return ApiReturnValue(value: value);
   }
@@ -85,13 +156,13 @@ class OrderServices {
     if (client == null) {
       client = http.Client();
     }
-    String url = baseURL + 'feed/showownfeed';
+    String url = baseURL + 'order/show/finished';
     var response = await client.get(url, headers: {
       "Content-Type": "application/json",
       'Authorization': 'Bearer ' + User.token,
     });
     if (response.statusCode != 200) {
-      print('StatusCode : ${response.statusCode}');
+      print('StatusCode showFinishedOrder : ${response.statusCode}');
       return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
     }
     var data = jsonDecode(response.body);

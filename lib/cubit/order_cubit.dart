@@ -9,6 +9,15 @@ part 'order_state.dart';
 class OrderCubit extends Cubit<OrderState> {
   OrderCubit() : super(OrderInitial());
 
+  Future<void> showOngoingOrder() async {
+    ApiReturnValue<List<Order>> result = await OrderServices.showOrder();
+    if (result.value != null) {
+      emit(OrderListLoaded(result.value));
+    } else {
+      emit(OrderLoadFailed(result.message));
+    }
+  }
+
   Future<void> createOrder(Order order) async {
     ApiReturnValue<Order> result = await OrderServices.createOrder(order: order);
     if (result.value != null) {

@@ -79,3 +79,4 @@ part 'feed_merchant.dart';
 part 'product_merchant.dart';
 part 'review_merchant_page.dart';
 part 'payment_page.dart';
+part 'confirm_payment.dart';

@@ -17,14 +17,14 @@ class VoucherCubit extends Cubit<VoucherState> {
     }
   }
 
-  Future<void> useVoucher(String code) async {
-    ApiReturnValue<Voucher> result = await VoucherServices.useVoucher(code: code);
-    if (result.value != null) {
-      emit(VoucherUsed(result.value));
-    } else {
-      emit(VoucherLoadingFailed(result.message));
-    }
-  }
+  // Future<void> useVoucher(String code) async {
+  //   ApiReturnValue<Voucher> result = await VoucherServices.useVoucher(code: code);
+  //   if (result.value != null) {
+  //     emit(VoucherUsed(result.value));
+  //   } else {
+  //     emit(VoucherLoadingFailed(result.message));
+  //   }
+  // }
 
   Future<void> checkVoucher(String code) async {
     ApiReturnValue<Voucher> result = await VoucherServices.checkVoucher(code: code);
@@ -33,5 +33,9 @@ class VoucherCubit extends Cubit<VoucherState> {
     } else {
       emit(VoucherLoadingFailed(result.message));
     }
+  }
+
+  Future<void> clear() async {
+    emit(VoucherLoadingFailed('null'));
   }
 }

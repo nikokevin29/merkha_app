@@ -420,31 +420,54 @@ class _CartTabState extends State<CartTab> {
                                           height: 30,
                                           disabledColor: Color(0xFFE4E4E4),
                                           child: Text(
-                                            'Add Voucher',
+                                            (idVoucher == null) ? 'Add Voucher' : 'Remove Voucher',
                                             style: blackTextFont.copyWith(
-                                                fontSize: 12, fontWeight: FontWeight.bold),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: (idVoucher == null)
+                                                    ? Colors.black
+                                                    : Colors.white),
                                           ),
                                           shape: RoundedRectangleBorder(
                                               borderRadius: new BorderRadius.circular(30.0)),
-                                          color: accentColor2,
+                                          color: (idVoucher == null) ? accentColor2 : Colors.red,
                                           onPressed: () async {
                                             //note: press Voucher
-                                            showDialog(
-                                                barrierDismissible: false,
-                                                context: context,
-                                                builder: (BuildContext context) {
-                                                  return Center(
-                                                    child: CircularProgressIndicator(),
-                                                  );
-                                                });
-                                            await context
-                                                .read<VoucherCubit>()
-                                                .checkVoucher(promoController.text.trim());
-                                            Navigator.pop(context);
-                                            setState(() {
-                                              total = (((subtotal - amountVoucher) * rateVoucher) +
-                                                  double.parse(ongkir ?? '0'));
-                                            });
+                                            if (idVoucher == null) {
+                                              showDialog(
+                                                  barrierDismissible: false,
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return Center(
+                                                      child: CircularProgressIndicator(),
+                                                    );
+                                                  });
+                                              await context
+                                                  .read<VoucherCubit>()
+                                                  .checkVoucher(promoController.text.trim());
+                                              Navigator.pop(context);
+                                              setState(() {
+                                                total =
+                                                    (((subtotal - amountVoucher) * rateVoucher) +
+                                                        double.parse(ongkir ?? '0'));
+                                              });
+                                            } else {
+                                              await context
+                                                  .read<VoucherCubit>()
+                                                  .clear(); //Clear Bloc State in Bottom
+                                              promoController.clear(); //Clear TextField Voucher
+                                              idVoucher = null; //set idVoucher to null
+                                              amountVoucher = 0; //set to default
+                                              rateVoucher = 1; //set to default
+                                              setState(() {
+                                                total =
+                                                    (((subtotal - amountVoucher) * rateVoucher) +
+                                                        double.parse(ongkir ?? '0'));
+                                              });
+                                            }
+                                            // print(idVoucher);
+                                            // print(amountVoucher);
+                                            // print(rateVoucher);
                                           },
                                         ),
                                       ),
@@ -462,7 +485,9 @@ class _CartTabState extends State<CartTab> {
                                   ),
                                   BlocBuilder<VoucherCubit, VoucherState>(
                                       builder: (context, state) {
-                                    if (state is VoucherUsed) {
+                                    if (state is VoucherLoadingFailed) {
+                                      return Container(child: Text('Voucher Not Applied'));
+                                    } else if (state is VoucherUsed) {
                                       idVoucher = state.voucher.id;
                                       amountVoucher = state.voucher.discAmount;
                                       rateVoucher = state.voucher.discRate;
@@ -506,7 +531,7 @@ class _CartTabState extends State<CartTab> {
                                         ),
                                       );
                                     } else {
-                                      return Container(child: Text('Voucher Not Applied'));
+                                      return Container(child: Text(''));
                                     }
                                   }),
                                   Divider(),
@@ -541,7 +566,7 @@ class _CartTabState extends State<CartTab> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: new BorderRadius.circular(30.0)),
                                     child: Text(
-                                      'Sumbit and Go To Payment',
+                                      'Submit and Go To Payment',
                                       style: blackTextFont.copyWith(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -549,6 +574,7 @@ class _CartTabState extends State<CartTab> {
                                     ),
                                     onPressed: () async {
                                       //id_merchant,id_destination, id_voucher, order_status,shipping_price, discount_price, total_price
+                                      //Get.to(PaymentPage());
                                       if (ongkir != null) {
                                         _scaffoldKey.currentState.showSnackBar(new SnackBar(
                                           // duration: new Duration(seconds: 4),
@@ -578,6 +604,11 @@ class _CartTabState extends State<CartTab> {
                                             totalPrice: total,
                                           ),
                                         );
+                                        LocalStorage.db.deleteAll(); // Clear Cart
+                                        SharedPreferences orders =
+                                            await SharedPreferences.getInstance();
+                                        await orders.clear(); //clear shared pref id order
+                                        Get.to(PaymentPage(total: total));
                                       } else if ((context.read<UserCubit>().state as UserLoaded)
                                               .user
                                               .email_verified_at ==
@@ -634,8 +665,10 @@ class _CartTabState extends State<CartTab> {
                       ),
                       shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                       color: Colors.white,
-                      onPressed: () {
+                      onPressed: () async {
                         Get.to(MainPage(bottomNavBarIndex: 0));
+                        SharedPreferences orders = await SharedPreferences.getInstance();
+                        orders.clear();
                         //BUG
                       },
                     ),

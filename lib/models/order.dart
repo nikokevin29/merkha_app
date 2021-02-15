@@ -5,6 +5,7 @@ class Order extends Equatable {
   final int idMerchant;
   final int idDestination;
   final int idVoucher;
+  final String orderNumber;
 
   final String merchantName;
   final String address;
@@ -17,12 +18,13 @@ class Order extends Equatable {
   final double totalPrice;
   final String createdAt;
   final String updatedAt;
-  final String detail;
+  final List<dynamic> detail;
 
   Order({
     this.id,
     this.idMerchant,
     this.idDestination,
+    this.orderNumber,
     this.idVoucher,
     this.merchantName,
     this.address,
@@ -43,6 +45,7 @@ class Order extends Equatable {
         id,
         idMerchant,
         idDestination,
+        orderNumber,
         idVoucher,
         merchantName,
         address,
@@ -60,7 +63,8 @@ class Order extends Equatable {
 
   factory Order.fromJson(Map<String, dynamic> data) => Order(
         id: data['id'],
-        idMerchant: int.parse(data['id_merchant']),
+        idMerchant: int.parse(data['id_merchant'].toString()),
+        orderNumber: data['order_number'],
         merchantName: data['merchant_name'],
         address: data['address'],
         province: data['province'],

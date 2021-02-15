@@ -133,7 +133,7 @@ class _MainTabState extends State<MainTab> {
                                 width: MediaQuery.of(context).size.width - (2 * defaultMargin),
                                 height: MediaQuery.of(context).size.width * 0.5,
                                 child: Shimmer.fromColors(
-                                  baseColor: Colors.grey,
+                                  baseColor: Colors.grey[200],
                                   highlightColor: Colors.white,
                                   child: Container(
                                     width: MediaQuery.of(context).size.width - (2 * defaultMargin),

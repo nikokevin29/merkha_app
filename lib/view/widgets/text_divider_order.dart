@@ -7,7 +7,7 @@ class TextDividerOrder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+      padding: EdgeInsets.only(left: defaultMargin, bottom: 15, top: 15),
       alignment: Alignment.centerLeft,
       child: Text(
         text,

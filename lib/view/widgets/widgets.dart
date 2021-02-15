@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:merkha_app/cubit/cubit.dart';
 import 'package:merkha_app/cubit/follow_cubit.dart';
 import 'package:merkha_app/models/models.dart';

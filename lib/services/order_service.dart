@@ -169,4 +169,25 @@ class OrderServices {
     List<Order> value = (data['data'] as Iterable).map((e) => Order.fromJson(e)).toList();
     return ApiReturnValue(value: value);
   }
+
+  static Future<ApiReturnValue<List<DetailOrder>>> showDetailOrder(
+      {String idOrder, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    print('id Order in DetailOrder API get ' + idOrder);
+    String url = baseURL + 'orderdetail/show/' + idOrder;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode : ${response.statusCode} _  show Detail Order by ' + idOrder);
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    List<DetailOrder> value =
+        (data['data'] as Iterable).map((e) => DetailOrder.fromJson(e)).toList();
+    return ApiReturnValue(value: value);
+  }
 }

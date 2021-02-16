@@ -101,4 +101,22 @@ class FollowingService {
     print('count followers = ' + data.toString());
     return data;
   }
+
+  static Future<int> countFollowingUser({http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'following/countFollowingUser';
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode Count following user : ${response.statusCode}');
+      return 0;
+    }
+    var data = jsonDecode(response.body);
+    print('count following = ' + data.toString());
+    return data;
+  }
 }

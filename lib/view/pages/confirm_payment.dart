@@ -19,7 +19,6 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLoading = false;
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -28,7 +27,7 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
           leading: BackButton(
             color: Colors.black,
             onPressed: () {
-              // Get.offAll(MainPage(bottomNavBarIndex: 4));
+              Get.back();
             },
           ),
         ),
@@ -112,16 +111,15 @@ class _ConfirmPaymentPageState extends State<ConfirmPaymentPage> {
                             child: CircularProgressIndicator(),
                           );
                         });
-                    SharedPreferences orders = await SharedPreferences.getInstance();
-                    int lastId = orders.getInt('lastId'); // get idOrder from SharedPreferences
                     await PaymentService.createPayment(
                       urlphoto: _imageFile,
                       payment: Payment(
-                        idOrder: lastId,
+                        idOrder: int.parse(widget.idOrders),
                         paymentStatus: 1,
                         //urlBuktiTransfer: '-',
                       ),
                     );
+                    await context.read<OrderCubit>().showOngoingOrder();
                     Get.offAll(MainPage(bottomNavBarIndex: 4));
                     Get.snackbar('Upload Success', 'Evidence Transfer Success');
                   },

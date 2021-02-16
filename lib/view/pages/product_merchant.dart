@@ -25,24 +25,24 @@ class _ProductMerchantState extends State<ProductMerchant> {
             return Container(
               width: MediaQuery.of(context).size.width - 2 * defaultMargin,
               child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.73,
+                shrinkWrap: true,
+                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.73,
+                ),
+                itemCount: product.length,
+                itemBuilder: (_, index) => Container(
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    direction: Axis.vertical,
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: [
+                      ItemCard(product: product[index]),
+                    ],
                   ),
-                  itemCount: product.length,
-                  itemBuilder: (_, index) => Container(
-                        child: Wrap(
-                          alignment: WrapAlignment.center,
-                          direction: Axis.vertical,
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: [
-                            ItemCard(product: product[index]),
-                          ],
-                        ),
-                      )),
+                ),
+              ),
             );
           } else {
             return Center(child: CircularProgressIndicator());

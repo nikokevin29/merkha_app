@@ -23,23 +23,24 @@ class _PostState extends State<Post> {
         return Container(
           width: MediaQuery.of(context).size.width - (2 * defaultMargin),
           child: GridView.builder(
-              shrinkWrap: true,
-              gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 1,
+            shrinkWrap: true,
+            gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 1,
+            ),
+            itemCount: feed.length,
+            itemBuilder: (_, index) => Container(
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                direction: Axis.vertical,
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  FeedOwnCard(feed[index]),
+                ],
               ),
-              itemCount: feed.length,
-              itemBuilder: (_, index) => Container(
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      direction: Axis.vertical,
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: [
-                        FeedOwnCard(feed[index]),
-                      ],
-                    ),
-                  )),
+            ),
+          ),
         );
       } else {
         return Center(child: CircularProgressIndicator());

@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => SearchProductMerchantCubit()),
         BlocProvider(create: (_) => OrderCubit()),
         BlocProvider(create: (_) => OrderFinishCubit()),
+        BlocProvider(create: (_) => DetailorderCubit()),
         //TODO:: insert Bloc Here
       ],
       child: GetMaterialApp(

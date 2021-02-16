@@ -604,11 +604,15 @@ class _CartTabState extends State<CartTab> {
                                             totalPrice: total,
                                           ),
                                         );
-                                        LocalStorage.db.deleteAll(); // Clear Cart
                                         SharedPreferences orders =
                                             await SharedPreferences.getInstance();
+                                        int tempLastId = orders.getInt('lastId');
+                                        Get.to(PaymentPage(
+                                          total: total,
+                                          idTemp: tempLastId,
+                                        ));
+                                        LocalStorage.db.deleteAll(); // Clear Cart
                                         await orders.clear(); //clear shared pref id order
-                                        Get.to(PaymentPage(total: total));
                                       } else if ((context.read<UserCubit>().state as UserLoaded)
                                               .user
                                               .email_verified_at ==

@@ -18,7 +18,7 @@ class Order extends Equatable {
   final double totalPrice;
   final String createdAt;
   final String updatedAt;
-  final List<dynamic> detail;
+  final String preview;
 
   Order({
     this.id,
@@ -37,7 +37,7 @@ class Order extends Equatable {
     this.totalPrice,
     this.createdAt,
     this.updatedAt,
-    this.detail,
+    this.preview,
   });
 
   @override
@@ -58,7 +58,7 @@ class Order extends Equatable {
         totalPrice,
         createdAt,
         updatedAt,
-        detail,
+        preview,
       ];
 
   factory Order.fromJson(Map<String, dynamic> data) => Order(
@@ -76,6 +76,6 @@ class Order extends Equatable {
         totalPrice: double.parse(data['total_price']),
         createdAt: data['created_at'],
         updatedAt: data['updated_at'],
-        detail: data['detail'],
+        preview: data['preview'],
       );
 }

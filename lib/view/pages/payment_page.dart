@@ -2,7 +2,9 @@ part of 'pages.dart';
 
 class PaymentPage extends StatefulWidget {
   final double total;
-  PaymentPage({this.total});
+
+  final int idTemp;
+  PaymentPage({this.total, this.idTemp});
   @override
   _PaymentPageState createState() => _PaymentPageState();
 }
@@ -41,13 +43,13 @@ class _PaymentPageState extends State<PaymentPage> {
                   children: [
                     BankCard(
                       color: '#A7A0BA',
-                      cardNumber: '1234 1234 1234 1234',
+                      cardNumber: rekBCA,
                       assetIcon: 'assets/bca.png',
                       value: widget.total.toString(),
                     ),
                     BankCard(
                       color: '#0C2855',
-                      cardNumber: '1234 1234 1234 1234',
+                      cardNumber: rek2,
                       assetIcon: 'assets/mandiri.png',
                       value: widget.total.toString(),
                     ),
@@ -59,16 +61,19 @@ class _PaymentPageState extends State<PaymentPage> {
                             .format(widget.total ?? 0),
                         style: redNumberFont.copyWith()),
                     Divider(),
+                    SizedBox(height: 15),
+                    Text('Confirm your order in Order Tab', style: blackTextFont.copyWith()),
+                    SizedBox(height: 15),
                     OutlineButton(
                       child: Text(
-                        "Confirm Payment",
+                        "Go To Profile Order Page",
                         style: blackTextFont.copyWith(
                           fontSize: 14,
                         ),
                       ),
                       shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                       onPressed: () {
-                        Get.to(ConfirmPaymentPage());
+                        Get.offAll(MainPage(bottomNavBarIndex: 4));
                       },
                     ),
                   ],

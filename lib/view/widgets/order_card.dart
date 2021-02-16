@@ -25,8 +25,9 @@ class OrderCard extends StatelessWidget {
                       color: Colors.grey[200],
                     ),
                     image: DecorationImage(
-                      image: NetworkImage(
-                          'https://ecs7.tokopedia.net/img/cache/900/product-1/2020/2/11/8134924/8134924_3ee990c6-86b8-48de-9ab0-a29a2890d581_920_920'),
+                      image: (order.preview != null)
+                          ? NetworkImage(order.preview)
+                          : AssetImage('assets/defaultProfile.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -125,9 +126,194 @@ class OrderCard extends StatelessWidget {
                     ),
                   ],
                 ),
+                Divider(),
+                OrderStatusWidget(order: order),
+                (order.orderStatus == 'WAITING FOR PAYMENT')
+                    ? Container(
+                        width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+                        margin: EdgeInsets.symmetric(vertical: 7),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: HexColor('#fcecec'),
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
+                        child: Column(
+                          children: [
+                            RichText(
+                              textAlign: TextAlign.justify,
+                              text: TextSpan(
+                                style: blackMonstadtTextFont.copyWith(
+                                  fontSize: 12,
+                                ),
+                                children: [
+                                  TextSpan(text: 'Harap segera melakukan transfer senilai '),
+                                  TextSpan(
+                                    text: NumberFormat.currency(
+                                            locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                        .format(order.totalPrice),
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: ' ke rekening '),
+                                  TextSpan(
+                                      text: 'BCA: ' + rekBCA, // norek in shared_value
+                                      style: TextStyle(fontWeight: FontWeight.bold)),
+                                  TextSpan(text: ' a.n '),
+                                  TextSpan(
+                                      text: 'PT Merkha Teknologi Indonesia',
+                                      style: TextStyle(fontWeight: FontWeight.bold)),
+                                  TextSpan(text: ' dan upload bukti transfernya sebelum '),
+                                  TextSpan(
+                                      text: DateFormat.yMMMMd('id').format(
+                                          DateFormat("yyyy-MM-dd HH:mm:ss")
+                                              .parse(order.createdAt)
+                                              .add(Duration(days: 1)))),
+                                  TextSpan(
+                                      text: ' pk ' +
+                                          DateFormat.Hm('id').format(
+                                              DateFormat("yyyy-MM-dd HH:mm:ss")
+                                                  .parse(order.createdAt))),
+                                  TextSpan(
+                                      text:
+                                          ' (24 jam dari sekarang). Transaksi akan batal otomatis apabila sudah melewati batas waktu tersebut.'),
+                                ],
+                              ),
+                            ),
+                            FlatButton(
+                              shape: StadiumBorder(),
+                              color: Colors.greenAccent,
+                              child: Text('Upload', style: blackTextFont),
+                              onPressed: () {
+                                Get.to(ConfirmPaymentPage(idOrders: order.id.toString()));
+                              },
+                            )
+                          ],
+                        ),
+                      )
+                    : Container(),
+                FlatButton(
+                    shape: StadiumBorder(),
+                    color: Colors.green,
+                    child: Text('Detail Order',
+                        style: blackTextFont.copyWith(color: Colors.white, fontSize: 14)),
+                    onPressed: () {
+                      //TODO: get order details here
+                      Get.to(DetailOrderPage(idOrder: order.id.toString()));
+                    }),
+                Container(
+                  alignment: Alignment.centerRight,
+                  child: (order.orderStatus == 'FINISHED')
+                      ? FlatButton(
+                          onPressed: () {
+                            Get.snackbar('Nothing', 'Soon');
+                          },
+                          child: Text('Give Star & Review',
+                              style:
+                                  blackTextFont.copyWith(color: Colors.blueAccent, fontSize: 11)),
+                        )
+                      : Container(),
+                ),
               ],
             ),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class OrderStatusWidget extends StatelessWidget {
+  final Order order;
+  const OrderStatusWidget({@required this.order});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+      height: 30,
+      alignment: Alignment.center,
+      child: Wrap(
+        spacing: 3.0,
+        children: [
+          Column(
+            children: [
+              Container(
+                height: 10,
+                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 6,
+                decoration: BoxDecoration(
+                  color: (order.orderStatus == 'WAITING FOR PAYMENT')
+                      ? HexColor('#69bf7e')
+                      : Colors.grey,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15), bottomLeft: Radius.circular(15)),
+                ),
+              ),
+              Text(
+                'Waiting For\nPayment',
+                style: blackTextFont.copyWith(fontSize: 8, color: Colors.green),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Container(
+                height: 10,
+                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 6,
+                color: (order.orderStatus == 'ORDER CONFIRMED') ? HexColor('#69bf7e') : Colors.grey,
+              ),
+              Text(
+                'Order\nConfirmed',
+                style: blackTextFont.copyWith(fontSize: 8, color: Colors.green),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Container(
+                height: 10,
+                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 6,
+                color: (order.orderStatus == 'ON DELIVERY') ? HexColor('#69bf7e') : Colors.grey,
+              ),
+              Text(
+                'On Delivery',
+                style: blackTextFont.copyWith(fontSize: 8, color: Colors.green),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Container(
+                height: 10,
+                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 6,
+                color: (order.orderStatus == 'DELIVERED') ? HexColor('#69bf7e') : Colors.grey,
+              ),
+              Text(
+                'Delivered',
+                style: blackTextFont.copyWith(fontSize: 8, color: Colors.green),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Container(
+                height: 10,
+                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 6,
+                decoration: BoxDecoration(
+                  color: (order.orderStatus == 'FINISHED') ? HexColor('#69bf7e') : Colors.grey,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15), bottomRight: Radius.circular(15)),
+                ),
+              ),
+              Text(
+                'FINISHED',
+                style: blackTextFont.copyWith(fontSize: 8, color: Colors.green),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ],
       ),
     );

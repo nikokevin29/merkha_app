@@ -40,9 +40,6 @@ class PaymentService {
     var data = jsonDecode(response.body);
     Payment value = Payment.fromJson(data['data']);
     print('Payment Created');
-    OrderServices.updateStatusOrder(
-        order: Order(
-            id: payment.idOrder, orderStatus: 'NEW ORDER')); //Update Order Status to NEW ORDER
     return ApiReturnValue(value: value);
   }
 }

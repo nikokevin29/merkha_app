@@ -40,8 +40,9 @@ class _OrderPageState extends State<OrderPage> {
                     ),
                     BlocBuilder<OrderFinishCubit, OrderFinishState>(
                       builder: (_, states) => (states is OrderFinishListLoaded)
-                          ? ListView(shrinkWrap: true,
-                              //physics: NeverScrollableScrollPhysics(),
+                          ? ListView(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
                               children: [
                                   TextDividerOrder(text: 'FINISH ORDER'),
                                   Column(

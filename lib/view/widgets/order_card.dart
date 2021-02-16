@@ -196,9 +196,31 @@ class OrderCard extends StatelessWidget {
                     child: Text('Detail Order',
                         style: blackTextFont.copyWith(color: Colors.white, fontSize: 14)),
                     onPressed: () {
-                      //TODO: get order details here
                       Get.to(DetailOrderPage(idOrder: order.id.toString()));
                     }),
+                (order.orderStatus == 'ON DELIVERY')
+                    ? FlatButton(
+                        shape: StadiumBorder(),
+                        color: Colors.green,
+                        child: Text('Order Reveiced',
+                            style: blackTextFont.copyWith(color: Colors.white, fontSize: 14)),
+                        onPressed: () async {
+                          //TODO: change orderStatus to FINISHED
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              });
+                          await OrderServices.updateStatusOrder(
+                            order: Order(id: order.id, orderStatus: 'FINISHED'),
+                          );
+                          await context.read<OrderFinishCubit>().showFinishedOrder();
+                          Navigator.pop(context);
+                        })
+                    : Container(),
                 Container(
                   alignment: Alignment.centerRight,
                   child: (order.orderStatus == 'FINISHED')

@@ -7,16 +7,17 @@ class ProfileTab extends StatefulWidget {
 
 class _ProfileTabState extends State<ProfileTab> {
   List<Widget> _randomChildren;
-  int countPost;
+  Future<int> countFollowing;
 
   @override
   void initState() {
     super.initState();
     // _initFeed();
+    countFollowing = FollowingService.countFollowingUser();
   }
 
   List<Widget> _randomHeightWidgets(BuildContext context) {
-    _randomChildren = List.generate(1, (index) => buildHeader(context));
+    _randomChildren = List.generate(1, (index) => buildHeader(context,countFollowing));
     return _randomChildren;
   }
 
@@ -208,7 +209,7 @@ class Logout extends StatelessWidget {
   }
 }
 
-Column buildHeader(BuildContext context) {
+Column buildHeader(BuildContext context,countFollowing) {
   return Column(
     children: [
       Container(
@@ -354,7 +355,7 @@ Column buildHeader(BuildContext context) {
                               Row(
                                 children: [
                                   FutureBuilder(
-                                      future: FollowingService.countFollowingUser(),
+                                      future: countFollowing,
                                       builder: (BuildContext context, snapshot) {
                                         if (snapshot.hasData) {
                                           int data = snapshot.data;

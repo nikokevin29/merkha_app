@@ -36,12 +36,13 @@ class FollowingService {
       print('data : ${response.body}');
       return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
     }
-    var data = jsonDecode(response.body);
-    Following value = Following.fromJson(data['data']);
-    return ApiReturnValue(value: value);
+    print('Unfollowed');
+    // var data = jsonDecode(response.body);
+    // Following value = Following.fromJson(data['data']);
+    return ApiReturnValue(value: null);
   }
 
-  static Future<ApiReturnValue<Following>> checkstatus({String id, http.Client client}) async {
+  static Future<String> checkstatus({String id, http.Client client}) async {
     if (client == null) {
       client = http.Client();
     }
@@ -54,13 +55,12 @@ class FollowingService {
     if (response.statusCode != 200) {
       print('StatusCode : ${response.statusCode}');
       print('data : ${response.body}');
-      var data = jsonDecode(response.body);
-      Following value = Following.fromJson(data['data']);
-      return ApiReturnValue(message: data['meta']['message'], value: value);
+      return response.body;
     }
-    var data = jsonDecode(response.body);
-    Following value = Following.fromJson(data['data']);
-    return ApiReturnValue(value: value);
+    //var data = jsonDecode(response.body);
+    // Following value = Following.fromJson(data['data']);
+    // print(value.following);
+    return response.body;
   }
 
   static Future<ApiReturnValue<List<Following>>> followList({http.Client client}) async {

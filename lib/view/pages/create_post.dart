@@ -129,19 +129,19 @@ class _CreatePostState extends State<CreatePost> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                InkWell(
+                FlatButton(
+                  onPressed: () => getImage(ImageSource.gallery),
                   child: Text(
                     'Galery',
                     style: blackMonstadtTextFont.copyWith(),
                   ),
-                  onTap: () => getImage(ImageSource.gallery),
                 ),
-                InkWell(
+                FlatButton(
+                  onPressed: () => getImage(ImageSource.camera),
                   child: Text(
                     'Camera',
                     style: blackMonstadtTextFont.copyWith(),
                   ),
-                  onTap: () => getImage(ImageSource.camera),
                 )
               ],
             )),

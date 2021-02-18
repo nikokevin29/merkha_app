@@ -71,7 +71,7 @@ class _DetailMerchantState extends State<DetailMerchant> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text(merchantName, style: blackTextFont.copyWith()),
+        title: Text(merchantName, style: blackTextFont.copyWith(fontSize: 14)),
         backgroundColor: Colors.white,
         leading: BackButton(
           color: Colors.black,
@@ -80,22 +80,36 @@ class _DetailMerchantState extends State<DetailMerchant> {
           },
         ),
         actions: [
-          FlatButton(
-            onPressed: () async {
-              print('tap Follow');
-              int followersCount =
-                  await FollowingService.countFollowersMerchant(idMerchant: idMerchant.toString());
-              print(followersCount);
-            },
-            child: Text(
-              'Follow +',
-              style: blackTextFont.copyWith(
-                fontSize: 14,
-                color: Colors.green,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          FutureBuilder(
+              future: FollowingService.checkstatus(id: idMerchant),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return FlatButton(
+                    onPressed: () async {
+                      if (snapshot.data == idMerchant) {
+                        print('unfollow');
+                        await context.read<FollowCubit>().unfollow(id: idMerchant);
+                        if (mounted) setState(() {});
+                      } else {
+                        print('follow');
+                        await context.read<FollowCubit>().follow(id: idMerchant);
+                        if (mounted) setState(() {});
+                      }
+                    },
+                    child: Text(
+                      (snapshot.data == idMerchant) ? 'Unfollow' : 'Follow +',
+                      style: blackTextFont.copyWith(
+                        fontSize: 14,
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Center(
+                      child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()));
+                }
+              }),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(

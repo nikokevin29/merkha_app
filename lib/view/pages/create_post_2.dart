@@ -129,7 +129,7 @@ class _CreatePost2State extends State<CreatePost2> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(pName ?? '...'),
-                  Text(pId.toString() ?? 'null'),
+                  //Text(pId.toString() ?? ''),
                   FlatButton(
                     minWidth: 100,
                     height: 30,
@@ -177,40 +177,55 @@ class _CreatePost2State extends State<CreatePost2> {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.4,
-            height: MediaQuery.of(context).size.width * 0.4,
-            alignment: Alignment.bottomRight,
-            child: FlatButton(
-              disabledColor: Color(0xFFE4E4E4),
-              shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-              color: accentColor2,
-              onPressed: () async {
-                print(pId.toString());
-                await context.read<FeedCubit>().createFeed(
-                      urlPhoto: widget.imageFile,
-                      location: location,
-                      idProduct: pId.toString(),
-                      caption: captionController.text,
-                    );
+              width: MediaQuery.of(context).size.width * 0.4,
+              height: MediaQuery.of(context).size.width * 0.4,
+              alignment: Alignment.bottomRight,
+              child: FlatButton(
+                disabledColor: Color(0xFFE4E4E4),
+                shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                color: accentColor2,
+                onPressed: () async {
+                  print(pId.toString());
+                  print(captionController.text);
+                  if (captionController.text == '') {
+                    Get.snackbar('Empty Field', 'Caption required');
+                  } else if (pId == null) {
+                    Get.snackbar('Empty Field', 'Product required');
+                  } else {
+                    print('Passed validation');
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        });
+                    await context.read<FeedCubit>().createFeed(
+                          urlPhoto: widget.imageFile,
+                          location: location,
+                          idProduct: pId.toString(),
+                          caption: captionController.text,
+                        );
 
-                await context.read<OwnfeedCubit>().showOwnFeed();//Get all Feed
-                Get.offAll(MainPage(bottomNavBarIndex: 4));
-                Get.snackbar('Success posting Feed', 'your feed has been posted');
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Share', style: blackTextFont.copyWith(fontSize: 22)),
-                  SizedBox(
-                    child: Icon(
-                      Icons.arrow_forward,
-                      color: Colors.black,
+                    await context.read<OwnfeedCubit>().showOwnFeed(); //Get all Feed
+                    Get.offAll(MainPage(bottomNavBarIndex: 4));
+                    Get.snackbar('Success posting Feed', 'your feed has been posted');
+                  }
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Share', style: blackTextFont.copyWith(fontSize: 22)),
+                    SizedBox(
+                      child: Icon(
+                        Icons.arrow_forward,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                  ],
+                ),
+              )),
         ),
       ),
     );

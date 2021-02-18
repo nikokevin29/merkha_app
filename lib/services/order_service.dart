@@ -66,7 +66,9 @@ class OrderServices {
         "Content-Type": "application/json",
         'Authorization': 'Bearer ' + User.token,
       },
-      body: jsonEncode(<String, String>{'order_status': order.orderStatus}),
+      body: jsonEncode(<String, String>{
+        'order_status': order.orderStatus,
+      }),
     );
     if (response.statusCode != 200) {
       print('StatusCode Update Status Order : ${response.statusCode}');

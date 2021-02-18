@@ -101,31 +101,77 @@ class _MerchantCardState extends State<MerchantCard> {
                 ),
               ],
             ),
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: FlatButton(
-                height: 25,
-                color: Colors.green[400],
-                shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                child: SizedBox(
-                  width: 80,
-                  child: Center(
-                    child: Text(
-                      'Follow',
-                      style: whiteNumberFont.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                onPressed: () async {
-                  // context
-                  //     .read<FollowCubit>()
-                  //     .checkstatus(id: widget.merchant.merchantId)
-                  //     .toString();
-                  await context.read<FollowCubit>().follow(id: widget.merchant.merchantId);
-                  // print('done');
-                },
-              ),
-            )
+            FutureBuilder(
+                future: FollowingService.checkstatus(id: widget.merchant.merchantId),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return FlatButton(
+                      height: 25,
+                      color: Colors.green[400],
+                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                      child: SizedBox(
+                        width: 80,
+                        child: Center(
+                            child: (snapshot.data == widget.merchant.merchantId)
+                                ? Text(
+                                    'Unfollow',
+                                    style: whiteNumberFont.copyWith(fontWeight: FontWeight.bold),
+                                  )
+                                : Text(
+                                    'Follow',
+                                    style: whiteNumberFont.copyWith(fontWeight: FontWeight.bold),
+                                  )),
+                      ),
+                      onPressed: () async {
+                        if (snapshot.data == widget.merchant.merchantId) {
+                          print('unfollow');
+                          await context
+                              .read<FollowCubit>()
+                              .unfollow(id: widget.merchant.merchantId);
+                          if (this.mounted) setState(() {});
+                        } else {
+                          print('follow');
+                          await context.read<FollowCubit>().follow(id: widget.merchant.merchantId);
+                          if (this.mounted) setState(() {});
+                        }
+                      },
+                    );
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                }),
+            // Container(
+            //   alignment: Alignment.bottomCenter,
+            //   child: (check == '123')
+            //       ? SizedBox(height: 15, width: 15, child: CircularProgressIndicator())
+            //       : FlatButton(
+            //           height: 25,
+            //           color: Colors.green[400],
+            //           shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+            //           child: SizedBox(
+            //             width: 80,
+            //             child: Center(
+            //                 child: (check == widget.merchant.merchantId)
+            //                     ? Text(
+            //                         'Unfollow',
+            //                         style: whiteNumberFont.copyWith(fontWeight: FontWeight.bold),
+            //                       )
+            //                     : Text(
+            //                         'Follow',
+            //                         style: whiteNumberFont.copyWith(fontWeight: FontWeight.bold),
+            //                       )),
+            //           ),
+            //           onPressed: () async {
+            //             if (check == widget.merchant.merchantId) {
+
+            //             } else {
+            //               await context.read<FollowCubit>().follow(id: widget.merchant.merchantId);
+            //             }
+
+            //             // print('done');
+            //           },
+            //         ),
+            // )
           ],
         ),
       ),

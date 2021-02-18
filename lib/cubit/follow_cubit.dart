@@ -27,16 +27,16 @@ class FollowCubit extends Cubit<FollowState> {
     }
   }
 
-  Future<void> checkstatus({String id}) async {
-    var result = await FollowingService.checkstatus(id: id);
-    if (result.value != null) {
-      print(result.value.following.toString());
-      emit(FollowCheck(result.value.following.toString()));
-    }
-     else {
-      emit(FollowFailed(result.message));
-    }
-  }
+  // Future<void> checkstatus({String id}) async {
+  //   var result = await FollowingService.checkstatus(id: id);
+  //   if (result.value != null) {
+  //     print(result.value.following.toString());
+  //     emit(FollowCheck(result.value.following.toString()));
+  //   }
+  //    else {
+  //     emit(FollowFailed(result.message));
+  //   }
+  // }
 
   Future<void> followList() async {
     ApiReturnValue<List<Following>> result = await FollowingService.followList();

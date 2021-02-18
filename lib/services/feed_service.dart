@@ -54,7 +54,7 @@ class FeedServices {
         'Authorization': 'Bearer ' + User.token,
       },
       body: jsonEncode(<String, String>{
-        'id_product': idProduct.toString(), //required
+        'id_product' : idProduct.toString(), //required
         'url_image': urlpicture, //required
         'caption': caption, //required
         'location': location, //nullable

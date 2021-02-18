@@ -128,6 +128,7 @@ class OrderCard extends StatelessWidget {
                 ),
                 Divider(),
                 OrderStatusWidget(order: order),
+                //note: ON WAITING FOR PAYMENT STATE
                 (order.orderStatus == 'WAITING FOR PAYMENT')
                     ? Container(
                         width: MediaQuery.of(context).size.width - (2 * defaultMargin),
@@ -190,6 +191,7 @@ class OrderCard extends StatelessWidget {
                         ),
                       )
                     : Container(),
+                //note: Button Detail Order
                 FlatButton(
                     shape: StadiumBorder(),
                     color: Colors.green,
@@ -198,6 +200,7 @@ class OrderCard extends StatelessWidget {
                     onPressed: () {
                       Get.to(DetailOrderPage(idOrder: order.id.toString()));
                     }),
+                //note: ON DELIVERY STATE
                 (order.orderStatus == 'ON DELIVERY')
                     ? FlatButton(
                         shape: StadiumBorder(),
@@ -215,9 +218,13 @@ class OrderCard extends StatelessWidget {
                                 );
                               });
                           await OrderServices.updateStatusOrder(
-                            order: Order(id: order.id, orderStatus: 'FINISHED'),
+                            order: Order(
+                              id: order.id,
+                              orderStatus: 'FINISHED',
+                            ),
                           );
-                          await context.read<OrderFinishCubit>().showFinishedOrder();
+                          context.read<OrderCubit>().showOngoingOrder();
+                          context.read<OrderFinishCubit>().showFinishedOrder();
                           Navigator.pop(context);
                         })
                     : Container(),

@@ -13,7 +13,7 @@ class FollowingService {
 
     if (response.statusCode != 200) {
       print('StatusCode : ${response.statusCode}');
-      print('data : ${response.body}');
+      //print('data : ${response.body}');
       return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
     }
     var data = jsonDecode(response.body);
@@ -117,6 +117,23 @@ class FollowingService {
     }
     var data = jsonDecode(response.body);
     print('count following = ' + data.toString());
+    return data;
+  }
+
+  static Future<int> countFollowersUserOther({String id, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'followinguser/countfollowersuser/' + id;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode Count following user : ${response.statusCode}');
+      return 0;
+    }
+    var data = jsonDecode(response.body);
     return data;
   }
 }

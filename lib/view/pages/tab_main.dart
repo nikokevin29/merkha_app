@@ -24,9 +24,12 @@ class _MainTabState extends State<MainTab> {
       return response.statusCode.toString();
     }
     var data = await jsonDecode(response.body);
-    setState(() {
-      appContent = List<String>.from(data);
-    });
+    if (this.mounted) {
+      setState(() {
+        appContent = List<String>.from(data);
+      });
+    }
+
     return data;
   }
 

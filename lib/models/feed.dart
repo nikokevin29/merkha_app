@@ -5,6 +5,8 @@ class Feed extends Equatable {
   final String idUser;
   final String idProduct;
   final int idMerchant;
+  final String username;
+  final String urlPhotoUser;
   final String merchantName;
   final String merchantLogo;
   final String merchantLastAccess;
@@ -22,6 +24,8 @@ class Feed extends Equatable {
     this.idUser,
     this.idProduct,
     this.idMerchant,
+    this.username,
+    this.urlPhotoUser,
     this.merchantName,
     this.merchantLogo,
     this.merchantLastAccess,
@@ -40,6 +44,8 @@ class Feed extends Equatable {
         idProduct: data['id_product'].toString(),
         idUser: data['id_user'].toString() ?? '0',
         idMerchant: data['id_merchant'] ?? 0,
+        username: data['username'],
+        urlPhotoUser: data['url_photo'],
         merchantName: data['merchant_name'],
         merchantLogo: data['merchant_logo'],
         merchantLastAccess: data['last_access'],
@@ -61,6 +67,8 @@ class Feed extends Equatable {
         idProduct,
         idUser,
         idMerchant,
+        username,
+        urlPhotoUser,
         merchantName,
         merchantLastAccess,
         merchantDescription,

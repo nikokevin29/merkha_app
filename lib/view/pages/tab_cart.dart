@@ -72,6 +72,12 @@ class _CartTabState extends State<CartTab> {
     });
   }
 
+  void updateTotal(double newTotal) {
+    setState(() {
+      total = newTotal;
+    });
+  }
+
   void updateCart() {
     LocalStorage.db.getCart().then((cartList) {
       _cart = cartList;
@@ -416,60 +422,64 @@ class _CartTabState extends State<CartTab> {
                                     children: [
                                       Container(
                                         alignment: Alignment.centerLeft,
-                                        child: FlatButton(
-                                          height: 30,
-                                          disabledColor: Color(0xFFE4E4E4),
-                                          child: Text(
-                                            (idVoucher == null) ? 'Add Voucher' : 'Remove Voucher',
-                                            style: blackTextFont.copyWith(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                color: (idVoucher == null)
-                                                    ? Colors.black
-                                                    : Colors.white),
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: new BorderRadius.circular(30.0)),
-                                          color: (idVoucher == null) ? accentColor2 : Colors.red,
-                                          onPressed: () async {
-                                            //note: press Voucher
-                                            if (idVoucher == null) {
-                                              showDialog(
-                                                  barrierDismissible: false,
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return Center(
-                                                      child: CircularProgressIndicator(),
-                                                    );
-                                                  });
-                                              await context
-                                                  .read<VoucherCubit>()
-                                                  .checkVoucher(promoController.text.trim());
-                                              Navigator.pop(context);
-                                              setState(() {
-                                                total =
-                                                    (((subtotal - amountVoucher) * rateVoucher) +
-                                                        double.parse(ongkir ?? '0'));
-                                              });
-                                            } else {
-                                              await context
-                                                  .read<VoucherCubit>()
-                                                  .clear(); //Clear Bloc State in Bottom
-                                              promoController.clear(); //Clear TextField Voucher
-                                              idVoucher = null; //set idVoucher to null
-                                              amountVoucher = 0; //set to default
-                                              rateVoucher = 1; //set to default
-                                              setState(() {
-                                                total =
-                                                    (((subtotal - amountVoucher) * rateVoucher) +
-                                                        double.parse(ongkir ?? '0'));
-                                              });
-                                            }
-                                            // print(idVoucher);
-                                            // print(amountVoucher);
-                                            // print(rateVoucher);
-                                          },
-                                        ),
+                                        child: StatefulBuilder(
+                                            builder: (thisLowerContext, innerSetState) {
+                                          return FlatButton(
+                                            height: 30,
+                                            disabledColor: Color(0xFFE4E4E4),
+                                            child: Text(
+                                              (idVoucher == null)
+                                                  ? 'Add Voucher'
+                                                  : 'Remove Voucher',
+                                              style: blackTextFont.copyWith(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: (idVoucher == null)
+                                                      ? Colors.black
+                                                      : Colors.white),
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: new BorderRadius.circular(30.0)),
+                                            color: (idVoucher == null) ? accentColor2 : Colors.red,
+                                            onPressed: () async {
+                                              //note: press Voucher
+                                              print('TEST TEST ' + idVoucher.toString());
+                                              if (idVoucher == null) {
+                                                showDialog(
+                                                    barrierDismissible: false,
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return Center(
+                                                        child: CircularProgressIndicator(),
+                                                      );
+                                                    });
+                                                await context
+                                                    .read<VoucherCubit>()
+                                                    .checkVoucher(promoController.text.trim());
+
+                                                innerSetState(() {
+                                                  total =
+                                                      (((subtotal - amountVoucher) * rateVoucher) +
+                                                          double.parse(ongkir ?? '0'));
+                                                });
+                                                Navigator.pop(context);
+                                              } else {
+                                                await context
+                                                    .read<VoucherCubit>()
+                                                    .clear(); //Clear Bloc State in Bottom
+                                                promoController.clear(); //Clear TextField Voucher
+                                                idVoucher = null; //set idVoucher to null
+                                                amountVoucher = 0; //set to default
+                                                rateVoucher = 1; //set to default
+                                                innerSetState(() {
+                                                  total =
+                                                      (((subtotal - amountVoucher) * rateVoucher) +
+                                                          double.parse(ongkir ?? '0'));
+                                                });
+                                              }
+                                            },
+                                          );
+                                        }),
                                       ),
                                       SizedBox(width: 9),
                                       Expanded(
@@ -521,7 +531,7 @@ class _CartTabState extends State<CartTab> {
                                                 Container(
                                                   child: (state.voucher.voucherType == "Amount")
                                                       ? Text(state.voucher.discAmount.toString())
-                                                      : Text(((state.voucher.discRate * 10) + 1)
+                                                      : Text((100 - (state.voucher.discRate * 100))
                                                               .toString() +
                                                           '%'),
                                                 )
@@ -547,14 +557,29 @@ class _CartTabState extends State<CartTab> {
                                         ),
                                         //((subtotal - voucher.discAmount) * voucher.discRate) + ongkir
                                         //total = (subtotal - amountVoucher) + double.parse(ongkir)
-                                        Text(
-                                          NumberFormat.currency(
-                                                  locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                                              .format(total =
-                                                  (((subtotal - amountVoucher) * rateVoucher) +
-                                                      double.parse(ongkir ?? '0'))),
-                                          style: redNumberFont.copyWith(fontSize: 12),
-                                        )
+                                        StreamBuilder(
+                                            stream: null,
+                                            initialData: total,
+                                            builder: (context, snapshot) {
+                                              return Text(
+                                                NumberFormat.currency(
+                                                        locale: 'id',
+                                                        symbol: 'Rp ',
+                                                        decimalDigits: 0)
+                                                    .format(total = (((subtotal - amountVoucher) *
+                                                            rateVoucher) +
+                                                        double.parse(ongkir ?? '0'))),
+                                                style: redNumberFont.copyWith(fontSize: 12),
+                                              );
+                                            }),
+                                        // Text(
+                                        //   NumberFormat.currency(
+                                        //           locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                        //       .format(total =
+                                        //           (((subtotal - amountVoucher) * rateVoucher) +
+                                        //               double.parse(ongkir ?? '0'))),
+                                        //   style: redNumberFont.copyWith(fontSize: 12),
+                                        // )
                                       ],
                                     ),
                                   ),

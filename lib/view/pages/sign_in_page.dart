@@ -136,7 +136,7 @@ class _SignInPageState extends State<SignInPage> {
                                     .showFeedByBestSeller(limit: '21');
                                 await context
                                     .read<MerchantRandomOrderCubit>()
-                                    .showMerchantByRandom(limit: '21');
+                                    .showMerchantByRandom(limit: '8');
                                 await context.read<FollowCubit>().followList();
                                 await context.read<FeedCubit>().showAllFeed();
                                 await context.read<OwnfeedCubit>().showOwnFeed();

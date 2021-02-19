@@ -8,7 +8,7 @@ class OrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     initializeDateFormatting('id', null); // Init Date Format for Indonesia
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      margin: EdgeInsets.symmetric(vertical: 5),
       child: ExpansionCard(
         margin: EdgeInsets.only(top: 5),
         title: Column(

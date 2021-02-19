@@ -17,7 +17,7 @@ class _ProfileTabState extends State<ProfileTab> {
   }
 
   List<Widget> _randomHeightWidgets(BuildContext context) {
-    _randomChildren = List.generate(1, (index) => buildHeader(context,countFollowing));
+    _randomChildren = List.generate(1, (index) => buildHeader(context, countFollowing));
     return _randomChildren;
   }
 
@@ -209,7 +209,7 @@ class Logout extends StatelessWidget {
   }
 }
 
-Column buildHeader(BuildContext context,countFollowing) {
+Column buildHeader(BuildContext context, countFollowing) {
   return Column(
     children: [
       Container(
@@ -342,16 +342,16 @@ Column buildHeader(BuildContext context,countFollowing) {
                                 ],
                               ),
                               //await context.read<FollowCubit>().followList();
-                              Row(
-                                children: [
-                                  Text(NumberFormat.compactCurrency(decimalDigits: 0, symbol: '')
-                                      .format(
-                                          (context.watch<FollowCubit>().state as FollowListLoaded)
-                                              .follow
-                                              .length)),
-                                  Text(' Followers(x)'),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     Text(NumberFormat.compactCurrency(decimalDigits: 0, symbol: '')
+                              //         .format(
+                              //             (context.watch<FollowCubit>().state as FollowListLoaded)
+                              //                 .follow
+                              //                 .length)),
+                              //     Text(' Followers(x)'),
+                              //   ],
+                              // ),
                               Row(
                                 children: [
                                   FutureBuilder(

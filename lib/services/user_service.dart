@@ -299,4 +299,27 @@ class UserServices {
     print(values);
     return ApiReturnValue(value: values);
   }
+
+  static Future<ApiReturnValue<User>> showUserById({String id, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'user/' + id;
+    var response = await client.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + User.token,
+      },
+    );
+    if (response.statusCode != 200) {
+      print(response.statusCode);
+      return ApiReturnValue(message: 'StatusCode  : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    print(data);
+    User value = User.fromJson(data['data']);
+    return ApiReturnValue(value: value);
+  }
 }

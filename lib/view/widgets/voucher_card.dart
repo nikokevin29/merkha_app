@@ -60,7 +60,7 @@ class VoucherCard extends StatelessWidget {
                         Container(
                           child: (voucher.voucherType == "Rate")
                               ? Text(
-                                  "Discount " + ((voucher.discRate * 10) + 1).toString() + ' %',
+                                  "Discount " + (100 - (voucher.discRate * 100)).toString() + ' %',
                                   style: redNumberFont.copyWith(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,

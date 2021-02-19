@@ -21,7 +21,7 @@ class FeedCard extends StatelessWidget {
                     if (feed.idMerchant != 0 || feed.idMerchant == null) {
                       Get.to(DetailMerchant(feed: feed));
                     } else {
-                      Get.to(DetailUser());
+                      Get.to(DetailUser(idUser: feed.idUser));
                     }
                   },
                   child: Row(
@@ -29,11 +29,11 @@ class FeedCard extends StatelessWidget {
                       Container(
                         width: 50,
                         height: 50,
-                        decoration: (feed.merchantLogo != null)
+                        decoration: (feed.merchantLogo != null || feed.urlPhotoUser != null)
                             ? BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  image: NetworkImage(feed.merchantLogo),
+                                  image: NetworkImage(feed.merchantLogo ?? feed.urlPhotoUser),
                                   fit: BoxFit.cover,
                                 ),
                               )
@@ -56,7 +56,7 @@ class FeedCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(feed.merchantName ?? '',
+                          Text(feed.merchantName ?? feed.username,
                               style: blackMonstadtTextFont.copyWith(fontSize: 13)),
                           SizedBox(
                             width: MediaQuery.of(context).size.width - (8 * defaultMargin),
@@ -87,8 +87,9 @@ class FeedCard extends StatelessWidget {
               height: MediaQuery.of(context).size.width - (3 * defaultMargin),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                    image:
-                        NetworkImage(feed.urlImage) ?? AssetImage('assets/img_not_available.jpeg'),
+                    image: (feed.urlImage != null)
+                        ? NetworkImage(feed.urlImage)
+                        : AssetImage('assets/img_not_available.jpeg'),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -111,7 +112,7 @@ class FeedCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               alignment: Alignment.centerLeft,
-              child: Text(feed.merchantName,
+              child: Text(feed.merchantName ?? feed.username,
                   style: blackTextFont.copyWith(fontSize: 12, fontWeight: FontWeight.bold)),
             ),
             Container(

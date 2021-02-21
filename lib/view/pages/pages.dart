@@ -29,6 +29,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import 'package:merkha_app/cubit/cubit.dart';
 import 'package:merkha_app/models/models.dart';

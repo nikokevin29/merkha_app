@@ -61,7 +61,9 @@ class _CartTabState extends State<CartTab> {
           subtotal = subtotal + (_cart[i].price * _cart[i].qty); // Set Subtotal init
           weightTotal = weightTotal + (_cart[i].weight);
         }
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
     });
   }
@@ -88,7 +90,9 @@ class _CartTabState extends State<CartTab> {
       for (int i = 0; i <= _cart.length - 1; i++) {
         subtotal = subtotal + (_cart[i].price * _cart[i].qty); // Set Subtotal init
       }
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -453,9 +457,10 @@ class _CartTabState extends State<CartTab> {
                                                         child: CircularProgressIndicator(),
                                                       );
                                                     });
-                                                await context
-                                                    .read<VoucherCubit>()
-                                                    .checkVoucher(promoController.text.trim());
+                                                await context.read<VoucherCubit>().checkVoucher(
+                                                      promoController.text.trim(),
+                                                      idMerchant,
+                                                    );
 
                                                 innerSetState(() {
                                                   total =
@@ -496,7 +501,9 @@ class _CartTabState extends State<CartTab> {
                                   BlocBuilder<VoucherCubit, VoucherState>(
                                       builder: (context, state) {
                                     if (state is VoucherLoadingFailed) {
-                                      return Container(child: Text('Voucher Not Applied'));
+                                      return Container(
+                                          padding: EdgeInsets.symmetric(vertical: 5),
+                                          child: Text(state.message, style: blackMonstadtTextFont));
                                     } else if (state is VoucherUsed) {
                                       idVoucher = state.voucher.id;
                                       amountVoucher = state.voucher.discAmount;

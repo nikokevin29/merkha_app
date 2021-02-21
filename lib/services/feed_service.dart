@@ -54,7 +54,7 @@ class FeedServices {
         'Authorization': 'Bearer ' + User.token,
       },
       body: jsonEncode(<String, String>{
-        'id_product' : idProduct.toString(), //required
+        'id_product': idProduct.toString(), //required
         'url_image': urlpicture, //required
         'caption': caption, //required
         'location': location, //nullable
@@ -143,6 +143,26 @@ class FeedServices {
 
     if (response.statusCode != 200) {
       print('StatusCode Feed Best Seller: ${response.statusCode}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    List<Feed> feed = (data['data'] as Iterable).map((e) => Feed.fromJson(e)).toList();
+    return ApiReturnValue(value: feed);
+  }
+
+  static Future<ApiReturnValue<List<Feed>>> showFeedByUserId(
+      {String id, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'feed/showbyuserid/' + id;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+
+    if (response.statusCode != 200) {
+      print('StatusCode Get Feed By User Id: ${response.statusCode}');
       return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
     }
     var data = jsonDecode(response.body);

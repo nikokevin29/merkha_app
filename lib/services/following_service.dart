@@ -120,11 +120,11 @@ class FollowingService {
     return data;
   }
 
-  static Future<int> countFollowersUserOther({String id, http.Client client}) async {
+  static Future<int> countFollowingUserOther({String id, http.Client client}) async {
     if (client == null) {
       client = http.Client();
     }
-    String url = baseURL + 'followinguser/countfollowersuser/' + id;
+    String url = baseURL + 'followinguser/countfollowinguser/' + id;
     var response = await client.get(url, headers: {
       "Content-Type": "application/json",
       'Authorization': 'Bearer ' + User.token,
@@ -135,5 +135,79 @@ class FollowingService {
     }
     var data = jsonDecode(response.body);
     return data;
+  }
+
+  static Future<int> countFollowersUser({String id, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'followinguser/countfollowersuser/' + id;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode Count followers user : ${response.statusCode}');
+      return 0;
+    }
+    var data = jsonDecode(response.body);
+    return data;
+  }
+
+  static Future<ApiReturnValue<Following>> followUser({String id, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'followinguser/follow/' + id;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+
+    if (response.statusCode != 200) {
+      print('StatusCode : ${response.statusCode}');
+      //print('data : ${response.body}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    Following value = Following.fromJson(data['data']);
+    return ApiReturnValue(value: value);
+  }
+
+  static Future<ApiReturnValue<Following>> unfollowUser({String id, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'followinguser/unfollow/' + id;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+
+    if (response.statusCode != 200) {
+      print('StatusCode : ${response.statusCode}');
+      print('data : ${response.body}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    print('Unfollowed User');
+    return ApiReturnValue(value: null);
+  }
+
+  static Future<String> checkstatusUser({String id, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'followinguser/checkstatus/' + id;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+
+    if (response.statusCode != 200) {
+      print('StatusCode : ${response.statusCode}');
+      print('data : ${response.body}');
+      return response.body;
+    }
+    return response.body;
   }
 }

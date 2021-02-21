@@ -45,11 +45,11 @@ class VoucherServices {
     return ApiReturnValue(value: voucher);
   }
 
-  static Future<ApiReturnValue<Voucher>> checkVoucher({String code, http.Client client}) async {
+  static Future<ApiReturnValue<Voucher>> checkVoucher({String id, http.Client client}) async {
     if (client == null) {
       client = http.Client();
     }
-    String url = baseURL + 'voucher/check/' + code;
+    String url = baseURL + 'voucher/check/' + id;
     var response = await client.get(url, headers: {
       "Content-Type": "application/json",
       'Authorization': 'Bearer ' + User.token,
@@ -69,4 +69,6 @@ class VoucherServices {
     Voucher voucher = Voucher.fromJson(data['data']);
     return ApiReturnValue(value: voucher);
   }
+
+  
 }

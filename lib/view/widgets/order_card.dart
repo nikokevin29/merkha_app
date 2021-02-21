@@ -27,7 +27,7 @@ class OrderCard extends StatelessWidget {
                     image: DecorationImage(
                       image: (order.preview != null)
                           ? NetworkImage(order.preview)
-                          : AssetImage('assets/defaultProfile.png'),
+                          : AssetImage('assets/img_not_available.jpeg'),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -228,12 +228,14 @@ class OrderCard extends StatelessWidget {
                           Navigator.pop(context);
                         })
                     : Container(),
+                //note: ON FINISHED STATE (REVIEW MERCHANT & PRODUCT)
                 Container(
                   alignment: Alignment.centerRight,
                   child: (order.orderStatus == 'FINISHED')
                       ? FlatButton(
                           onPressed: () {
-                            Get.snackbar('Nothing', 'Soon');
+                            // Get.snackbar('Nothing', 'Soon');
+                            _reviewMerchantBottomSheet(context, order);
                           },
                           child: Text('Give Star & Review',
                               style:
@@ -247,6 +249,147 @@ class OrderCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _reviewMerchantBottomSheet(BuildContext context, Order order) {
+    TextEditingController reviewMerchantController = new TextEditingController();
+    double valueMerchant;
+    bool status = false;
+    showModalBottomSheet(
+        context: context,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        barrierColor: Colors.black.withAlpha(1),
+        builder: (builder) {
+          return Container(
+            alignment: Alignment.topCenter,
+            child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.only(
+                        topLeft: const Radius.circular(10.0),
+                        topRight: const Radius.circular(10.0))),
+                child: Center(
+                  child: Container(
+                    margin: EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.white,
+                        ),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(Icons.close, color: Colors.white),
+                            GestureDetector(
+                                onTap: () {
+                                  Get.back();
+                                },
+                                child: Icon(Icons.close, color: Colors.black)),
+                          ],
+                        ),
+                        Text(
+                          "How This Merchant Services ?",
+                          style: blackMonstadtTextFont.copyWith(fontSize: 14),
+                        ),
+                        SmoothStarRating(
+                          starCount: 5,
+                          rating: 0,
+                          size: 40.0,
+                          filledIconData: Icons.star,
+                          halfFilledIconData: Icons.star_half,
+                          color: Colors.yellowAccent,
+                          borderColor: Colors.grey[400],
+                          onRated: (v) {
+                            valueMerchant = v;
+                          },
+                        ),
+                        Divider(),
+                        TextField(
+                          autofocus: true,
+                          controller: reviewMerchantController,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 10,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Type your review here...',
+                          ),
+                        ),
+                        //switch hidden name
+                        StatefulBuilder(builder: (context, setState) {
+                          return CheckboxListTile(
+                            title: Text("Hide my name",
+                                style: blackMonstadtTextFont.copyWith(fontSize: 12)),
+                            value: status,
+                            onChanged: (newValue) {
+                              setState(() {
+                                status = newValue;
+                              });
+                              (status) ? print('1') : print('0');
+                            },
+                            controlAffinity:
+                                ListTileControlAffinity.leading, //  <-- leading Checkbox
+                          );
+                        }),
+
+                        FlatButton(
+                          color: Colors.greenAccent,
+                          disabledColor: Colors.grey,
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(15)),
+                          child: Text(
+                            'Submit',
+                            style: blackMonstadtTextFont.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onPressed: (reviewMerchantController.text != null &&
+                                  valueMerchant != null &&
+                                  reviewMerchantController.text != '' &&
+                                  valueMerchant != 0)
+                              ? () async {
+                                  //TODO: buat logic submit review merchant
+                                  //id_order,id_user,is_hidden_name,description,id_merchant
+                                  showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      });
+                                  await ReviewServices.createReviewMerchant(
+                                    ReviewMerchant(
+                                      idOrder: order.id,
+                                      idMerchant: order.idMerchant,
+                                      isHiddenName: (status) ? '1' : '0',
+                                      stars: valueMerchant,
+                                      description: reviewMerchantController.text,
+                                    ),
+                                  );
+                                  Get.back();
+                                  Get.back();
+                                  Get.snackbar('Review Success', 'Your Review Success Posted');
+                                  context
+                                      .read<ReviewMerchantCubit>()
+                                      .showReviewMerchant(merchantId: order.idMerchant.toString());
+                                }
+                              : null,
+                        )
+                      ],
+                    ),
+                  ),
+                )),
+          );
+        });
   }
 }
 

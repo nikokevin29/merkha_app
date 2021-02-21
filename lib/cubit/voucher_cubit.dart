@@ -26,16 +26,20 @@ class VoucherCubit extends Cubit<VoucherState> {
   //   }
   // }
 
-  Future<void> checkVoucher(String code) async {
-    ApiReturnValue<Voucher> result = await VoucherServices.checkVoucher(code: code);
-    if (result.value != null) {
+  Future<void> checkVoucher(String id, int idMerch) async {
+    ApiReturnValue<Voucher> result = await VoucherServices.checkVoucher(id: id);
+    if (result.value == null) {
+      emit(VoucherLoadingFailed(result.message));
+    } else if (result.value.idMerchant == idMerch) {
+      print('Voucher Valid');
       emit(VoucherUsed(result.value));
     } else {
-      emit(VoucherLoadingFailed(result.message));
+      print("Can't use voucher from another Merchant");
+      emit(VoucherLoadingFailed("Can't use voucher from another Merchant"));
     }
   }
 
   Future<void> clear() async {
-    emit(VoucherLoadingFailed('null'));
+    emit(VoucherLoadingFailed(''));
   }
 }

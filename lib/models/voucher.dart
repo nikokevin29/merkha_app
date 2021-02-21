@@ -2,6 +2,7 @@ part of 'models.dart';
 
 class Voucher extends Equatable {
   final int id;
+  final int idMerchant;
   final String merchant;
   final String merchantLogo;
   final String voucherName;
@@ -16,6 +17,7 @@ class Voucher extends Equatable {
 
   Voucher({
     this.id,
+    this.idMerchant,
     this.merchant,
     this.merchantLogo,
     this.voucherName,
@@ -32,6 +34,7 @@ class Voucher extends Equatable {
   @override
   List<Object> get props => [
         id,
+        idMerchant,
         merchant,
         merchantLogo,
         voucherName,
@@ -47,6 +50,7 @@ class Voucher extends Equatable {
 
   factory Voucher.fromJson(Map<String, dynamic> data) => Voucher(
         id: data['id'],
+        idMerchant: data['id_merchant'],
         merchant: data['merchant'],
         merchantLogo: data['merchant_logo'],
         voucherName: data['voucher_name'],

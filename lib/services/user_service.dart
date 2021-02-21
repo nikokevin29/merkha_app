@@ -304,7 +304,7 @@ class UserServices {
     if (client == null) {
       client = http.Client();
     }
-    String url = baseURL + 'user/' + id;
+    String url = baseURL + 'users/' + id;
     var response = await client.get(
       url,
       headers: {

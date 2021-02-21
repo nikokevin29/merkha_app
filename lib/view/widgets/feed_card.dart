@@ -17,11 +17,25 @@ class FeedCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     if (feed.idMerchant != 0 || feed.idMerchant == null) {
                       Get.to(DetailMerchant(feed: feed));
                     } else {
-                      Get.to(DetailUser(idUser: feed.idUser));
+                      User usr;
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          });
+                      await UserServices.showUserById(id: feed.idUser).then((value) {
+                        usr = value.value;
+                      });
+                      await context.read<FeedbyuseridCubit>().showFeedByUserId(id: feed.idUser);
+                      Get.back();
+                      Get.to(DetailUser(idUser: feed.idUser, user: usr));
                     }
                   },
                   child: Row(

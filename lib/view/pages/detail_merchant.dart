@@ -178,7 +178,7 @@ class _DetailMerchantState extends State<DetailMerchant> {
                   ), //used id_merchant, merchant_name, website, description
                   FeedMerchant(feed: widget.feed, idMerchant: idMerchant),
                   ProductMerchant(idMerch: idMerchant),
-                  ReviewMerchant(),
+                  ReviewMerchantPage(idMerchant: idMerchant),
                 ]),
               ),
             ],
@@ -229,7 +229,7 @@ class _HomeMerchantState extends State<HomeMerchant> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.merchantName,
+                    widget.merchantName ?? '',
                     style: blackTextFont.copyWith(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -237,7 +237,7 @@ class _HomeMerchantState extends State<HomeMerchant> {
                   ),
                   SizedBox(height: 3),
                   ReadMoreText(
-                    widget.description,
+                    widget.description ?? '',
                     textAlign: TextAlign.justify,
                     trimLines: 2,
                     colorClickableText: Colors.pink,
@@ -247,22 +247,24 @@ class _HomeMerchantState extends State<HomeMerchant> {
                     moreStyle: blackTextFont.copyWith(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 5),
-                  InkWell(
-                      child: Text(widget.merchantWebsite,
-                          style: blackTextFont.copyWith(color: Colors.blueAccent)),
-                      onTap: () async {
-                        if (await canLaunch('http:' + widget.merchantWebsite)) {
-                          await launch(
-                            'http:' + widget.merchantWebsite,
-                            // forceSafariVC: false,
-                            // forceWebView: false,
-                          );
-                        } else {
-                          Get.snackbar('Could Not Launch', 'Cannot Launch this url',
-                              snackPosition: SnackPosition.BOTTOM);
-                          throw 'Could not launch ' + widget.merchantWebsite;
-                        }
-                      }),
+                  (widget.merchantWebsite != null)
+                      ? InkWell(
+                          child: Text(widget.merchantWebsite,
+                              style: blackTextFont.copyWith(color: Colors.blueAccent)),
+                          onTap: () async {
+                            if (await canLaunch('http:' + widget.merchantWebsite)) {
+                              await launch(
+                                'http:' + widget.merchantWebsite,
+                                // forceSafariVC: false,
+                                // forceWebView: false,
+                              );
+                            } else {
+                              Get.snackbar('Could Not Launch', 'Cannot Launch this url',
+                                  snackPosition: SnackPosition.BOTTOM);
+                              throw 'Could not launch ' + widget.merchantWebsite;
+                            }
+                          })
+                      : Container(),
                 ],
               ),
             ),
@@ -486,7 +488,7 @@ Widget buildHeaderMerchant(BuildContext context, merchantName, idMerchant, merch
                                       NumberFormat.compactCurrency(decimalDigits: 0, symbol: '')
                                           .format(data),
                                       style: whiteNumberFont.copyWith(
-                                          fontSize: 10, color: Colors.black),
+                                          fontSize: 11, color: Colors.black),
                                     );
                                   } else {
                                     Text('0',
@@ -496,20 +498,39 @@ Widget buildHeaderMerchant(BuildContext context, merchantName, idMerchant, merch
                                   return SizedBox(
                                       width: 10, height: 10, child: CircularProgressIndicator());
                                 }),
-                            Text(' Followers ', style: blackTextFont.copyWith(fontSize: 10))
+                            Text(' Followers ', style: blackTextFont.copyWith(fontSize: 11))
                           ],
                         ),
                         Row(
                           children: [
                             Icon(Icons.schedule, size: 15),
                             Text(lastOnlineFormated.toString() + ' Hours Ago ',
-                                style: blackTextFont.copyWith(fontSize: 10))
+                                style: blackTextFont.copyWith(fontSize: 11))
                           ],
                         ),
                         Row(
                           children: [
                             Icon(Icons.star, size: 15),
-                            Text('4.5 Ratings', style: blackTextFont.copyWith(fontSize: 10))
+                            FutureBuilder(
+                                future: ReviewServices.avgReviewMerchant(idMerchant: idMerchant),
+                                builder: (BuildContext context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    print(snapshot.data);
+                                    return Text(
+                                      NumberFormat.compactCurrency(decimalDigits: 2, symbol: '')
+                                          .format(snapshot.data),
+                                      style:
+                                          blackTextFont.copyWith(fontSize: 11, color: Colors.black),
+                                    );
+                                  } else {
+                                    Text('0',
+                                        style: whiteNumberFont.copyWith(
+                                            fontSize: 11, color: Colors.black));
+                                  }
+                                  return SizedBox(
+                                      width: 10, height: 10, child: CircularProgressIndicator());
+                                }),
+                            Text(' Ratings', style: blackTextFont.copyWith(fontSize: 11)),
                           ],
                         ),
                       ],

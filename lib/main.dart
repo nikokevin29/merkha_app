@@ -44,6 +44,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => OrderCubit()),
         BlocProvider(create: (_) => OrderFinishCubit()),
         BlocProvider(create: (_) => DetailorderCubit()),
+        BlocProvider(create: (_) => FeedbyuseridCubit()),
+        BlocProvider(create: (_) => ReviewMerchantCubit()),
         //TODO:: insert Bloc Here
       ],
       child: GetMaterialApp(

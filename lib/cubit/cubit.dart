@@ -23,3 +23,5 @@ export 'search_product_merchant_cubit.dart';
 export 'order_cubit.dart';
 export 'order_finish_cubit.dart';
 export 'detailorder_cubit.dart';
+export 'feedbyuserid_cubit.dart';
+export 'review_merchant_cubit.dart';

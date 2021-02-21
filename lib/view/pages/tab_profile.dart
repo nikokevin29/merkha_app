@@ -342,16 +342,38 @@ Column buildHeader(BuildContext context, countFollowing) {
                                 ],
                               ),
                               //await context.read<FollowCubit>().followList();
-                              // Row(
-                              //   children: [
-                              //     Text(NumberFormat.compactCurrency(decimalDigits: 0, symbol: '')
-                              //         .format(
-                              //             (context.watch<FollowCubit>().state as FollowListLoaded)
-                              //                 .follow
-                              //                 .length)),
-                              //     Text(' Followers(x)'),
-                              //   ],
-                              // ),
+                              Row(
+                                children: [
+                                  FutureBuilder(
+                                      future: FollowingService.countFollowersUser(
+                                        id: (context.watch<UserCubit>().state as UserLoaded)
+                                            .user
+                                            .id
+                                            .toString(),
+                                      ),
+                                      builder: (BuildContext context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          int data = snapshot.data;
+                                          return Text(
+                                            NumberFormat.compactCurrency(
+                                                    decimalDigits: 0, symbol: '')
+                                                .format(data),
+                                            style: blackTextFont.copyWith(
+                                                fontSize: 14, color: Colors.black),
+                                          );
+                                        } else {
+                                          Text('0',
+                                              style: whiteNumberFont.copyWith(
+                                                  fontSize: 10, color: Colors.black));
+                                        }
+                                        return SizedBox(
+                                            width: 10,
+                                            height: 10,
+                                            child: CircularProgressIndicator());
+                                      }),
+                                  Text(' Followers'),
+                                ],
+                              ),
                               Row(
                                 children: [
                                   FutureBuilder(

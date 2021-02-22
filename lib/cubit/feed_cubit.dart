@@ -9,15 +9,32 @@ part 'feed_state.dart';
 
 class FeedCubit extends Cubit<FeedState> {
   FeedCubit() : super(FeedInitial());
-
+  ApiReturnValue<List<Feed>> result;
   Future<void> showAllFeed() async {
-    ApiReturnValue<List<Feed>> result = await FeedServices.showAllFeedFollowed();
-    if (result.value != null) {
-      emit(FeedListLoaded(result.value));
+    if (state is FeedInitial) {
+      result = await FeedServices.showAllFeedFollowed(start: 0, end: 3);
+      emit(FeedListLoaded(feed: result.value, hasReachedMax: false));
     } else {
-      emit(FeedFailed(result.message));
+      FeedListLoaded feedListLoaded = state as FeedListLoaded;
+      print(result.value.length);
+      result = await FeedServices.showAllFeedFollowed(start: result.value.length, end: 3); //
+
+      (result.value.isEmpty)
+          ? emit(feedListLoaded.copyWith(hasReachedMax: true))
+          : emit(FeedListLoaded(feed: feedListLoaded.feed + result.value, hasReachedMax: false));
     }
+    //  else {
+    //   emit(FeedFailed(result.message));
+    // }
+    //ApiReturnValue<List<Feed>> result = await FeedServices.showAllFeedFollowed();
+    // if (result.value != null) {
+    //   emit(FeedListLoaded(feed: result.value));
+    // } else {
+    //   emit(FeedFailed(result.message));
+    // }
   }
+
+  void callFeedLoaded() => emit(FeedListLoaded());
 
   Future<void> createFeed(
       {File urlPhoto, String location, String caption, String idProduct}) async {

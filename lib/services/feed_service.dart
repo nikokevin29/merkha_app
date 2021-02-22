@@ -1,11 +1,12 @@
 part of 'services.dart';
 
 class FeedServices {
-  static Future<ApiReturnValue<List<Feed>>> showAllFeedFollowed({http.Client client}) async {
+  static Future<ApiReturnValue<List<Feed>>> showAllFeedFollowed(
+      {int start, int end, http.Client client}) async {
     if (client == null) {
       client = http.Client();
     }
-    String url = baseURL + 'feed/showall';
+    String url = baseURL + 'feed/showall/' + start.toString() + '/' + end.toString();
     var response = await client.get(url, headers: {
       "Content-Type": "application/json",
       'Authorization': 'Bearer ' + User.token,

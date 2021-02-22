@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:merkha_app/bloc/feed_bloc.dart';
 import 'package:merkha_app/view/pages/pages.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'cubit/cubit.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +50,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => DetailorderCubit()),
         BlocProvider(create: (_) => FeedbyuseridCubit()),
         BlocProvider(create: (_) => ReviewMerchantCubit()),
+        BlocProvider(create: (context) => FeedBloc(httpClient: http.Client())..add(FeedFetched())),
         //TODO:: insert Bloc Here
       ],
       child: GetMaterialApp(

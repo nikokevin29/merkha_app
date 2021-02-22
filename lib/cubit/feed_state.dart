@@ -9,11 +9,18 @@ abstract class FeedState extends Equatable {
 
 class FeedInitial extends FeedState {}
 
-
 class FeedListLoaded extends FeedState {
   final List<Feed> feed;
+  final bool hasReachedMax;
 
-  FeedListLoaded(this.feed);
+  FeedListLoaded({this.feed, this.hasReachedMax});
+
+  FeedListLoaded copyWith({List<Feed> feed, bool hasReachedMax}) {
+    return FeedListLoaded(
+      feed: feed ?? this.feed,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+    );
+  }
 
   @override
   List<Object> get props => [feed];

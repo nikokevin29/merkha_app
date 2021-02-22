@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:merkha_app/cubit/feed_cubit.dart';
 import 'package:merkha_app/shared/shared.dart';
 
 part 'user.dart';

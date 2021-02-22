@@ -153,7 +153,7 @@ class FeedCard extends StatelessWidget {
                   Get.to(CommentPage(feed: feed));
                 },
                 child: Text(
-                  'View Comments',
+                  'View Comments ' + feed.id.toString(),//TODO: Debug nanti dihapus
                   style: blackTextFont.copyWith(fontSize: 13, color: Colors.grey),
                 ),
               ),

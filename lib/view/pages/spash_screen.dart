@@ -19,15 +19,16 @@ class _SplashScreenState extends State<SplashScreen> {
         UserState state = context.read<UserCubit>().state;
         if (state is UserLoaded) {
           //TODO: SHOULD ADD More Cubit Here
-          await context.read<UserInterestCubit>().loadInterest();
+          //await context.read<UserInterestCubit>().loadInterest();
           await context.read<FeedrandomCubit>().showFeedRandom(limit: '21');
           await context.read<MerchantRandomOrderCubit>().showMerchantByRandom(limit: '21');
           await context.read<FeedbestsellerCubit>().showFeedByBestSeller(limit: '12');
-          await context.read<VoucherCubit>().showAllVoucher();
-          await context.read<FollowCubit>().followList();
-          await context.read<FeedCubit>().showAllFeed();
-          await context.read<OwnfeedCubit>().showOwnFeed();
+          context.read<VoucherCubit>().showAllVoucher();
+          //context.read<FollowCubit>().followList();
+          //await context.read<FeedCubit>().showAllFeed();
+          context.read<OwnfeedCubit>().showOwnFeed();
           await context.read<MerchantcategoryCubit>().showAllMerchantCategory();
+          OrderServices.triggerOrderExpired(); //Trigger Order if create_at more than 1 day
           Get.offAll(MainPage());
         }
       } else {

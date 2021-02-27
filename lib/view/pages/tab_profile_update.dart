@@ -312,7 +312,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                   _selectedGender = selectedGen;
                                 }
                                 if (pictureFile != null) {
-                                  context.read<UserCubit>().updateProfile(
+                                  await context.read<UpdateUserCubit>().updateProfile(
                                       User(
                                           email: _email,
                                           first_name: _firstName,
@@ -323,7 +323,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                           gender: _selectedGender),
                                       pictureFile: pictureFile);
                                 } else {
-                                  context.read<UserCubit>().updateProfile(
+                                  await context.read<UpdateUserCubit>().updateProfile(
                                         User(
                                             email: _email,
                                             first_name: _firstName,
@@ -335,8 +335,27 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                       );
                                 }
                                 Navigator.pop(context);
-                                Get.back();
-                                Get.snackbar("Profile Updated", "Your Profile Has Been Updated");
+                                UpdateUserState state = context.read<UpdateUserCubit>().state;
+                                if (state is UserUpdateLoadingFailed) {
+                                  Get.snackbar(
+                                    "",
+                                    "",
+                                    backgroundColor: HexColor("D9435E"),
+                                    icon: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                    ),
+                                    titleText: Text("Update Profile Failed", style: blackTextFont),
+                                    messageText: Text(
+                                      state.message ?? '',
+                                      style: blackTextFont,
+                                    ),
+                                  );
+                                } else {
+                                  Navigator.pop(context);
+                                  Get.back();
+                                  Get.snackbar("Profile Updated", "Your Profile Has Been Updated");
+                                }
                               }
                             : null),
                   ),

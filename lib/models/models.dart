@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:merkha_app/cubit/feed_cubit.dart';
 import 'package:merkha_app/shared/shared.dart';
 
 part 'user.dart';
@@ -20,3 +19,6 @@ part 'order.dart';
 part 'detail_order.dart';
 part 'payment.dart';
 part 'review_merchant.dart';
+part 'review_product.dart';
+part 'report_product.dart';
+part 'report_feed.dart';

@@ -192,4 +192,23 @@ class OrderServices {
         (data['data'] as Iterable).map((e) => DetailOrder.fromJson(e)).toList();
     return ApiReturnValue(value: value);
   }
+
+  static Future<ApiReturnValue<Order>> triggerOrderExpired({http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'order/isExpired';
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode Trigger Order : ${response.statusCode}');
+      print('data : ${response.body}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    Order value = Order.fromJson(data['data']);
+    return ApiReturnValue(value: value);
+  }
 }

@@ -50,6 +50,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => DetailorderCubit()),
         BlocProvider(create: (_) => FeedbyuseridCubit()),
         BlocProvider(create: (_) => ReviewMerchantCubit()),
+        BlocProvider(create: (_) => ReviewProductCubit()),
+        BlocProvider(create: (_) => UpdateUserCubit()),
         BlocProvider(create: (context) => FeedBloc(httpClient: http.Client())..add(FeedFetched())),
         //TODO:: insert Bloc Here
       ],

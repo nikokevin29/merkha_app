@@ -4,6 +4,7 @@ class Merchant extends Equatable {
   final String idUser;
   final String merchantId;
   final String merchantName;
+  final String merchantUsername;
   final String merchantLogo;
   final String description;
   final String phoneNumber;
@@ -21,6 +22,7 @@ class Merchant extends Equatable {
   Merchant({
     this.idUser,
     this.merchantId,
+    this.merchantUsername,
     this.merchantName,
     this.merchantLogo,
     this.description,
@@ -43,6 +45,7 @@ class Merchant extends Equatable {
         merchantId,
         merchantName,
         merchantLogo,
+        merchantUsername,
         description,
         phoneNumber,
         province,
@@ -75,6 +78,7 @@ class Merchant extends Equatable {
         idUser: data['id_user'].toString(),
         merchantId: data['id_merchant'].toString(),
         merchantName: data['name'],
+        merchantUsername: data['merchant_username'],
         merchantLogo: data['merchant_logo'],
         description: data['description'],
         province: data['province'],

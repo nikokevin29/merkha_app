@@ -3,7 +3,6 @@ part of 'widgets.dart';
 class OrderCard extends StatelessWidget {
   final Order order;
   OrderCard({this.order});
-
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting('id', null); // Init Date Format for Indonesia
@@ -198,7 +197,7 @@ class OrderCard extends StatelessWidget {
                     child: Text('Detail Order',
                         style: blackTextFont.copyWith(color: Colors.white, fontSize: 14)),
                     onPressed: () {
-                      Get.to(DetailOrderPage(idOrder: order.id.toString()));
+                      Get.to(DetailOrderPage(order: order));
                     }),
                 //note: ON DELIVERY STATE
                 (order.orderStatus == 'ON DELIVERY')
@@ -228,20 +227,28 @@ class OrderCard extends StatelessWidget {
                           Navigator.pop(context);
                         })
                     : Container(),
-                //note: ON FINISHED STATE (REVIEW MERCHANT & PRODUCT)
+                //note: ON FINISHED STATE (REVIEW MERCHANT)
+
                 Container(
                   alignment: Alignment.centerRight,
-                  child: (order.orderStatus == 'FINISHED')
-                      ? FlatButton(
-                          onPressed: () {
-                            // Get.snackbar('Nothing', 'Soon');
-                            _reviewMerchantBottomSheet(context, order);
-                          },
-                          child: Text('Give Star & Review',
-                              style:
-                                  blackTextFont.copyWith(color: Colors.blueAccent, fontSize: 11)),
-                        )
-                      : Container(),
+                  child: (order.orderStatus != 'FINISHED')
+                      ? Container()
+                      : FutureBuilder(
+                          future: ReviewServices.checkReviewMerchant(idOrder: order.id.toString()),
+                          builder: (context, snapshot) {
+                            if (snapshot.data == 1) {
+                              return FlatButton(
+                                onPressed: () {
+                                  _reviewMerchantBottomSheet(context, order);
+                                },
+                                child: Text('Give Star & Review',
+                                    style: blackTextFont.copyWith(
+                                        color: Colors.blueAccent, fontSize: 11)),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          }),
                 ),
               ],
             ),
@@ -301,7 +308,7 @@ class OrderCard extends StatelessWidget {
                         ),
                         SmoothStarRating(
                           starCount: 5,
-                          rating: 0,
+                          rating: 1,
                           size: 40.0,
                           filledIconData: Icons.star,
                           halfFilledIconData: Icons.star_half,
@@ -410,7 +417,7 @@ class OrderStatusWidget extends StatelessWidget {
             children: [
               Container(
                 height: 10,
-                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 6,
+                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 7,
                 decoration: BoxDecoration(
                   color: (order.orderStatus == 'WAITING FOR PAYMENT')
                       ? HexColor('#69bf7e')
@@ -430,7 +437,22 @@ class OrderStatusWidget extends StatelessWidget {
             children: [
               Container(
                 height: 10,
-                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 6,
+                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 7,
+                color:
+                    (order.orderStatus == 'PAYMENT CONFIRMED') ? HexColor('#69bf7e') : Colors.grey,
+              ),
+              Text(
+                'Payment\nConfirmed',
+                style: blackTextFont.copyWith(fontSize: 8, color: Colors.green),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Container(
+                height: 10,
+                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 7,
                 color: (order.orderStatus == 'ORDER CONFIRMED') ? HexColor('#69bf7e') : Colors.grey,
               ),
               Text(
@@ -444,7 +466,7 @@ class OrderStatusWidget extends StatelessWidget {
             children: [
               Container(
                 height: 10,
-                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 6,
+                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 7,
                 color: (order.orderStatus == 'ON DELIVERY') ? HexColor('#69bf7e') : Colors.grey,
               ),
               Text(
@@ -458,7 +480,7 @@ class OrderStatusWidget extends StatelessWidget {
             children: [
               Container(
                 height: 10,
-                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 6,
+                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 7,
                 color: (order.orderStatus == 'DELIVERED') ? HexColor('#69bf7e') : Colors.grey,
               ),
               Text(
@@ -472,7 +494,7 @@ class OrderStatusWidget extends StatelessWidget {
             children: [
               Container(
                 height: 10,
-                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 6,
+                width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 7,
                 decoration: BoxDecoration(
                   color: (order.orderStatus == 'FINISHED') ? HexColor('#69bf7e') : Colors.grey,
                   borderRadius: BorderRadius.only(
@@ -480,7 +502,7 @@ class OrderStatusWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                'FINISHED',
+                'Finished',
                 style: blackTextFont.copyWith(fontSize: 8, color: Colors.green),
                 textAlign: TextAlign.center,
               ),

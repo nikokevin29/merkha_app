@@ -128,8 +128,8 @@ class _SignInPageState extends State<SignInPage> {
                               UserState state = context.read<UserCubit>().state;
                               if (state is UserLoaded) {
                                 //TODO: SHOULD ADD More Cubit Here
-                                await context.read<UserInterestCubit>().loadInterest();
-                                await context.read<VoucherCubit>().showAllVoucher();
+                                //await context.read<UserInterestCubit>().loadInterest();
+                                context.read<VoucherCubit>().showAllVoucher();
                                 await context.read<FeedrandomCubit>().showFeedRandom(limit: '21');
                                 await context
                                     .read<FeedbestsellerCubit>()
@@ -138,13 +138,12 @@ class _SignInPageState extends State<SignInPage> {
                                     .read<MerchantRandomOrderCubit>()
                                     .showMerchantByRandom(limit: '8');
                                 await context.read<FollowCubit>().followList();
-                                await context.read<FeedCubit>().showAllFeed();
-                                await context.read<OwnfeedCubit>().showOwnFeed();
-                                await context
-                                    .read<MerchantcategoryCubit>()
-                                    .showAllMerchantCategory();
-                                //context.read<ProductCubit>().getProduct();
-                                //context.read<OrderCubit>().getOrder();
+                                // await context.read<FeedCubit>().showAllFeed();
+                                context.read<OwnfeedCubit>().showOwnFeed();
+                                context.read<MerchantcategoryCubit>().showAllMerchantCategory();
+
+                                OrderServices
+                                    .triggerOrderExpired(); //Trigger Order if create_at more than 1 day
                                 SharedPreferences autologin = await SharedPreferences.getInstance();
                                 await autologin.setString('email', emailController.text);
                                 await autologin.setString('password', passwordController.text);

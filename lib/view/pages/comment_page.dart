@@ -49,7 +49,7 @@ class _CommentPageState extends State<CommentPage> {
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                             alignment: Alignment.centerLeft,
-                            child: Text(widget.feed.merchantName,
+                            child: Text(widget.feed.merchantUsername ?? widget.feed.username,
                                 style: blackTextFont.copyWith(
                                     fontSize: 16, fontWeight: FontWeight.bold)),
                           ),
@@ -75,7 +75,7 @@ class _CommentPageState extends State<CommentPage> {
                                   (e) => ListTile(
                                     tileColor: Colors.cyanAccent,
                                     title: Text(
-                                      (e.idUser == null) ? e.merchantName : e.userName,
+                                      (e.idUser == null) ? e.merchantUsername : e.userName,
                                       style: blackMonstadtTextFont.copyWith(fontSize: 14),
                                     ),
                                     subtitle: Text(e.comment,

@@ -17,4 +17,8 @@ class DetailorderCubit extends Cubit<DetailorderState> {
       emit(DetailOrderFailed(result.message));
     }
   }
+
+Future<void> clear() async {
+    emit(DetailOrderListLoaded([]));
+  }
 }

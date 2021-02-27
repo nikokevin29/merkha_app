@@ -447,7 +447,7 @@ class _CartTabState extends State<CartTab> {
                                             color: (idVoucher == null) ? accentColor2 : Colors.red,
                                             onPressed: () async {
                                               //note: press Voucher
-                                              print('TEST TEST ' + idVoucher.toString());
+                                              print('ID Voucher Tap : ' + idVoucher.toString());
                                               if (idVoucher == null) {
                                                 showDialog(
                                                     barrierDismissible: false,
@@ -461,7 +461,17 @@ class _CartTabState extends State<CartTab> {
                                                       promoController.text.trim(),
                                                       idMerchant,
                                                     );
+                                                if ((context.read<VoucherCubit>().state
+                                                            as VoucherUsed)
+                                                        .voucher
+                                                        .discAmount >
+                                                    subtotal) {
+                                                  Navigator.pop(context);
+                                                  Get.snackbar('Error Discount',
+                                                      'Discount Amount Greater than Subtotal');
 
+                                                  return;
+                                                }
                                                 innerSetState(() {
                                                   total =
                                                       (((subtotal - amountVoucher) * rateVoucher) +
@@ -505,6 +515,9 @@ class _CartTabState extends State<CartTab> {
                                           padding: EdgeInsets.symmetric(vertical: 5),
                                           child: Text(state.message, style: blackMonstadtTextFont));
                                     } else if (state is VoucherUsed) {
+                                      if (state.voucher.discAmount > subtotal) {
+                                        return Text('Voucher Amount Greater Than Subtotal !!');
+                                      }
                                       idVoucher = state.voucher.id;
                                       amountVoucher = state.voucher.discAmount;
                                       rateVoucher = state.voucher.discRate;
@@ -630,9 +643,11 @@ class _CartTabState extends State<CartTab> {
                                             idVoucher: idVoucher,
                                             orderStatus: 'WAITING FOR PAYMENT',
                                             shippingPrice: double.parse(ongkir),
-                                            discountPrice: (amountVoucher != 0)
-                                                ? ((subtotal * rateVoucher))
-                                                : amountVoucher,
+                                            discountPrice: (idVoucher != 0)
+                                                ? ((rateVoucher == 1)
+                                                    ? amountVoucher
+                                                    : subtotal - (subtotal * rateVoucher))
+                                                : 0,
                                             totalPrice: total,
                                           ),
                                         );

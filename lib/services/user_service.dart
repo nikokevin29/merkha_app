@@ -93,11 +93,12 @@ class UserServices {
         print('StatusCode : ${response.statusCode}');
         print('data : ${response.body}');
 
-        return ApiReturnValue(message: data['meta']['message']);
+        return ApiReturnValue(message: data['meta']['message'], value: null);
+      } else {
+        print(data['data']);
+        User value = User.fromJson(data['data']);
+        return ApiReturnValue(value: value);
       }
-      print(data['data']);
-      User value = User.fromJson(data['data']);
-      return ApiReturnValue(value: value);
     } else {
       var response = await client.post(
         url,
@@ -122,11 +123,12 @@ class UserServices {
         print('StatusCode : ${response.statusCode}');
         print('data : ${response.body}');
 
-        return ApiReturnValue(message: data['meta']['message']);
+        return ApiReturnValue(message: data['meta']['message'], value: null);
+      } else {
+        print(data['data']);
+        User value = User.fromJson(data['data']);
+        return ApiReturnValue(value: value);
       }
-      print(data['data']);
-      User value = User.fromJson(data['data']);
-      return ApiReturnValue(value: value);
     }
   }
 

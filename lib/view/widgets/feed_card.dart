@@ -70,7 +70,7 @@ class FeedCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(feed.merchantName ?? feed.username,
+                          Text(feed.merchantUsername ?? feed.username,
                               style: blackMonstadtTextFont.copyWith(fontSize: 13)),
                           SizedBox(
                             width: MediaQuery.of(context).size.width - (8 * defaultMargin),
@@ -89,24 +89,108 @@ class FeedCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.more_horiz,
-                  color: HexColor('#2A2A2A'),
+                Flexible(
+                  child: PopupMenuButton(
+                      padding: EdgeInsets.all(0),
+                      icon: Icon(Icons.more_vert, color: Colors.grey),
+                      itemBuilder: (context) => [
+                            PopupMenuItem(
+                              value: 'more',
+                              child: FutureBuilder(
+                                  future: ReportService.checkReportFeed(id: feed.id.toString()),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return InkWell(
+                                        child: (snapshot.data.toString() == feed.id.toString())
+                                            ? Container(
+                                                padding: EdgeInsets.all(10),
+                                                child: Text(
+                                                  'Cancel Report',
+                                                  style: whiteNumberFont.copyWith(
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.black),
+                                                ),
+                                              )
+                                            : Container(
+                                                padding: EdgeInsets.all(10),
+                                                child: Text(
+                                                  'Report Feed',
+                                                  style: whiteNumberFont.copyWith(
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.black),
+                                                ),
+                                              ),
+                                        onTap: () async {
+                                          if (snapshot.data.toString() == feed.id.toString()) {
+                                            print('cancel report feed' +
+                                                snapshot.data.toString() +
+                                                '   ' +
+                                                feed.id.toString());
+                                            await ReportService.deleteReportFeed(
+                                                feed.id.toString());
+                                            Get.back();
+                                            Get.snackbar('Feed Report Canceled',
+                                                'This Feed Has Been Unreported');
+                                          } else {
+                                            print('report feed ' +
+                                                snapshot.data.toString() +
+                                                '   ' +
+                                                feed.id.toString());
+                                            await ReportService.createReportFeed(
+                                                feed.id.toString());
+                                            Get.back();
+                                            Get.snackbar('Feed Reported',
+                                                'This Feed Has Been Reported and will be check soon');
+                                          }
+                                        },
+                                      );
+                                    } else {
+                                      return CircularProgressIndicator();
+                                    }
+                                  }),
+                            ),
+                          ]),
                 ),
+                // InkWell(
+                //   onTap: () {
+                //     print('tap');
+                //   },
+                //   child: Icon(
+                //     Icons.more_horiz,
+                //     color: HexColor('#2A2A2A'),
+                //   ),
+                // ),
               ],
             ),
             SizedBox(height: 9),
-            Container(
-              width: MediaQuery.of(context).size.width - (3 * defaultMargin),
-              height: MediaQuery.of(context).size.width - (3 * defaultMargin),
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: (feed.urlImage != null)
-                        ? NetworkImage(feed.urlImage)
-                        : AssetImage('assets/img_not_available.jpeg'),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
+            GestureDetector(
+              onTap: () async {
+                Product product;
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    });
+                await ProductServices.getProductById(id: feed.idProduct)
+                    .then((value) => product = value.value);
+                Get.back();
+                Get.to(DetailProduct(product: product));
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width - (3 * defaultMargin),
+                height: MediaQuery.of(context).size.width - (3 * defaultMargin),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: (feed.urlImage != null)
+                          ? NetworkImage(feed.urlImage)
+                          : AssetImage('assets/img_not_available.jpeg'),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+              ),
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -126,7 +210,7 @@ class FeedCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               alignment: Alignment.centerLeft,
-              child: Text(feed.merchantName ?? feed.username,
+              child: Text(feed.merchantUsername ?? feed.username, //
                   style: blackTextFont.copyWith(fontSize: 12, fontWeight: FontWeight.bold)),
             ),
             Container(
@@ -134,7 +218,7 @@ class FeedCard extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(feed.caption,
+                    child: Text(feed.caption ?? '',
                         style: blackTextFont.copyWith(fontSize: 12),
                         textAlign: TextAlign.justify,
                         maxLines: 10),
@@ -153,7 +237,7 @@ class FeedCard extends StatelessWidget {
                   Get.to(CommentPage(feed: feed));
                 },
                 child: Text(
-                  'View Comments ' + feed.id.toString(),//TODO: Debug nanti dihapus
+                  'View Comments ',
                   style: blackTextFont.copyWith(fontSize: 13, color: Colors.grey),
                 ),
               ),
@@ -183,7 +267,7 @@ class FeedCard extends StatelessWidget {
                             ),
                             Text(
                                 NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                                    .format(feed.productPrice),
+                                    .format(feed.productPrice ?? 0),
                                 style: redNumberFont.copyWith(fontSize: 12)),
                           ],
                         ),

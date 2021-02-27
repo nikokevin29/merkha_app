@@ -53,22 +53,25 @@ class ItemCardWishlist extends StatelessWidget {
                     onTap: () async {
                       // onTap Shop Button
                       print('tap Button');
+                      print(product.id.toString());
+                      ApiReturnValue<Product> result =
+                          await ProductServices.getProductById(id: product.id.toString());
                       SharedPreferences isMerchant =
                           await SharedPreferences.getInstance(); //Save isMerchant
                       int checkMerchant = (isMerchant.getInt('isMerchant'));
                       print('Buy Tapped');
                       Cart cart = Cart(
-                        id: product.id,
-                        productName: product.productName,
-                        urlPreview: product.preview,
-                        price: product.price,
+                        id: result.value.id,
+                        productName: result.value.productName,
+                        urlPreview: result.value.preview,
+                        price: result.value.price,
                         qty: 1,
-                        weight: product.weight,
-                        idMerchant: product.merchantId,
-                        merchantName: product.merchant,
-                        merchantLogo: product.merchantLogo,
-                        idProvinceM: product.idProvinceM,
-                        idCityM: product.idCityM,
+                        weight: result.value.weight,
+                        idMerchant: result.value.merchantId,
+                        merchantName: result.value.merchant,
+                        merchantLogo: result.value.merchantLogo,
+                        idProvinceM: result.value.idProvinceM,
+                        idCityM: result.value.idCityM,
                       );
                       List<Cart> _cart = []; //Init Empty String
 
@@ -91,9 +94,10 @@ class ItemCardWishlist extends StatelessWidget {
                               );
                               Widget continueButton = FlatButton(
                                 child: Text("Add"),
-                                onPressed: () {
+                                onPressed: () async {
                                   LocalStorage.db.deleteAll();
                                   LocalStorage.db.insert(cart);
+                                  await isMerchant.setInt('isMerchant', cart.idMerchant);
                                   Get.back();
                                   Get.snackbar('Product Added to Cart',
                                       'This Product Has been added to Cart');
@@ -118,12 +122,11 @@ class ItemCardWishlist extends StatelessWidget {
                             } else if (cart.id == _cart[i].id) {
                               Get.snackbar('Product Exist In Cart', 'This Product exist in cart');
                               break;
-                            } else {
+                            } else if (cart.id != _cart[i].id) {
                               Get.snackbar(
-                                  'Product Added to Cart', 'This Product Has been added to Cart');
+                                  'Product Added to Cart', 'This Product Has been added to Cart.');
                               await isMerchant.setInt('isMerchant', cart.idMerchant);
                               LocalStorage.db.insert(cart);
-                              break;
                             }
                           }
                         }

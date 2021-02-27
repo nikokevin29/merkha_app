@@ -20,6 +20,7 @@ part 'appcontent_service.dart';
 part 'order_service.dart';
 part 'payment_service.dart';
 part 'review_service.dart';
+part 'report_service.dart';
 
 String baseURL = "http://192.168.0.55:8000/api/";
 

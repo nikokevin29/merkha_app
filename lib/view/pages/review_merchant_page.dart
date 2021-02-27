@@ -96,7 +96,8 @@ class ReviewMerchantCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(review.username, style: blackTextFont.copyWith(fontSize: 12)),
+                      Text((review.isHiddenName != '1') ? review.username : '*********',
+                          style: blackTextFont.copyWith(fontSize: 12)),
                       Text(
                           DateFormat.yMMMMd()
                               .format(DateFormat("yyyy-MM-dd HH:mm:ss").parse(review.createdAt)),

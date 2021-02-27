@@ -1,13 +1,23 @@
 part of 'pages.dart';
 
-class DetailProduct extends StatelessWidget {
+class DetailProduct extends StatefulWidget {
   final Product product;
   DetailProduct({this.product});
 
   @override
+  _DetailProductState createState() => _DetailProductState();
+}
+
+class _DetailProductState extends State<DetailProduct> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ReviewProductCubit>().showReviewProduct(productId: widget.product.id.toString());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
@@ -27,8 +37,8 @@ class DetailProduct extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                    image: (product.merchantLogo.toString() != null)
-                        ? NetworkImage(product.merchantLogo)
+                    image: (widget.product.merchantLogo.toString() != null)
+                        ? NetworkImage(widget.product.merchantLogo)
                         : AssetImage('assets/defaultProfile.png')),
                 boxShadow: [
                   BoxShadow(spreadRadius: 3, blurRadius: 7, color: Colors.black12),
@@ -41,14 +51,14 @@ class DetailProduct extends StatelessWidget {
                 SizedBox(
                   width: MediaQuery.of(context).size.width - 200,
                   child: Text(
-                    product.merchant.toString(),
+                    widget.product.merchant.toString(),
                     style: blackTextFont.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
                 ),
                 Text(
-                  product.merchantLocation.toString(),
+                  widget.product.merchantLocation.toString(),
                   style: blackTextFont.copyWith(fontSize: 8, fontWeight: FontWeight.w200),
                 ),
               ],
@@ -62,19 +72,73 @@ class DetailProduct extends StatelessWidget {
                     PopupMenuItem(
                         value: 'more',
                         child: InkWell(
-                          onTap: () {
-                            //Action here
-                            print(product.photo);
-                          },
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.access_alarm_sharp,
-                                color: Colors.grey,
-                              ),
-                              Text(' Option'),
-                            ],
-                          ),
+                          onTap: () async {},
+                          child: FutureBuilder(
+                              future: ReportService.checkReportProduct(
+                                  id: widget.product.id.toString()),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return FlatButton(
+                                    height: 10,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: new BorderRadius.circular(30.0)),
+                                    child: SizedBox(
+                                      width: 80,
+                                      child: Center(
+                                          child: (snapshot.data.toString() ==
+                                                  widget.product.id.toString())
+                                              ? Text(
+                                                  'Cancel Report',
+                                                  style: whiteNumberFont.copyWith(
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.black),
+                                                )
+                                              : Text(
+                                                  'Report Product',
+                                                  style: whiteNumberFont.copyWith(
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.black),
+                                                )),
+                                    ),
+                                    onPressed: () async {
+                                      if (snapshot.data.toString() == widget.product.id.toString()) {
+                                        print('cancel report ' +
+                                            snapshot.data.toString() +
+                                            '   ' +
+                                            widget.product.id.toString());
+                                        await ReportService.deleteReportProduct(
+                                            widget.product.id.toString());
+                                        Get.back();
+                                        Get.snackbar('Product Report Canceled',
+                                            'This Product Has Been Unreported');
+                                        if (this.mounted) setState(() {});
+                                      } else {
+                                        print('report product ' +
+                                            snapshot.data.toString() +
+                                            '   ' +
+                                            widget.product.id.toString());
+                                        await ReportService.createReportProduct(
+                                            widget.product.id.toString());
+                                        Get.back();
+                                        Get.snackbar('Product Reported',
+                                            'This Product Has Been Reported and will be check soon');
+                                        if (this.mounted) setState(() {});
+                                      }
+                                    },
+                                  );
+                                } else {
+                                  return CircularProgressIndicator();
+                                }
+                              }),
+                          // Row(
+                          //   children: [
+                          //     Icon(
+                          //       Icons.access_alarm_sharp,
+                          //       color: Colors.grey,
+                          //     ),
+                          //     Text(' Option'),
+                          //   ],
+                          // ),
                         )),
                   ])
         ],
@@ -89,8 +153,8 @@ class DetailProduct extends StatelessWidget {
                 options: CarouselOptions(
                   height: MediaQuery.of(context).size.width - (2 * defaultMargin),
                 ),
-                items: product.photo
-                    .substring(1, product.photo.length - 1)
+                items: widget.product.photo
+                    .substring(1, widget.product.photo.length - 1)
                     .split(', ')
                     .toList()
                     .map((i) {
@@ -122,7 +186,7 @@ class DetailProduct extends StatelessWidget {
                   // note: Product Name
                   SizedBox(
                     width: MediaQuery.of(context).size.width - 50,
-                    child: Text(product.productName,
+                    child: Text(widget.product.productName,
                         style: blackTextFont.copyWith(fontWeight: FontWeight.w400, fontSize: 20),
                         overflow: TextOverflow.clip),
                   ),
@@ -134,8 +198,11 @@ class DetailProduct extends StatelessWidget {
                       child: Icon(Icons.bookmark_border, color: Colors.grey),
                       onTap: () {
                         print('tap bookmark detaill product');
-                        context.read<WishlistCubit>().addWishlist(Wishlist(idProduct: product.id));
-                        Get.snackbar('Product Added', product.productName + ' Added to Wishlist');
+                        context
+                            .read<WishlistCubit>()
+                            .addWishlist(Wishlist(idProduct: widget.product.id));
+                        Get.snackbar(
+                            'Product Added', widget.product.productName + ' Added to Wishlist');
                       },
                     ),
                   ),
@@ -146,7 +213,7 @@ class DetailProduct extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                      .format(product.price.toDouble()),
+                      .format(widget.product.price.toDouble()),
                   style: redNumberFont.copyWith(fontSize: 20),
                 ),
               ),
@@ -175,7 +242,7 @@ class DetailProduct extends StatelessWidget {
                     SizedBox(height: 9),
                     //note: Description
                     Text(
-                      product.description,
+                      widget.product.description,
                       style:
                           blackMonstadtTextFont.copyWith(fontSize: 14, fontWeight: FontWeight.w200),
                       textAlign: TextAlign.justify,
@@ -184,22 +251,24 @@ class DetailProduct extends StatelessWidget {
                 ),
               ),
               Divider(),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Review', style: blackMonstadtTextFont.copyWith(fontSize: 14)),
-                    SizedBox(height: 9),
-                    //note: Review Product (Belum Jadi)
-                    Container(
-                      height: 150,
-                      width: MediaQuery.of(context).size.width - (2 * defaultMargin),
-                      color: Colors.grey,
-                    )
-                  ],
-                ),
+              SizedBox(
+                height: 250,
+                child: BlocBuilder<ReviewProductCubit, ReviewProductState>(builder: (_, state) {
+                  if (state is ReviewProductLoaded) {
+                    List<ReviewProduct> review = state.review;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: review.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (_, index) => Container(
+                        margin: EdgeInsets.all(5),
+                        child: ReviewProductCard(review: review[index]),
+                      ),
+                    );
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }),
               ),
               Divider(),
               Container(
@@ -218,7 +287,7 @@ class DetailProduct extends StatelessWidget {
                         Text('Seller',
                             style: blackMonstadtTextFont.copyWith(
                                 fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w100)),
-                        Text(product.merchant.toString(),
+                        Text(widget.product.merchant.toString(),
                             style: blackMonstadtTextFont.copyWith(fontSize: 14)),
                       ],
                     ),
@@ -230,7 +299,7 @@ class DetailProduct extends StatelessWidget {
                         Text('Seller Location',
                             style:
                                 blackMonstadtTextFont.copyWith(fontSize: 14, color: Colors.grey)),
-                        Text(product.merchantLocation.toString(),
+                        Text(widget.product.merchantLocation.toString(),
                             style: blackMonstadtTextFont.copyWith(fontSize: 14)),
                       ],
                     ),
@@ -242,7 +311,7 @@ class DetailProduct extends StatelessWidget {
                         Text('Weight',
                             style:
                                 blackMonstadtTextFont.copyWith(fontSize: 14, color: Colors.grey)),
-                        Text(product.weight.toString() + ' Grams',
+                        Text(widget.product.weight.toString() + ' Grams',
                             style: redNumberFont.copyWith(fontSize: 14, color: Colors.black)),
                       ],
                     ),
@@ -254,7 +323,7 @@ class DetailProduct extends StatelessWidget {
                         Text('Category',
                             style:
                                 blackMonstadtTextFont.copyWith(fontSize: 14, color: Colors.grey)),
-                        Text(product.category.toString(),
+                        Text(widget.product.category.toString(),
                             style: blackMonstadtTextFont.copyWith(fontSize: 14)),
                       ],
                     ),
@@ -266,7 +335,7 @@ class DetailProduct extends StatelessWidget {
                         Text('Seller Website',
                             style:
                                 blackMonstadtTextFont.copyWith(fontSize: 14, color: Colors.grey)),
-                        Text(product.website.toString(),
+                        Text(widget.product.website.toString() ?? '',
                             style: blackMonstadtTextFont.copyWith(fontSize: 14)),
                       ],
                     ),
@@ -304,17 +373,17 @@ class DetailProduct extends StatelessWidget {
                   int checkMerchant = (isMerchant.getInt('isMerchant'));
                   print('Buy Tapped ' + checkMerchant.toString());
                   Cart cart = Cart(
-                    id: product.id,
-                    productName: product.productName,
-                    urlPreview: product.preview,
-                    price: product.price,
+                    id: widget.product.id,
+                    productName: widget.product.productName,
+                    urlPreview: widget.product.preview,
+                    price: widget.product.price,
                     qty: 1,
-                    weight: product.weight,
-                    idMerchant: product.merchantId,
-                    merchantName: product.merchant,
-                    merchantLogo: product.merchantLogo,
-                    idProvinceM: product.idProvinceM,
-                    idCityM: product.idCityM,
+                    weight: widget.product.weight,
+                    idMerchant: widget.product.merchantId,
+                    merchantName: widget.product.merchant,
+                    merchantLogo: widget.product.merchantLogo,
+                    idProvinceM: widget.product.idProvinceM,
+                    idCityM: widget.product.idCityM,
                   );
                   List<Cart> _cart = []; //Init Empty String
 
@@ -381,26 +450,26 @@ class DetailProduct extends StatelessWidget {
 
                   FirebaseFirestore.instance
                       .collection('rooms')
-                      .doc(product.merchantId.toString() +
+                      .doc(widget.product.merchantId.toString() +
                           '-' +
                           (context.read<UserCubit>().state as UserLoaded)
                               .user
                               .id
                               .toString()) //idMerchant-idUser
                       .set({
-                    'id_merchant': product.merchantId.toString(), //Id Merchant
+                    'id_merchant': widget.product.merchantId.toString(), //Id Merchant
                     'id_user': (context.read<UserCubit>().state as UserLoaded)
                         .user
                         .id
                         .toString(), //Id Merchant
-                    'url_photo': product.merchantLogo,
-                    'merchant_name': product.merchant,
+                    'url_photo': widget.product.merchantLogo,
+                    'merchant_name': widget.product.merchant,
                     'created_at': DateTime.now(),
                   });
                   Get.to(DetailChat(
-                      peerId: product.merchantId.toString(),
-                      peerAvatar: product.merchantLogo,
-                      peerName: product.merchant));
+                      peerId: widget.product.merchantId.toString(),
+                      peerAvatar: widget.product.merchantLogo,
+                      peerName: widget.product.merchant));
                 },
                 child: SizedBox(
                   height: 50,

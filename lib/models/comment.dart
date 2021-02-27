@@ -14,6 +14,7 @@ class Comment extends Equatable {
   final int idMerchant;
   final int idFeed;
   final int idUser;
+  final String merchantUsername;
   final String merchantName;
   final String userName;
   final String comment;
@@ -27,6 +28,7 @@ class Comment extends Equatable {
     this.idFeed,
     this.idUser,
     this.merchantName,
+    this.merchantUsername,
     this.userName,
     this.comment,
     this.mention,
@@ -53,6 +55,7 @@ class Comment extends Equatable {
         idMerchant: data['id_merchant'],
         merchantName: data['merchant_name'],
         userName: data['user_name'],
+        merchantUsername: data['merchant_username'],
         idFeed: int.parse(data['id_feed'].toString()),
         idUser: data['id_user'],
         comment: data['comment'],

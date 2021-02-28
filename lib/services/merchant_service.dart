@@ -85,4 +85,24 @@ class MerchantService {
         (data['data'] as Iterable).map((e) => MerchantCategory.fromJson(e)).toList();
     return ApiReturnValue(value: merchantcat);
   }
+
+  static Future<ApiReturnValue<List<OperationalHours>>> showAllOperational(
+      {http.Client client, String idMerchant}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'operational_hours/get/' + idMerchant;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode : ${response.statusCode}');
+      return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
+    List<OperationalHours> value =
+        (data['data'] as Iterable).map((e) => OperationalHours.fromJson(e)).toList();
+    return ApiReturnValue(value: value);
+  }
 }

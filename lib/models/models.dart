@@ -22,3 +22,4 @@ part 'review_merchant.dart';
 part 'review_product.dart';
 part 'report_product.dart';
 part 'report_feed.dart';
+part 'operational_hours.dart';

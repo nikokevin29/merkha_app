@@ -9,10 +9,14 @@ class DetailProduct extends StatefulWidget {
 }
 
 class _DetailProductState extends State<DetailProduct> {
+  String avgRev;
   @override
   void initState() {
     super.initState();
     context.read<ReviewProductCubit>().showReviewProduct(productId: widget.product.id.toString());
+    ReviewServices.avgReviewProduct(productId: widget.product.id.toString()).then((value) {
+      avgRev = value;
+    });
   }
 
   @override
@@ -101,7 +105,8 @@ class _DetailProductState extends State<DetailProduct> {
                                                 )),
                                     ),
                                     onPressed: () async {
-                                      if (snapshot.data.toString() == widget.product.id.toString()) {
+                                      if (snapshot.data.toString() ==
+                                          widget.product.id.toString()) {
                                         print('cancel report ' +
                                             snapshot.data.toString() +
                                             '   ' +
@@ -225,9 +230,36 @@ class _DetailProductState extends State<DetailProduct> {
                     color: Colors.grey,
                   ),
                   SizedBox(width: 8),
-                  Text('4.9', style: redNumberFont.copyWith(color: Colors.grey)),
+                  FutureBuilder(
+                    future:
+                        ReviewServices.avgReviewProduct(productId: widget.product.id.toString()),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text((snapshot.data != null) ? snapshot.data : 'No Review',
+                            style: redNumberFont.copyWith(color: Colors.grey));
+                      } else {
+                        return SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: Shimmer.fromColors(
+                            baseColor: Colors.white,
+                            highlightColor: Colors.grey,
+                            child: Container(width: 10, height: 10, color: Colors.grey),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+
                   SizedBox(width: 5),
-                  Text('(13 Rating)', style: blackTextFont.copyWith(color: Colors.grey)),
+                  Text(
+                      '(' +
+                          (context.watch<ReviewProductCubit>().state as ReviewProductLoaded)
+                              .review
+                              .length
+                              .toString() +
+                          ' Rating)',
+                      style: blackTextFont.copyWith(color: Colors.grey)), //
                 ],
               ),
               Divider(),
@@ -254,6 +286,7 @@ class _DetailProductState extends State<DetailProduct> {
               SizedBox(
                 height: 250,
                 child: BlocBuilder<ReviewProductCubit, ReviewProductState>(builder: (_, state) {
+                  //
                   if (state is ReviewProductLoaded) {
                     List<ReviewProduct> review = state.review;
                     return ListView.builder(
@@ -335,7 +368,7 @@ class _DetailProductState extends State<DetailProduct> {
                         Text('Seller Website',
                             style:
                                 blackMonstadtTextFont.copyWith(fontSize: 14, color: Colors.grey)),
-                        Text(widget.product.website.toString() ?? '',
+                        Text(widget.product.website ?? '-',
                             style: blackMonstadtTextFont.copyWith(fontSize: 14)),
                       ],
                     ),

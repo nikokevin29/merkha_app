@@ -37,6 +37,7 @@ class _DetailMerchantState extends State<DetailMerchant> {
       merchantLastAccess = widget.feed.merchantLastAccess;
       merchantLocation = widget.feed.location;
     }
+    context.read<OperationalHoursCubit>().showOperational(idMerchant);
   }
 
   List<Widget> _randomChildren;
@@ -115,6 +116,7 @@ class _DetailMerchantState extends State<DetailMerchant> {
             child: GestureDetector(
                 onTap: () {
                   print('tap more horiz');
+                  onClickOperationalHours();
                 },
                 child: Icon(Icons.more_horiz, color: Colors.black)),
           ),
@@ -186,6 +188,68 @@ class _DetailMerchantState extends State<DetailMerchant> {
         ),
       ),
     );
+  }
+
+  void onClickOperationalHours() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.84,
+                  width: MediaQuery.of(context).size.width,
+                  child: BlocBuilder<OperationalHoursCubit, OperationalHoursState>(
+                    builder: (_, state) => (state is OperationalHoursListLoaded)
+                        ? ListView(children: [
+                            Container(
+                              alignment: Alignment.center,
+                              child: Text('Operational Hours',
+                                  style: blackTextFont.copyWith(
+                                    fontSize: 21,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: state.operational
+                                  .map((e) => Padding(
+                                        padding: EdgeInsets.only(
+                                            top: (e == state.operational.first) ? 15 : 0,
+                                            bottom: (e == state.operational.last) ? 15 : 0),
+                                        child: Flexible(
+                                            child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(e.days,
+                                                style: blackTextFont.copyWith(fontSize: 15)),
+                                            Row(
+                                              children: [
+                                                Text(e.startTime,
+                                                    style: blackTextFont.copyWith(fontSize: 15)),
+                                                Text(' - '),
+                                                Text(e.endTime,
+                                                    style: blackTextFont.copyWith(fontSize: 15)),
+                                                Divider(),
+                                              ],
+                                            ),
+                                          ],
+                                        )),
+                                      ))
+                                  .toList(),
+                            ),
+                          ])
+                        : Padding(
+                            padding: const EdgeInsets.all(50.0),
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
 

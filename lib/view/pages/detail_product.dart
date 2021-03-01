@@ -17,6 +17,8 @@ class _DetailProductState extends State<DetailProduct> {
     ReviewServices.avgReviewProduct(productId: widget.product.id.toString()).then((value) {
       avgRev = value;
     });
+    //note: Increase Viewed Product
+    ProductServices.incrementViewed(id: widget.product.id.toString());
   }
 
   @override
@@ -289,15 +291,17 @@ class _DetailProductState extends State<DetailProduct> {
                   //
                   if (state is ReviewProductLoaded) {
                     List<ReviewProduct> review = state.review;
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: review.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (_, index) => Container(
-                        margin: EdgeInsets.all(5),
-                        child: ReviewProductCard(review: review[index]),
-                      ),
-                    );
+                    return (review.length != 0)
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: review.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (_, index) => Container(
+                              margin: EdgeInsets.all(5),
+                              child: ReviewProductCard(review: review[index]),
+                            ),
+                          )
+                        : Center(child: Text('No Review', style: blackMonstadtTextFont));
                   } else {
                     return Center(child: CircularProgressIndicator());
                   }

@@ -111,14 +111,34 @@ class _DetailMerchantState extends State<DetailMerchant> {
                       child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()));
                 }
               }),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-                onTap: () {
-                  print('tap more horiz');
-                  onClickOperationalHours();
-                },
-                child: Icon(Icons.more_horiz, color: Colors.black)),
+          Flexible(
+            child: PopupMenuButton(
+              icon: Icon(Icons.more_vert, color: Colors.grey),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        onClickOperationalHours();
+                      },
+                      child: ListTile(
+                        leading: Icon(Icons.schedule, color: Colors.black),
+                        title:
+                            Text('Operational Hours', style: blackTextFont.copyWith(fontSize: 14)),
+                      ),
+                    ),
+                    // Row(
+                    //   children: [
+                    //     Icon(Icons.schedule, color: Colors.black),
+                    //     SizedBox(width: 5),
+                    //     Text('Operational Hours', style: blackTextFont.copyWith(fontSize: 14)),
+                    //   ],
+                    // ),
+                  ),
+                )
+              ],
+            ),
           ),
         ],
       ),
@@ -198,6 +218,16 @@ class _DetailMerchantState extends State<DetailMerchant> {
             child: Column(
               children: [
                 Container(
+                  padding: EdgeInsets.only(top: defaultMargin, right: defaultMargin),
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                      onTap: () {
+                        Get.back();
+                        Get.back();
+                      },
+                      child: Icon(Icons.close, color: Colors.black)),
+                ),
+                Container(
                   height: MediaQuery.of(context).size.height * 0.84,
                   width: MediaQuery.of(context).size.width,
                   child: BlocBuilder<OperationalHoursCubit, OperationalHoursState>(
@@ -205,6 +235,7 @@ class _DetailMerchantState extends State<DetailMerchant> {
                         ? ListView(children: [
                             Container(
                               alignment: Alignment.center,
+                              padding: EdgeInsets.only(top: defaultMargin),
                               child: Text('Operational Hours',
                                   style: blackTextFont.copyWith(
                                     fontSize: 21,
@@ -271,12 +302,34 @@ class HomeMerchant extends StatefulWidget {
 }
 
 class _HomeMerchantState extends State<HomeMerchant> {
+  var appContent;
   @override
   void initState() {
     super.initState();
+    appContentAPI(widget.idMerchant.toString());
     context
         .read<BestSellerProductCubit>()
         .showProductbyBestSeller(id: widget.idMerchant.toString());
+  }
+
+  Future<dynamic> appContentAPI(String idMerchant) async {
+    String url = baseURL + 'app_content/merchant/' + idMerchant;
+    var response = await http.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode : ${response.statusCode}');
+      return response.statusCode.toString();
+    }
+    var data = await jsonDecode(response.body);
+    if (this.mounted) {
+      setState(() {
+        appContent = List<String>.from(data);
+      });
+    }
+
+    return data;
   }
 
   @override
@@ -286,6 +339,54 @@ class _HomeMerchantState extends State<HomeMerchant> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              padding: EdgeInsets.only(top: defaultMargin),
+              child: (appContent != null)
+                  ? CarouselSlider(
+                      options: CarouselOptions(
+                        autoPlay: true,
+                        //autoPlayInterval: Duration(milliseconds: 10000),
+                        height: MediaQuery.of(context).size.width * 0.5,
+                      ),
+                      items: appContent.map<Widget>((i) {
+                        print(i);
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  image: DecorationImage(
+                                    image: NetworkImage(i),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                //child: Text(i ?? 'Image not Found'), //Debug Show Link image
+                              ),
+                            );
+                          },
+                        );
+                      }).toList(),
+                    )
+                  : SizedBox(
+                      width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+                      height: MediaQuery.of(context).size.width * 0.5,
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey[200],
+                        highlightColor: Colors.white,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+                          height: MediaQuery.of(context).size.width * 0.5,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+            ),
             Divider(),
             Container(
               padding: EdgeInsets.symmetric(horizontal: defaultMargin),

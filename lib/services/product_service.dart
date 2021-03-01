@@ -184,4 +184,21 @@ class ProductServices {
     List<Product> value = (data['data'] as Iterable).map((e) => Product.fromJson(e)).toList();
     return ApiReturnValue(value: value);
   }
+
+  static Future<String> incrementViewed({http.Client client, String id}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'product/increaseview/' + id;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+    if (response.statusCode != 200) {
+      print('StatusCode Increase Viewed: ${response.statusCode}');
+      print('increase viewed product : ${response.body}');
+      return '0';
+    }
+    return '1';
+  }
 }

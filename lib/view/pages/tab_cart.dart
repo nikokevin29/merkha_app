@@ -461,17 +461,24 @@ class _CartTabState extends State<CartTab> {
                                                       promoController.text.trim(),
                                                       idMerchant,
                                                     );
-                                                if ((context.read<VoucherCubit>().state
-                                                            as VoucherUsed)
-                                                        .voucher
-                                                        .discAmount >
-                                                    subtotal) {
-                                                  Navigator.pop(context);
-                                                  Get.snackbar('Error Discount',
-                                                      'Discount Amount Greater than Subtotal');
+                                                // if ((context.read<VoucherCubit>().state
+                                                //             as VoucherLoadingFailed)
+                                                //         .message !=
+                                                //     null) {
+                                                //   Get.back();
+                                                //   return;
+                                                // }
+                                                // if ((context.read<VoucherCubit>().state
+                                                //                 as VoucherUsed)
+                                                //             .voucher
+                                                //             .discAmount >
+                                                //         subtotal) {
+                                                //   Navigator.pop(context);
+                                                //   Get.snackbar('Error Discount',
+                                                //       'Discount Amount Greater than Subtotal');
 
-                                                  return;
-                                                }
+                                                //   return;
+                                                // }
                                                 innerSetState(() {
                                                   total =
                                                       (((subtotal - amountVoucher) * rateVoucher) +
@@ -479,6 +486,14 @@ class _CartTabState extends State<CartTab> {
                                                 });
                                                 Navigator.pop(context);
                                               } else {
+                                                showDialog(
+                                                    barrierDismissible: false,
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return Center(
+                                                        child: CircularProgressIndicator(),
+                                                      );
+                                                    });
                                                 await context
                                                     .read<VoucherCubit>()
                                                     .clear(); //Clear Bloc State in Bottom
@@ -491,6 +506,8 @@ class _CartTabState extends State<CartTab> {
                                                       (((subtotal - amountVoucher) * rateVoucher) +
                                                           double.parse(ongkir ?? '0'));
                                                 });
+                                                setState(() {});
+                                                Navigator.pop(context);
                                               }
                                             },
                                           );

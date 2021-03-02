@@ -22,9 +22,9 @@ part 'payment_service.dart';
 part 'review_service.dart';
 part 'report_service.dart';
 
-String baseURL = "http://192.168.0.55:8000/api/";
+String baseURL = "http://192.168.0.60:8000/api/";
 
-String baseURLphoto = "http://192.168.0.55:8000/storage/";
+String baseURLphoto = "http://192.168.0.60:8000/storage/";
 
 String apiRajaOngkir = "https://api.rajaongkir.com/starter/";
 String apiKeyOngkir = "7facf87ad54c821e568ef658f3fa79d6";

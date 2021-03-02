@@ -228,28 +228,47 @@ class OrderCard extends StatelessWidget {
                         })
                     : Container(),
                 //note: ON FINISHED STATE (REVIEW MERCHANT)
-
-                Container(
-                  alignment: Alignment.centerRight,
-                  child: (order.orderStatus != 'FINISHED')
-                      ? Container()
-                      : FutureBuilder(
-                          future: ReviewServices.checkReviewMerchant(idOrder: order.id.toString()),
-                          builder: (context, snapshot) {
-                            if (snapshot.data == 1) {
-                              return FlatButton(
-                                onPressed: () {
-                                  _reviewMerchantBottomSheet(context, order);
-                                },
-                                child: Text('Give Star & Review',
-                                    style: blackTextFont.copyWith(
-                                        color: Colors.blueAccent, fontSize: 11)),
-                              );
-                            } else {
-                              return Container();
-                            }
-                          }),
-                ),
+                (order.orderStatus == 'FINISHED')
+                    ? Container(
+                        alignment: Alignment.centerRight,
+                        child: FlatButton(
+                            child: Text('Give Star & Review',
+                                style:
+                                    blackTextFont.copyWith(color: Colors.blueAccent, fontSize: 11)),
+                            onPressed: () async {
+                              //
+                              var check;
+                              await ReviewServices.checkReviewMerchant(idOrder: order.id.toString())
+                                  .then((var value) => check = value);
+                              if (check == 0) {
+                                _reviewMerchantBottomSheet(context, order);
+                              } else {
+                                Get.snackbar('Review Complete', 'Your Order Already Reviewed');
+                              }
+                            }),
+                      )
+                    : Container(),
+                // Container(
+                //   alignment: Alignment.centerRight,
+                //   child: (order.orderStatus != 'FINISHED')
+                //       ? Container()
+                //       : FutureBuilder(
+                //           future: ReviewServices.checkReviewMerchant(idOrder: order.id.toString()),
+                //           builder: (context, snapshot) {
+                //             if (snapshot.data == 1) {
+                //               return FlatButton(
+                //                 onPressed: () {
+                //                   _reviewMerchantBottomSheet(context, order);
+                //                 },
+                //                 child: Text('Give Star & Review',
+                //                     style: blackTextFont.copyWith(
+                //                         color: Colors.blueAccent, fontSize: 11)),
+                //               );
+                //             } else {
+                //               return Container();
+                //             }
+                //           }),
+                // ),
               ],
             ),
           )

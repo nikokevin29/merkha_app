@@ -13,11 +13,23 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin {
   int bottomNavBarIndex = 0;
   TabController controller;
+  DateTime currentBackPressTime;
   @override
   void initState() {
     context.read<AddressCubit>().showAddress(); //Get All Address
     controller = new TabController(length: 5, vsync: this, initialIndex: widget.bottomNavBarIndex);
     super.initState();
+  }
+
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Get.snackbar('Exit ?', 'Tap Exit Again for Exit');
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 
   @override
@@ -94,15 +106,18 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
           ],
         ),
       ),
-      body: TabBarView(
-        controller: controller,
-        children: [
-          new MainTab(),
-          new FeedTab(),
-          new CartTab(),
-          new WishlishTab(),
-          new ProfileTab()
-        ],
+      body: WillPopScope(
+        onWillPop: onWillPop,
+        child: TabBarView(
+          controller: controller,
+          children: [
+            new MainTab(),
+            new FeedTab(),
+            new CartTab(),
+            new WishlishTab(),
+            new ProfileTab()
+          ],
+        ),
       ),
     );
   }

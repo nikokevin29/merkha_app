@@ -312,6 +312,16 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                   _selectedGender = selectedGen;
                                 }
                                 if (pictureFile != null) {
+                                  await context.read<UserCubit>().updateProfile(
+                                      User(
+                                          email: _email,
+                                          first_name: _firstName,
+                                          last_name: _lastName,
+                                          phone_number: _phone,
+                                          username: _username,
+                                          bio: _bio,
+                                          gender: _selectedGender),
+                                      pictureFile: pictureFile);
                                   await context.read<UpdateUserCubit>().updateProfile(
                                       User(
                                           email: _email,
@@ -323,6 +333,16 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                           gender: _selectedGender),
                                       pictureFile: pictureFile);
                                 } else {
+                                  await context.read<UserCubit>().updateProfile(
+                                        User(
+                                            email: _email,
+                                            first_name: _firstName,
+                                            last_name: _lastName,
+                                            phone_number: _phone,
+                                            username: _username,
+                                            bio: _bio,
+                                            gender: _selectedGender),
+                                      );
                                   await context.read<UpdateUserCubit>().updateProfile(
                                         User(
                                             email: _email,
@@ -336,7 +356,11 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                 }
                                 Navigator.pop(context);
                                 UpdateUserState state = context.read<UpdateUserCubit>().state;
-                                if (state is UserUpdateLoadingFailed) {
+                                if (state is UpdateUserLoaded) {
+                                  Navigator.pop(context);
+                                  Get.back();
+                                  Get.snackbar("Profile Updated", "Your Profile Has Been Updated");
+                                } else {
                                   Get.snackbar(
                                     "",
                                     "",
@@ -347,14 +371,10 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                     ),
                                     titleText: Text("Update Profile Failed", style: blackTextFont),
                                     messageText: Text(
-                                      state.message ?? '',
+                                      'Something Wrong', //state.message ?? '',
                                       style: blackTextFont,
                                     ),
                                   );
-                                } else {
-                                  Navigator.pop(context);
-                                  Get.back();
-                                  Get.snackbar("Profile Updated", "Your Profile Has Been Updated");
                                 }
                               }
                             : null),

@@ -198,7 +198,7 @@ class FeedCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Wrap(spacing: 15, children: [
-                    Icon(Icons.send, color: HexColor('#707070')),
+                    //Icon(Icons.send, color: HexColor('#707070')),
                     InkWell(
                         onTap: () => Get.to(CommentPage(feed: feed)),
                         child: Icon(Icons.chat_bubble_outline, color: HexColor('#707070'))),

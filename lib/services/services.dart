@@ -22,7 +22,7 @@ part 'payment_service.dart';
 part 'review_service.dart';
 part 'report_service.dart';
 
-String baseURL = "http://192.168.0.60:8000/api/";
+String baseURL = "http://192.168.0.60:8000/api/";//https://mobile.merkha.com/api/
 
 String baseURLphoto = "http://192.168.0.60:8000/storage/";
 

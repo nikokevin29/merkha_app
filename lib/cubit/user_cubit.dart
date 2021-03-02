@@ -74,5 +74,14 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  
+  Future<void> updateProfile(User user, {File pictureFile}) async {
+    ApiReturnValue<User> result =
+        await UserServices.updateProfile(user: user, urlphoto: pictureFile);
+    if (result.value.id != null) {
+      emit(UserLoaded(result.value));
+    } else {
+      print('Update Faileds');
+      //emit(UserLoadingFailed(result.message));
+    }
+  }
 }

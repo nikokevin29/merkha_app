@@ -117,14 +117,17 @@ class UserServices {
           'bio': user.bio,
         }),
       );
-
-      var data = jsonDecode(response.body);
+      print(response.body);
+      print(response.statusCode);
       if (response.statusCode != 200) {
         print('StatusCode : ${response.statusCode}');
         print('data : ${response.body}');
+        var data = jsonDecode(response.body);
+        User value = User.fromJson(data['data']);
 
-        return ApiReturnValue(message: data['meta']['message'], value: null);
+        return ApiReturnValue(message: data['meta']['message'], value: value);
       } else {
+        var data = jsonDecode(response.body);
         print(data['data']);
         User value = User.fromJson(data['data']);
         return ApiReturnValue(value: value);

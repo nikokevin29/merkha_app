@@ -173,7 +173,7 @@ class ChatScreenState extends State<ChatScreen> {
           // .doc(groupChatId)
           // .collection(groupChatId)
           .collection('rooms')
-          .doc(peerId + '-' + id)//idMerchant-idUser
+          .doc(peerId + '-' + id) //idMerchant-idUser
           .collection('message')
           .doc(DateTime.now().millisecondsSinceEpoch.toString());
 
@@ -199,7 +199,7 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   Widget buildItem(int index, DocumentSnapshot document) {
-    if (document.data()['idFrom'] == id) {
+    if (document.data()['idFrom'] == id && document.data()['from'] == 'user') {
       // Right (my message)
       return Column(
         children: <Widget>[

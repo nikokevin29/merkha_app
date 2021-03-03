@@ -122,11 +122,15 @@ class _MainTabState extends State<MainTab> {
                                         AppContent content = i;
                                         return GestureDetector(
                                           onTap: () async {
-                                            ApiReturnValue<Merchant> result =
-                                                await MerchantService.showByMerchantId(
-                                                    merchantId: content.idMerchant.toString());
-                                            Get.to(DetailMerchant(merchant: result.value));
-                                            print(content.idMerchant);
+                                            if (content.idMerchant != null) {
+                                              ApiReturnValue<Merchant> result =
+                                                  await MerchantService.showByMerchantId(
+                                                      merchantId: content.idMerchant.toString());
+                                              Get.to(DetailMerchant(merchant: result.value));
+                                              print(content.idMerchant);
+                                            } else {
+                                              print('No Route Banner');
+                                            }
                                           },
                                           child: Container(
                                             padding: EdgeInsets.symmetric(horizontal: 5),

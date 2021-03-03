@@ -189,9 +189,12 @@ class _CreatePost2State extends State<CreatePost2> {
                   print(captionController.text);
                   if (captionController.text == '') {
                     Get.snackbar('Empty Field', 'Caption required');
-                  } else if (pId == null) {
-                    Get.snackbar('Empty Field', 'Product required');
-                  } else {
+                  }
+                  // note: if Product Required
+                  // else if (pId == null) {
+                  //   Get.snackbar('Empty Field', 'Product required');
+                  // }
+                  else {
                     print('Passed validation');
                     showDialog(
                         barrierDismissible: false,
@@ -207,7 +210,6 @@ class _CreatePost2State extends State<CreatePost2> {
                           idProduct: pId.toString(),
                           caption: captionController.text,
                         );
-
                     await context.read<OwnfeedCubit>().showOwnFeed(); //Get all Feed
                     Get.offAll(MainPage(bottomNavBarIndex: 4));
                     Get.snackbar('Success posting Feed', 'your feed has been posted');

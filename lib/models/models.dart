@@ -23,3 +23,4 @@ part 'review_product.dart';
 part 'report_product.dart';
 part 'report_feed.dart';
 part 'operational_hours.dart';
+part 'app_content.dart';

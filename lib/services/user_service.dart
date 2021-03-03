@@ -79,7 +79,7 @@ class UserServices {
         body: jsonEncode(<String, String>{
           'first_name': user.first_name,
           'last_name': user.last_name,
-          'username': user.username,
+          //'username': user.username,
           'gender': user.gender,
           'email': user.email,
           'phone_number': user.phone_number,
@@ -110,7 +110,7 @@ class UserServices {
         body: jsonEncode(<String, String>{
           'first_name': user.first_name,
           'last_name': user.last_name,
-          'username': user.username,
+          //'username': user.username,
           'gender': user.gender,
           'email': user.email,
           'phone_number': user.phone_number,
@@ -324,6 +324,31 @@ class UserServices {
     }
     var data = jsonDecode(response.body);
     print(data);
+    User value = User.fromJson(data['data']);
+    return ApiReturnValue(value: value);
+  }
+
+  static Future<ApiReturnValue<User>> updateUsername({String username, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'username/update';
+    var response = await client.put(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + User.token,
+      },
+      body: jsonEncode(<String, String>{
+        'username': username,
+      }),
+    );
+    if (response.statusCode != 200) {
+      print(response.statusCode);
+      return ApiReturnValue(message: 'StatusCode  : ${response.statusCode}');
+    }
+    var data = jsonDecode(response.body);
     User value = User.fromJson(data['data']);
     return ApiReturnValue(value: value);
   }

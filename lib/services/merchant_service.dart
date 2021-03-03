@@ -61,7 +61,7 @@ class MerchantService {
     }
     var data = jsonDecode(response.body);
 
-    Merchant value = Merchant.fromJson(data['data']);
+    Merchant value = Merchant.fromJson(data['data'][0]);
     return ApiReturnValue(value: value);
   }
 

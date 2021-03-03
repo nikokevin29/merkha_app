@@ -10,10 +10,9 @@ part 'update_user_state.dart';
 class UpdateUserCubit extends Cubit<UpdateUserState> {
   UpdateUserCubit() : super(UpdateUserInitial());
 
-  Future<void> updateProfile(User user, {File pictureFile}) async {
-    ApiReturnValue<User> result =
-        await UserServices.updateProfile(user: user, urlphoto: pictureFile);
-    if (result.value.id != null) {
+  Future<void> updateUsername(String username) async {
+    ApiReturnValue<User> result = await UserServices.updateUsername(username: username);
+    if (result.value != null) {
       emit(UpdateUserLoaded(result.value));
     } else {
       emit(UserUpdateLoadingFailed(result.message));

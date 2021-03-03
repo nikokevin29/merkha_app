@@ -184,16 +184,22 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                       });
                     },
                   ),
-                  TextFormField(
-                    keyboardType: TextInputType.name,
-                    initialValue: username,
-                    decoration:
-                        InputDecoration(prefixIcon: Icon(MdiIcons.account), labelText: "Username"),
-                    onChanged: (text) {
-                      setState(() {
-                        _username = text;
-                      });
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(UpdateUsernamePage(username));
                     },
+                    child: TextFormField(
+                      enabled: false,
+                      keyboardType: TextInputType.name,
+                      initialValue: (context.watch<UserCubit>().state as UserLoaded).user.username,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(MdiIcons.account), labelText: "Username"),
+                      // onChanged: (text) {
+                      //   setState(() {
+                      //     _username = text;
+                      //   });
+                      // },
+                    ),
                   ),
                   TextFormField(
                     keyboardType: TextInputType.name,
@@ -318,17 +324,6 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                           first_name: _firstName,
                                           last_name: _lastName,
                                           phone_number: _phone,
-                                          username: _username,
-                                          bio: _bio,
-                                          gender: _selectedGender),
-                                      pictureFile: pictureFile);
-                                  await context.read<UpdateUserCubit>().updateProfile(
-                                      User(
-                                          email: _email,
-                                          first_name: _firstName,
-                                          last_name: _lastName,
-                                          phone_number: _phone,
-                                          username: _username,
                                           bio: _bio,
                                           gender: _selectedGender),
                                       pictureFile: pictureFile);
@@ -339,24 +334,13 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                             first_name: _firstName,
                                             last_name: _lastName,
                                             phone_number: _phone,
-                                            username: _username,
-                                            bio: _bio,
-                                            gender: _selectedGender),
-                                      );
-                                  await context.read<UpdateUserCubit>().updateProfile(
-                                        User(
-                                            email: _email,
-                                            first_name: _firstName,
-                                            last_name: _lastName,
-                                            phone_number: _phone,
-                                            username: _username,
                                             bio: _bio,
                                             gender: _selectedGender),
                                       );
                                 }
                                 Navigator.pop(context);
-                                UpdateUserState state = context.read<UpdateUserCubit>().state;
-                                if (state is UpdateUserLoaded) {
+                                UserState state = context.read<UserCubit>().state;
+                                if (state is UserLoaded) {
                                   Navigator.pop(context);
                                   Get.back();
                                   Get.snackbar("Profile Updated", "Your Profile Has Been Updated");

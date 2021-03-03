@@ -306,15 +306,22 @@ Column buildHeader(BuildContext context, countFollowing) {
                       children: [
                         Text(
                           (context.watch<UserCubit>().state as UserLoaded).user.first_name ??
-                              CircularProgressIndicator(), //First Name
+                              '', //First Name
                           style: blackTextFont.copyWith(fontSize: 32),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
                         Text(
                           (context.watch<UserCubit>().state as UserLoaded).user.last_name ??
-                              CircularProgressIndicator(), //Last Name
+                              '', //Last Name
                           style: blackTextFont.copyWith(fontSize: 32),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        Text(
+                          '@' + (context.watch<UserCubit>().state as UserLoaded).user.username ??
+                              'username', //Last Name
+                          style: blackTextFont.copyWith(fontSize: 16),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
@@ -334,10 +341,10 @@ Column buildHeader(BuildContext context, countFollowing) {
                             children: [
                               Row(
                                 children: [
-                                  Text((context.watch<OwnfeedCubit>().state as OwnFeedListLoaded)
-                                      .feed
-                                      .length
-                                      .toString()),
+                                  // Text((context.watch<OwnfeedCubit>().state as OwnFeedListLoaded)
+                                  //     .feed
+                                  //     .length
+                                  //     .toString()),
                                   Text(' Posts'),
                                 ],
                               ),

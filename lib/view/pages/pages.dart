@@ -83,3 +83,4 @@ part 'review_merchant_page.dart';
 part 'payment_page.dart';
 part 'confirm_payment.dart';
 part 'detail_order_page.dart';
+part 'update_username_page.dart';

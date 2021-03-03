@@ -14,7 +14,7 @@ class Feed extends Equatable {
   final String merchantDescription;
   final String merchantWebsite;
   final String productName;
-  final double productPrice;
+  final String productPrice;
   final int likeCount;
   final String urlImage;
   final String caption;
@@ -55,7 +55,7 @@ class Feed extends Equatable {
         merchantDescription: data['description'],
         merchantWebsite: data['website'],
         productName: data['product_name'],
-        productPrice: double.parse(data['price'].toString()),
+        productPrice: data['price'],
         likeCount: data['like_count'],
         urlImage: data['url_image'],
         caption: data['caption'],

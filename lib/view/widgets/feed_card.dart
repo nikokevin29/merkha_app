@@ -176,8 +176,13 @@ class FeedCard extends StatelessWidget {
                     });
                 await ProductServices.getProductById(id: feed.idProduct)
                     .then((value) => product = value.value);
-                Get.back();
-                Get.to(DetailProduct(product: product));
+                if (product != null) {
+                  Get.back();
+                  Get.to(DetailProduct(product: product));
+                } else {
+                  Get.back();
+                  Get.snackbar('Product Doesnt Exist', 'Product has been paused or deleted');
+                }
               },
               child: Container(
                 width: MediaQuery.of(context).size.width - (3 * defaultMargin),
@@ -243,7 +248,7 @@ class FeedCard extends StatelessWidget {
               ),
             ),
             SizedBox(height: 15),
-            (feed.idProduct != null)
+            (feed.productName != null)
                 ? Container(
                     padding: EdgeInsets.only(left: 10),
                     decoration: BoxDecoration(
@@ -259,7 +264,7 @@ class FeedCard extends StatelessWidget {
                             SizedBox(
                               width: MediaQuery.of(context).size.width - 130,
                               child: Text(
-                                feed.productName,
+                                feed.productName ?? '',
                                 style: blackTextFont.copyWith(fontSize: 12),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -267,7 +272,7 @@ class FeedCard extends StatelessWidget {
                             ),
                             Text(
                                 NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                                    .format(feed.productPrice ?? 0),
+                                    .format(double.parse(feed.productPrice) ?? 0),
                                 style: redNumberFont.copyWith(fontSize: 12)),
                           ],
                         ),
@@ -276,82 +281,87 @@ class FeedCard extends StatelessWidget {
                             print(feed.idProduct.toString());
                             ApiReturnValue<Product> result =
                                 await ProductServices.getProductById(id: feed.idProduct.toString());
-                            SharedPreferences isMerchant =
-                                await SharedPreferences.getInstance(); //Save isMerchant
-                            int checkMerchant = (isMerchant.getInt('isMerchant'));
-                            print('Buy Tapped');
-                            Cart cart = Cart(
-                              id: result.value.id,
-                              productName: result.value.productName,
-                              urlPreview: result.value.preview,
-                              price: result.value.price,
-                              qty: 1,
-                              weight: result.value.weight,
-                              idMerchant: result.value.merchantId,
-                              merchantName: result.value.merchant,
-                              merchantLogo: result.value.merchantLogo,
-                              idProvinceM: result.value.idProvinceM,
-                              idCityM: result.value.idCityM,
-                            );
-                            List<Cart> _cart = []; //Init Empty String
+                            if (result != null) {
+                              SharedPreferences isMerchant =
+                                  await SharedPreferences.getInstance(); //Save isMerchant
+                              int checkMerchant = (isMerchant.getInt('isMerchant'));
+                              print('Buy Tapped');
+                              Cart cart = Cart(
+                                id: result.value.id,
+                                productName: result.value.productName,
+                                urlPreview: result.value.preview,
+                                price: result.value.price,
+                                qty: 1,
+                                weight: result.value.weight,
+                                idMerchant: result.value.merchantId,
+                                merchantName: result.value.merchant,
+                                merchantLogo: result.value.merchantLogo,
+                                idProvinceM: result.value.idProvinceM,
+                                idCityM: result.value.idCityM,
+                              );
+                              List<Cart> _cart = []; //Init Empty String
 
-                            LocalStorage.db.getCart().then((value) async {
-                              _cart = value;
-                              print(_cart);
-                              if (_cart.length == 0) {
-                                await isMerchant.setInt('isMerchant', cart.idMerchant);
-                                LocalStorage.db.insert(cart);
-                                Get.snackbar(
-                                    'Product Added to Cart', 'This Product Has been added to Cart');
-                              } else {
-                                for (int i = 0; i <= _cart.length - 1; i++) {
-                                  if (cart.idMerchant != checkMerchant) {
-                                    Widget cancelButton = FlatButton(
-                                      child: Text("Cancel"),
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                    );
-                                    Widget continueButton = FlatButton(
-                                      child: Text("Add"),
-                                      onPressed: () async {
-                                        LocalStorage.db.deleteAll();
-                                        LocalStorage.db.insert(cart);
-                                        await isMerchant.setInt('isMerchant', cart.idMerchant);
-                                        Get.back();
-                                        Get.snackbar('Product Added to Cart',
-                                            'This Product Has been added to Cart');
-                                      },
-                                    );
-                                    AlertDialog alert = AlertDialog(
-                                      title: Text("Already Have Product From Another Merchant"),
-                                      content: Text(
-                                          "Are you sure to add this item and remove old item in cart ?"),
-                                      actions: [
-                                        cancelButton,
-                                        continueButton,
-                                      ],
-                                    );
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return alert;
-                                      },
-                                    );
-                                    break;
-                                  } else if (cart.id == _cart[i].id) {
-                                    Get.snackbar(
-                                        'Product Exist In Cart', 'This Product exist in cart');
-                                    break;
-                                  } else if (cart.id != _cart[i].id) {
-                                    Get.snackbar('Product Added to Cart',
-                                        'This Product Has been added to Cart.');
-                                    await isMerchant.setInt('isMerchant', cart.idMerchant);
-                                    LocalStorage.db.insert(cart);
+                              LocalStorage.db.getCart().then((value) async {
+                                _cart = value;
+                                print(_cart);
+                                if (_cart.length == 0) {
+                                  await isMerchant.setInt('isMerchant', cart.idMerchant);
+                                  LocalStorage.db.insert(cart);
+                                  Get.snackbar('Product Added to Cart',
+                                      'This Product Has been added to Cart');
+                                } else {
+                                  for (int i = 0; i <= _cart.length - 1; i++) {
+                                    if (cart.idMerchant != checkMerchant) {
+                                      Widget cancelButton = FlatButton(
+                                        child: Text("Cancel"),
+                                        onPressed: () {
+                                          Get.back();
+                                        },
+                                      );
+                                      Widget continueButton = FlatButton(
+                                        child: Text("Add"),
+                                        onPressed: () async {
+                                          LocalStorage.db.deleteAll();
+                                          LocalStorage.db.insert(cart);
+                                          await isMerchant.setInt('isMerchant', cart.idMerchant);
+                                          Get.back();
+                                          Get.snackbar('Product Added to Cart',
+                                              'This Product Has been added to Cart');
+                                        },
+                                      );
+                                      AlertDialog alert = AlertDialog(
+                                        title: Text("Already Have Product From Another Merchant"),
+                                        content: Text(
+                                            "Are you sure to add this item and remove old item in cart ?"),
+                                        actions: [
+                                          cancelButton,
+                                          continueButton,
+                                        ],
+                                      );
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return alert;
+                                        },
+                                      );
+                                      break;
+                                    } else if (cart.id == _cart[i].id) {
+                                      Get.snackbar(
+                                          'Product Exist In Cart', 'This Product exist in cart');
+                                      break;
+                                    } else if (cart.id != _cart[i].id) {
+                                      Get.snackbar('Product Added to Cart',
+                                          'This Product Has been added to Cart.');
+                                      await isMerchant.setInt('isMerchant', cart.idMerchant);
+                                      LocalStorage.db.insert(cart);
+                                    }
                                   }
                                 }
-                              }
-                            });
+                              });
+                            } else {
+                              Get.snackbar(
+                                  'Product Doest Exist', 'Product has Been Paused or Deleted');
+                            }
                           },
                           child: Container(
                             height: 54,

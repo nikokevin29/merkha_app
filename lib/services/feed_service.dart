@@ -42,34 +42,59 @@ class FeedServices {
     var downurl = await (taskSnapshot).ref.getDownloadURL();
     print(taskSnapshot);
     urlpicture = downurl.toString(); // url link photo uploaded
-    print('URL PHOTO UPLOADED ' + urlpicture);
+    print('URL PHOTO UPLOADED ' + idProduct.toString() + urlpicture);
     //End Of Upload Photo Firebase
     // print(feed.idProduct.toString());
     // print(feed.caption);
     // print(feed.location);
     String url = baseURL + 'feed/create';
-    var response = await client.post(
-      url,
-      headers: {
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer ' + User.token,
-      },
-      body: jsonEncode(<String, String>{
-        'id_product': idProduct.toString(), //required
-        'url_image': urlpicture, //required
-        'caption': caption, //required
-        'location': location, //nullable
-      }),
-    );
-    if (response.statusCode != 200) {
-      print('StatusCode : ${response.statusCode}');
-      print('data : ${response.body}');
-      return 0;
+    if (idProduct != 'null') {
+      var response = await client.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + User.token,
+        },
+        body: jsonEncode(<String, String>{
+          'id_product': idProduct.toString(), //nullable
+          'url_image': urlpicture, //required
+          'caption': caption, //required
+          'location': location, //nullable
+        }),
+      );
+      if (response.statusCode != 200) {
+        print('StatusCode : ${response.statusCode}');
+        print('data : ${response.body}');
+        return 0;
+      }
+      var data = jsonDecode(response.body);
+      print(data);
+      //Feed value = Feed.fromJson(data['data']);
+      return 1;
+    } else {
+      var response = await client.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + User.token,
+        },
+        body: jsonEncode(<String, String>{
+          //'id_product': idProduct.toString(), //nullable
+          'url_image': urlpicture, //required
+          'caption': caption, //required
+          'location': location, //nullable
+        }),
+      );
+      if (response.statusCode != 200) {
+        print('StatusCode : ${response.statusCode}');
+        print('data : ${response.body}');
+        return 0;
+      }
+      var data = jsonDecode(response.body);
+      print(data);
+      //Feed value = Feed.fromJson(data['data']);
+      return 1;
     }
-    var data = jsonDecode(response.body);
-    print(data);
-    //Feed value = Feed.fromJson(data['data']);
-    return 1;
   }
 
   static Future<ApiReturnValue<List<Feed>>> showOwnFeed({http.Client client}) async {

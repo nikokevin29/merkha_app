@@ -139,7 +139,10 @@ class ProductServices {
       return ApiReturnValue(message: 'StatusCode : ${response.statusCode}');
     }
     var data = jsonDecode(response.body);
-    print(data);
+    print(data['data']);
+    if (data['data'] == null) {
+      return ApiReturnValue(value: null, message: data['meta']['message']);
+    }
     Product value = Product.fromJson(data['data'][0]);
 
     return ApiReturnValue(value: value, message: data['meta']['message']);

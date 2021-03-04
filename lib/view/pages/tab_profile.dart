@@ -341,10 +341,10 @@ Column buildHeader(BuildContext context, countFollowing) {
                             children: [
                               Row(
                                 children: [
-                                  // Text((context.watch<OwnfeedCubit>().state as OwnFeedListLoaded)
-                                  //     .feed
-                                  //     .length
-                                  //     .toString()),
+                                  Text((context.watch<OwnfeedCubit>().state as OwnFeedListLoaded)
+                                      .feed
+                                      .length
+                                      .toString()),
                                   Text(' Posts'),
                                 ],
                               ),

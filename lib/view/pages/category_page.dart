@@ -9,7 +9,7 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  var appContent;
+  var appContentCategory;
   @override
   void initState() {
     super.initState();

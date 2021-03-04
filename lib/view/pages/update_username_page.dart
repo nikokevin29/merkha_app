@@ -70,8 +70,7 @@ class _UpdateUsernamePageState extends State<UpdateUsernamePage> {
                         Get.back();
                         Get.back();
                         Get.back();
-                        Get.snackbar(
-                            "Username Updated", "Your Username will be update after app closed");
+                        Get.snackbar("Username Updated", "Your Username Updated");
                       }
                     }
                   : null,

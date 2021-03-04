@@ -177,8 +177,8 @@ class FeedCard extends StatelessWidget {
                 await ProductServices.getProductById(id: feed.idProduct)
                     .then((value) => product = value.value);
                 if (product != null) {
-                  Get.back();
-                  Get.to(DetailProduct(product: product));
+                    Get.back();
+                    Get.to(DetailProduct(product: product));
                 } else {
                   Get.back();
                   Get.snackbar('Product Doesnt Exist', 'Product has been paused or deleted');
@@ -203,11 +203,41 @@ class FeedCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Wrap(spacing: 15, children: [
-                    //Icon(Icons.send, color: HexColor('#707070')),
+                    //note: Comment Button
                     InkWell(
                         onTap: () => Get.to(CommentPage(feed: feed)),
                         child: Icon(Icons.chat_bubble_outline, color: HexColor('#707070'))),
-                    Icon(Icons.favorite_border, color: HexColor('#707070')),
+                    //note:Like Button
+                    FutureBuilder(
+                        future: FeedLikeService.checkStatusLike(idFeed: feed.id.toString()),
+                        builder: (context, snapshot) {
+                          if (snapshot.data.toString() == feed.id.toString()) {
+                            return GestureDetector(
+                              onTap: () async {
+                                await FeedLikeService.deleteLike(idFeed: feed.id.toString());
+                              },
+                              child: Icon(Icons.favorite, color: Colors.red),
+                            );
+                          } else if (snapshot.data.toString() != feed.id.toString()) {
+                            return GestureDetector(
+                              onTap: () async {
+                                await FeedLikeService.createLike(idFeed: feed.id.toString());
+                              },
+                              child: Icon(Icons.favorite_border, color: HexColor('#707070')),
+                            );
+                          } else {
+                            return GestureDetector(
+                              // onTap: () async {
+                              //   await FeedLikeService.createLike(idFeed: feed.id.toString());
+                              // },
+                              child: SizedBox(
+                                height: 15,
+                                width: 15,
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                        }),
                   ]),
                 ],
               ),
@@ -231,14 +261,13 @@ class FeedCard extends StatelessWidget {
                 ],
               ),
             ),
+            //note: Comment Button
             Container(
               margin: EdgeInsets.symmetric(vertical: 5),
               padding: EdgeInsets.symmetric(horizontal: 10),
               alignment: Alignment.centerLeft,
               child: InkWell(
                 onTap: () {
-                  //TODO: tap comment here
-                  print('tap view comment');
                   Get.to(CommentPage(feed: feed));
                 },
                 child: Text(
@@ -248,6 +277,7 @@ class FeedCard extends StatelessWidget {
               ),
             ),
             SizedBox(height: 15),
+            //note: Widget Product (productName,productPrice, and Button Add to Cart)
             (feed.productName != null)
                 ? Container(
                     padding: EdgeInsets.only(left: 10),

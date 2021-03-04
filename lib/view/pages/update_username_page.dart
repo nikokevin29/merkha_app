@@ -67,9 +67,8 @@ class _UpdateUsernamePageState extends State<UpdateUsernamePage> {
                       } else {
                         await context.read<UserCubit>().updateUsername(
                             (context.read<UserCubit>().state as UserLoaded).user.id.toString());
-                        // final userCubit = UserCubit();
-                        // await userCubit.updateUsername(_username);
-                        // await userCubit.close();
+                        Get.back();
+                        Get.back();
                         Get.back();
                         Get.snackbar(
                             "Username Updated", "Your Username will be update after app closed");

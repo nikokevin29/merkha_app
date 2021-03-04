@@ -254,14 +254,14 @@ class _DetailProductState extends State<DetailProduct> {
                   ),
 
                   SizedBox(width: 5),
-                  Text(
-                      '(' +
-                          (context.watch<ReviewProductCubit>().state as ReviewProductLoaded)
-                              .review
-                              .length
-                              .toString() +
-                          ' Rating)',
-                      style: blackTextFont.copyWith(color: Colors.grey)), //
+                  // Text(
+                  //     '(' +
+                  //         (context.watch<ReviewProductCubit>().state as ReviewProductLoaded)
+                  //             .review
+                  //             .length
+                  //             .toString() +
+                  //         ' Rating)',
+                  //     style: blackTextFont.copyWith(color: Colors.grey)), //
                 ],
               ),
               Divider(),

@@ -32,18 +32,24 @@ class _MainTabState extends State<MainTab> {
         child: SingleChildScrollView(
           child: Stack(
             children: [
-              (backgroundImage != null)
-                  ? Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            colorFilter: new ColorFilter.mode(
-                                Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                            image: NetworkImage(backgroundImage)),
-                      ),
-                    )
-                  : Container(),
+              FutureBuilder(
+                  future: backgroundBannerAPI(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              colorFilter: new ColorFilter.mode(
+                                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                              image: NetworkImage(backgroundImage)),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }),
               Container(
                 child: Column(
                   children: [

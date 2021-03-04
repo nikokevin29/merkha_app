@@ -1,9 +1,14 @@
 part of 'widgets.dart';
 
-class FeedCard extends StatelessWidget {
+class FeedCard extends StatefulWidget {
   final Feed feed;
   FeedCard({this.feed});
 
+  @override
+  _FeedCardState createState() => _FeedCardState();
+}
+
+class _FeedCardState extends State<FeedCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -18,8 +23,8 @@ class FeedCard extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () async {
-                    if (feed.idMerchant != 0 || feed.idMerchant == null) {
-                      Get.to(DetailMerchant(feed: feed));
+                    if (widget.feed.idMerchant != 0 || widget.feed.idMerchant == null) {
+                      Get.to(DetailMerchant(feed: widget.feed));
                     } else {
                       User usr;
                       showDialog(
@@ -30,12 +35,14 @@ class FeedCard extends StatelessWidget {
                               child: CircularProgressIndicator(),
                             );
                           });
-                      await UserServices.showUserById(id: feed.idUser).then((value) {
+                      await UserServices.showUserById(id: widget.feed.idUser).then((value) {
                         usr = value.value;
                       });
-                      await context.read<FeedbyuseridCubit>().showFeedByUserId(id: feed.idUser);
+                      await context
+                          .read<FeedbyuseridCubit>()
+                          .showFeedByUserId(id: widget.feed.idUser);
                       Get.back();
-                      Get.to(DetailUser(idUser: feed.idUser, user: usr));
+                      Get.to(DetailUser(idUser: widget.feed.idUser, user: usr));
                     }
                   },
                   child: Row(
@@ -43,11 +50,13 @@ class FeedCard extends StatelessWidget {
                       Container(
                         width: 50,
                         height: 50,
-                        decoration: (feed.merchantLogo != null || feed.urlPhotoUser != null)
+                        decoration: (widget.feed.merchantLogo != null ||
+                                widget.feed.urlPhotoUser != null)
                             ? BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  image: NetworkImage(feed.merchantLogo ?? feed.urlPhotoUser),
+                                  image: NetworkImage(
+                                      widget.feed.merchantLogo ?? widget.feed.urlPhotoUser),
                                   fit: BoxFit.cover,
                                 ),
                               )
@@ -70,12 +79,12 @@ class FeedCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(feed.merchantUsername ?? feed.username,
+                          Text(widget.feed.merchantUsername ?? widget.feed.username,
                               style: blackMonstadtTextFont.copyWith(fontSize: 13)),
                           SizedBox(
                             width: MediaQuery.of(context).size.width - (8 * defaultMargin),
                             child: Text(
-                              feed.location ?? '',
+                              widget.feed.location ?? '',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: blackMonstadtTextFont.copyWith(
@@ -97,37 +106,40 @@ class FeedCard extends StatelessWidget {
                             PopupMenuItem(
                               value: 'more',
                               child: FutureBuilder(
-                                  future: ReportService.checkReportFeed(id: feed.id.toString()),
+                                  future:
+                                      ReportService.checkReportFeed(id: widget.feed.id.toString()),
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
                                       return InkWell(
-                                        child: (snapshot.data.toString() == feed.id.toString())
-                                            ? Container(
-                                                padding: EdgeInsets.all(10),
-                                                child: Text(
-                                                  'Cancel Report',
-                                                  style: whiteNumberFont.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black),
-                                                ),
-                                              )
-                                            : Container(
-                                                padding: EdgeInsets.all(10),
-                                                child: Text(
-                                                  'Report Feed',
-                                                  style: whiteNumberFont.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.black),
-                                                ),
-                                              ),
+                                        child:
+                                            (snapshot.data.toString() == widget.feed.id.toString())
+                                                ? Container(
+                                                    padding: EdgeInsets.all(10),
+                                                    child: Text(
+                                                      'Cancel Report',
+                                                      style: whiteNumberFont.copyWith(
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.black),
+                                                    ),
+                                                  )
+                                                : Container(
+                                                    padding: EdgeInsets.all(10),
+                                                    child: Text(
+                                                      'Report Feed',
+                                                      style: whiteNumberFont.copyWith(
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.black),
+                                                    ),
+                                                  ),
                                         onTap: () async {
-                                          if (snapshot.data.toString() == feed.id.toString()) {
+                                          if (snapshot.data.toString() ==
+                                              widget.feed.id.toString()) {
                                             print('cancel report feed' +
                                                 snapshot.data.toString() +
                                                 '   ' +
-                                                feed.id.toString());
+                                                widget.feed.id.toString());
                                             await ReportService.deleteReportFeed(
-                                                feed.id.toString());
+                                                widget.feed.id.toString());
                                             Get.back();
                                             Get.snackbar('Feed Report Canceled',
                                                 'This Feed Has Been Unreported');
@@ -135,9 +147,9 @@ class FeedCard extends StatelessWidget {
                                             print('report feed ' +
                                                 snapshot.data.toString() +
                                                 '   ' +
-                                                feed.id.toString());
+                                                widget.feed.id.toString());
                                             await ReportService.createReportFeed(
-                                                feed.id.toString());
+                                                widget.feed.id.toString());
                                             Get.back();
                                             Get.snackbar('Feed Reported',
                                                 'This Feed Has Been Reported and will be check soon');
@@ -174,11 +186,11 @@ class FeedCard extends StatelessWidget {
                         child: CircularProgressIndicator(),
                       );
                     });
-                await ProductServices.getProductById(id: feed.idProduct)
+                await ProductServices.getProductById(id: widget.feed.idProduct)
                     .then((value) => product = value.value);
                 if (product != null) {
-                    Get.back();
-                    Get.to(DetailProduct(product: product));
+                  Get.back();
+                  Get.to(DetailProduct(product: product));
                 } else {
                   Get.back();
                   Get.snackbar('Product Doesnt Exist', 'Product has been paused or deleted');
@@ -189,8 +201,8 @@ class FeedCard extends StatelessWidget {
                 height: MediaQuery.of(context).size.width - (3 * defaultMargin),
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: (feed.urlImage != null)
-                          ? NetworkImage(feed.urlImage)
+                      image: (widget.feed.urlImage != null)
+                          ? NetworkImage(widget.feed.urlImage)
                           : AssetImage('assets/img_not_available.jpeg'),
                       fit: BoxFit.cover,
                     ),
@@ -205,23 +217,25 @@ class FeedCard extends StatelessWidget {
                   Wrap(spacing: 15, children: [
                     //note: Comment Button
                     InkWell(
-                        onTap: () => Get.to(CommentPage(feed: feed)),
+                        onTap: () => Get.to(CommentPage(feed: widget.feed)),
                         child: Icon(Icons.chat_bubble_outline, color: HexColor('#707070'))),
                     //note:Like Button
                     FutureBuilder(
-                        future: FeedLikeService.checkStatusLike(idFeed: feed.id.toString()),
+                        future: FeedLikeService.checkStatusLike(idFeed: widget.feed.id.toString()),
                         builder: (context, snapshot) {
-                          if (snapshot.data.toString() == feed.id.toString()) {
+                          if (snapshot.data.toString() == widget.feed.id.toString()) {
                             return GestureDetector(
                               onTap: () async {
-                                await FeedLikeService.deleteLike(idFeed: feed.id.toString());
+                                await FeedLikeService.deleteLike(idFeed: widget.feed.id.toString());
+                                setState(() {});
                               },
                               child: Icon(Icons.favorite, color: Colors.red),
                             );
-                          } else if (snapshot.data.toString() != feed.id.toString()) {
+                          } else if (snapshot.data.toString() != widget.feed.id.toString()) {
                             return GestureDetector(
                               onTap: () async {
-                                await FeedLikeService.createLike(idFeed: feed.id.toString());
+                                await FeedLikeService.createLike(idFeed: widget.feed.id.toString());
+                                setState(() {});
                               },
                               child: Icon(Icons.favorite_border, color: HexColor('#707070')),
                             );
@@ -245,7 +259,7 @@ class FeedCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               alignment: Alignment.centerLeft,
-              child: Text(feed.merchantUsername ?? feed.username, //
+              child: Text(widget.feed.merchantUsername ?? widget.feed.username, //
                   style: blackTextFont.copyWith(fontSize: 12, fontWeight: FontWeight.bold)),
             ),
             Container(
@@ -253,7 +267,7 @@ class FeedCard extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(feed.caption ?? '',
+                    child: Text(widget.feed.caption ?? '',
                         style: blackTextFont.copyWith(fontSize: 12),
                         textAlign: TextAlign.justify,
                         maxLines: 10),
@@ -268,7 +282,7 @@ class FeedCard extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: InkWell(
                 onTap: () {
-                  Get.to(CommentPage(feed: feed));
+                  Get.to(CommentPage(feed: widget.feed));
                 },
                 child: Text(
                   'View Comments ',
@@ -278,7 +292,7 @@ class FeedCard extends StatelessWidget {
             ),
             SizedBox(height: 15),
             //note: Widget Product (productName,productPrice, and Button Add to Cart)
-            (feed.productName != null)
+            (widget.feed.productName != null)
                 ? Container(
                     padding: EdgeInsets.only(left: 10),
                     decoration: BoxDecoration(
@@ -294,7 +308,7 @@ class FeedCard extends StatelessWidget {
                             SizedBox(
                               width: MediaQuery.of(context).size.width - 130,
                               child: Text(
-                                feed.productName ?? '',
+                                widget.feed.productName ?? '',
                                 style: blackTextFont.copyWith(fontSize: 12),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -302,15 +316,15 @@ class FeedCard extends StatelessWidget {
                             ),
                             Text(
                                 NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                                    .format(double.parse(feed.productPrice) ?? 0),
+                                    .format(double.parse(widget.feed.productPrice) ?? 0),
                                 style: redNumberFont.copyWith(fontSize: 12)),
                           ],
                         ),
                         InkWell(
                           onTap: () async {
-                            print(feed.idProduct.toString());
-                            ApiReturnValue<Product> result =
-                                await ProductServices.getProductById(id: feed.idProduct.toString());
+                            print(widget.feed.idProduct.toString());
+                            ApiReturnValue<Product> result = await ProductServices.getProductById(
+                                id: widget.feed.idProduct.toString());
                             if (result != null) {
                               SharedPreferences isMerchant =
                                   await SharedPreferences.getInstance(); //Save isMerchant

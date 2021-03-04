@@ -17,7 +17,6 @@ import 'package:photo_view/photo_view.dart';
 import 'package:date_format/date_format.dart';
 import 'package:expansion_card/expansion_card.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
-import 'package:readmore/readmore.dart';
 
 part 'selectable_box.dart';
 part 'item_card.dart';

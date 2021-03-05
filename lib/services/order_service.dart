@@ -122,6 +122,7 @@ class OrderServices {
           'id_product': detail.idProduct.toString(),
           'amount': detail.amount.toString(),
           'subtotal': detail.subtotal.toString(),
+          'product_price': detail.productPrice.toString(),
         }));
     if (response.statusCode != 200) {
       print('StatusCode Detail Order : ${response.statusCode}');

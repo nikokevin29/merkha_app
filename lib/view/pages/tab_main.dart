@@ -10,7 +10,6 @@ class _MainTabState extends State<MainTab> {
   @override
   void initState() {
     super.initState();
-    backgroundBannerAPI();
   }
 
   Future<dynamic> backgroundBannerAPI() async {
@@ -21,7 +20,7 @@ class _MainTabState extends State<MainTab> {
       return response.statusCode.toString();
     }
     //var data = jsonDecode(response.body);
-    backgroundImage = response.body;
+    var backgroundImage = response.body;
     return backgroundImage;
   }
 
@@ -43,7 +42,7 @@ class _MainTabState extends State<MainTab> {
                           image: DecorationImage(
                               colorFilter: new ColorFilter.mode(
                                   Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                              image: NetworkImage(backgroundImage)),
+                              image: NetworkImage(snapshot.data)),
                         ),
                       );
                     } else {
@@ -120,7 +119,7 @@ class _MainTabState extends State<MainTab> {
                             child: FutureBuilder(
                                 future: AppContentServices.showMainAppContentFormat(),
                                 builder: (context, snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.done) {
+                                  if (snapshot.hasData) {
                                     return CarouselSlider(
                                       options: CarouselOptions(
                                         autoPlay: true,

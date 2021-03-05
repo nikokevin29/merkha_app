@@ -99,7 +99,7 @@ class DetailProductOrderTile extends StatelessWidget {
                       SizedBox(height: 3),
                       Text(
                           NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                              .format(detail.price),
+                              .format(detail.productPrice),
                           style: redNumberFont.copyWith()),
                     ],
                   ),

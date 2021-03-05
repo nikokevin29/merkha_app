@@ -125,7 +125,6 @@ class _CartTabState extends State<CartTab> {
     print('Cart length  =  ' + _cart.length.toString());
     SharedPreferences orders = await SharedPreferences.getInstance();
     int lastId = orders.getInt('lastId');
-
     for (int i = 0; i <= _cart.length - 1; i++) {
       // print('id product' + _cart[i].id.toString());
       // print('amount ' + _cart[i].qty.toString());
@@ -136,6 +135,7 @@ class _CartTabState extends State<CartTab> {
           idProduct: _cart[i].id,
           amount: _cart[i].qty,
           subtotal: (_cart[i].qty * _cart[i].price),
+          productPrice: _cart[i].price,
         ),
       );
     }
@@ -741,63 +741,63 @@ class _CartTabState extends State<CartTab> {
                       },
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                    alignment: Alignment.centerLeft,
-                    child: Text('My Wishlist',
-                        style: blackTextFont.copyWith(fontSize: 22, fontWeight: FontWeight.bold)),
-                  ),
-                  BlocBuilder<WishlistCubit, WishlistState>(builder: (_, state) {
-                    if (state is WishlistLoaded) {
-                      List<Product> wishlist = state.wishlist;
-                      return Container(
-                        width: MediaQuery.of(context).size.width - 2 * defaultMargin,
-                        child: (wishlist.length != 0)
-                            ? GridView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 0.73,
-                                ),
-                                itemCount: wishlist.length,
-                                itemBuilder: (_, index) => Container(
-                                    child: Wrap(
-                                  alignment: WrapAlignment.center,
-                                  direction: Axis.horizontal,
-                                  spacing: 10,
-                                  runSpacing: 10,
-                                  children: [
-                                    ItemCardWishlist(product: wishlist[index]),
-                                  ],
-                                )),
-                              )
-                            : Center(
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 50),
-                                    Text(
-                                      'Wishlist Empty',
-                                      style:
-                                          blackTextFont.copyWith(fontSize: 16, color: Colors.red),
-                                    ),
-                                    SizedBox(height: 50),
-                                    FlatButton(
-                                        color: accentColor2,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: new BorderRadius.circular(30.0)),
-                                        onPressed: () {
-                                          Get.off(MainPage(bottomNavBarIndex: 0));
-                                        },
-                                        child: Text('Go To Home'))
-                                  ],
-                                ),
-                              ),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  }),
+                  // Container(
+                  //   margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  //   alignment: Alignment.centerLeft,
+                  //   child: Text('My Wishlist',
+                  //       style: blackTextFont.copyWith(fontSize: 22, fontWeight: FontWeight.bold)),
+                  // ),
+                  // BlocBuilder<WishlistCubit, WishlistState>(builder: (_, state) {
+                  //   if (state is WishlistLoaded) {
+                  //     List<Product> wishlist = state.wishlist;
+                  //     return Container(
+                  //       width: MediaQuery.of(context).size.width - 2 * defaultMargin,
+                  //       child: (wishlist.length != 0)
+                  //           ? GridView.builder(
+                  //               shrinkWrap: true,
+                  //               physics: NeverScrollableScrollPhysics(),
+                  //               gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                  //                 crossAxisCount: 2,
+                  //                 childAspectRatio: 0.73,
+                  //               ),
+                  //               itemCount: wishlist.length,
+                  //               itemBuilder: (_, index) => Container(
+                  //                   child: Wrap(
+                  //                 alignment: WrapAlignment.center,
+                  //                 direction: Axis.horizontal,
+                  //                 spacing: 10,
+                  //                 runSpacing: 10,
+                  //                 children: [
+                  //                   ItemCardWishlist(product: wishlist[index]),
+                  //                 ],
+                  //               )),
+                  //             )
+                  //           : Center(
+                  //               child: Column(
+                  //                 children: [
+                  //                   SizedBox(height: 50),
+                  //                   Text(
+                  //                     'Wishlist Empty',
+                  //                     style:
+                  //                         blackTextFont.copyWith(fontSize: 16, color: Colors.red),
+                  //                   ),
+                  //                   SizedBox(height: 50),
+                  //                   FlatButton(
+                  //                       color: accentColor2,
+                  //                       shape: RoundedRectangleBorder(
+                  //                           borderRadius: new BorderRadius.circular(30.0)),
+                  //                       onPressed: () {
+                  //                         Get.off(MainPage(bottomNavBarIndex: 0));
+                  //                       },
+                  //                       child: Text('Go To Home'))
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //     );
+                  //   } else {
+                  //     return Container();
+                  //   }
+                  // }),
                 ],
               ),
             ),

@@ -150,6 +150,7 @@ class _SignInPageState extends State<SignInPage> {
                                 Navigator.pop(context);
                                 Get.offAll(MainPage());
                               } else {
+                                Navigator.pop(context);
                                 Get.snackbar(
                                   "Failed",
                                   "Sign In Failed",

@@ -10,16 +10,26 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        title: Text('Chat', style: blackTextFont.copyWith(fontSize: 22)),
-        backgroundColor: Colors.white,
-        leading: BackButton(
-          color: Colors.black,
-          onPressed: () {
-            Get.back();
-          },
-        ),
-      ),
+          elevation: 0,
+          title: Text('Chat', style: blackTextFont.copyWith(fontSize: 22)),
+          backgroundColor: Colors.white,
+          leading: BackButton(
+            color: Colors.black,
+            onPressed: () {
+              Get.back();
+            },
+          ),
+          actions: [
+            Container(
+                child: InkWell(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text('+', style: blackMonstadtTextFont.copyWith(fontSize: 21)),
+                    ),
+                    onTap: () {
+                      Get.to(SearchMerchantChatPage());
+                    }))
+          ]),
       body: SingleChildScrollView(
         child: Expanded(
           child: Container(

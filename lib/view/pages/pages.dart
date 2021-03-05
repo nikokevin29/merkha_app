@@ -84,3 +84,4 @@ part 'payment_page.dart';
 part 'confirm_payment.dart';
 part 'detail_order_page.dart';
 part 'update_username_page.dart';
+part 'search_merchant_chat.dart';

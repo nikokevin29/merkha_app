@@ -35,8 +35,10 @@ class _ChatPageState extends State<ChatPage> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: defaultMargin),
             child: StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection('rooms').orderBy('created_at').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('rooms')
+                  .orderBy('created_at', descending: true)
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(

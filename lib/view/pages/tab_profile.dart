@@ -341,14 +341,17 @@ Column buildHeader(BuildContext context, countFollowing) {
                             children: [
                               Row(
                                 children: [
-                                  Text((context.watch<OwnfeedCubit>().state as OwnFeedListLoaded)
-                                      .feed
-                                      .length
-                                      .toString()),
+                                  BlocBuilder<OwnfeedCubit, OwnfeedState>(
+                                      builder: (context, state) {
+                                    if (state is OwnFeedListLoaded) {
+                                      return Text(state.feed.length.toString());
+                                    } else {
+                                      return Text('');
+                                    }
+                                  }),
                                   Text(' Posts'),
                                 ],
                               ),
-                              //await context.read<FollowCubit>().followList();
                               Row(
                                 children: [
                                   FutureBuilder(

@@ -61,7 +61,7 @@ dev_dependencies:
     sdk: flutter
   argon_buttons_flutter: ^1.0.6
   cached_network_image: ^2.5.0
-  firebase_analytics: ^6.3.0
+  firebase_analytics: ^6.2.0
   firebase_core: ^0.5.0+1
   firebase_storage: ^5.2.0
   flutter_spinkit: ^4.1.2+1

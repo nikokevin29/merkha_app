@@ -246,7 +246,8 @@ Column buildHeader(BuildContext context, countFollowing) {
                   child: GestureDetector(
                       onTap: () {
                         //Chat Button
-                        Get.to(ChatPage());
+                        //Get.to(ChatPage());
+                        Get.to(() => ChatPage());
                       },
                       child: SizedBox(
                           height: 22, width: 30, child: Image.asset('assets/chat-icon.png'))),

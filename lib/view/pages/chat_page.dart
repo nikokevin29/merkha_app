@@ -31,30 +31,32 @@ class _ChatPageState extends State<ChatPage> {
                     }))
           ]),
       body: SingleChildScrollView(
-        child: Expanded(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('rooms')
-                  .orderBy('created_at', descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) =>
-                        buildItem(context, snapshot.data.documents[index]),
-                    itemCount: snapshot.data.documents.length,
-                  );
-                }
-              },
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rooms')
+                    .orderBy('created_at', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) =>
+                          buildItem(context, snapshot.data.documents[index]),
+                      itemCount: snapshot.data.documents.length,
+                    );
+                  }
+                },
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

@@ -193,7 +193,7 @@ class _DetailProductState extends State<DetailProduct> {
                   // note: Product Name
                   SizedBox(
                     width: MediaQuery.of(context).size.width - 50,
-                    child: Text(widget.product.productName,
+                    child: Text(widget.product.productName ?? '',
                         style: blackTextFont.copyWith(fontWeight: FontWeight.w400, fontSize: 20),
                         overflow: TextOverflow.clip),
                   ),
@@ -322,7 +322,7 @@ class _DetailProductState extends State<DetailProduct> {
                     SizedBox(height: 9),
                     //note: Description
                     Text(
-                      widget.product.description,
+                      widget.product.description ?? '',
                       style:
                           blackMonstadtTextFont.copyWith(fontSize: 14, fontWeight: FontWeight.w200),
                       textAlign: TextAlign.justify,

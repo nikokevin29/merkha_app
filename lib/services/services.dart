@@ -23,9 +23,9 @@ part 'review_service.dart';
 part 'report_service.dart';
 part 'feed_like_service.dart';
 
-String baseURL = "https://mobile.merkha.com/api/"; //https://mobile.merkha.com/api/
+String baseURL = "http://192.168.0.75:8000/api/"; //https://mobile.merkha.com/api/
 
-String baseURLphoto = "http://192.168.0.60:8000/storage/";
+String baseURLphoto = "http://192.168.0.75:8000/storage/";
 
 String apiRajaOngkir = "https://api.rajaongkir.com/starter/";
 String apiKeyOngkir = "7facf87ad54c821e568ef658f3fa79d6";

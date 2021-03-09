@@ -69,4 +69,64 @@ class WishlistService {
     var data = jsonDecode(response.body);
     return ApiReturnValue(message: data['meta']['message']);
   }
+
+  static Future<String> createWishlistStatus({String idProduct, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'wishlist_saved/create/' + idProduct;
+    var response = await client.post(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer ' + User.token,
+      },
+      body: jsonEncode(<String, String>{
+        'id_product': idProduct,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      print('StatusCode Create Wishlist Status : ${response.statusCode}');
+      return '0';
+    }
+    print('Create Wishlist Status Success');
+    return '1';
+  }
+
+  static Future<String> deleteWishlistStatus({String idProduct, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'wishlist_saved/delete/' + idProduct;
+    var response = await client.delete(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+
+    if (response.statusCode != 200) {
+      print('StatusCode Delete Wishlist: ${response.statusCode}');
+      return '0';
+    }
+    print('Delete Wishlist status');
+    return '1';
+  }
+
+  static Future<String> checkWishlistStatus({String idProduct, http.Client client}) async {
+    if (client == null) {
+      client = http.Client();
+    }
+    String url = baseURL + 'wishlist_saved/check/' + idProduct;
+    var response = await client.get(url, headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer ' + User.token,
+    });
+
+    if (response.statusCode != 200) {
+      print('StatusCode Check Status Wishlist Status Code: ${response.statusCode}');
+      return response.body;
+    }
+    print('Check Wishlist Status Done');
+    return response.body;
+  }
 }

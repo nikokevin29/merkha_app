@@ -332,11 +332,24 @@ class _MainTabState extends State<MainTab> {
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: defaultMargin, vertical: 16),
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Discover',
-                              style: blackTextFont.copyWith(
-                                fontSize: 25,
-                              ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Discover',
+                                  style: blackTextFont.copyWith(
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                InkWell(
+                                    onTap: () async {
+                                      context.read<FeedrandomCubit>().loading();
+                                      await context
+                                          .read<FeedrandomCubit>()
+                                          .showFeedRandom(limit: '21');
+                                    },
+                                    child: Icon(Icons.refresh)),
+                              ],
                             ),
                           ),
                           //Discover Feed Limit 21 (Random)

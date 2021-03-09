@@ -26,3 +26,6 @@ class FeedRandomFailed extends FeedrandomState {
   @override
   List<Object> get props => [message];
 }
+class FeedLoading extends FeedrandomState {
+  
+}

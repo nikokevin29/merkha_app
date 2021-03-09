@@ -14,7 +14,7 @@ class Wishlist extends Equatable {
   factory Wishlist.fromJson(Map<String, dynamic> data) => Wishlist(
         id: data['id'],
         idUser: data['id_user'],
-        idProduct: data['id_product'],
+        idProduct: int.parse(data['id_product'].toString()),
       );
 
   @override

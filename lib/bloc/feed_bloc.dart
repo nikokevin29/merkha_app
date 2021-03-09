@@ -36,6 +36,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedStates> {
         yield FeedFailure();
       }
     }
+    if (event is FeedRefresh) {
+      result = await FeedServices.showAllFeedFollowed(start: 0, end: 3);
+      yield FeedSuccess(feed: result.value, hasReachedMax: false);
+      return;
+    }
   }
 }
 

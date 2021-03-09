@@ -11,9 +11,14 @@ class FeedrandomCubit extends Cubit<FeedrandomState> {
     ApiReturnValue<List<Feed>> result = await FeedServices.showFeedRandom(limit: limit);
     if (result.value != null) {
       emit(FeedRandomListLoaded(result.value));
-      print('Feed Ranom By Limit Loaded');
+      print('Feed Random By Limit Loaded');
     } else {
       emit(FeedRandomFailed(result.message));
     }
+  }
+
+  Future<void> loading() {
+    emit(FeedLoading());
+    return null;
   }
 }

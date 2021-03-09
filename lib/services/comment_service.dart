@@ -26,7 +26,7 @@ class CommentService {
     if (client == null) {
       client = http.Client();
     }
-    String url = baseURL + 'comment/createcomment/';
+    String url = baseURL + 'comment/createcomment';
     var response = await client.post(
       url,
       headers: {

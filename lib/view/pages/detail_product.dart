@@ -57,14 +57,14 @@ class _DetailProductState extends State<DetailProduct> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width - 200,
                   child: Text(
-                    widget.product.merchant.toString(),
+                    widget.product.merchant.toString() ?? '',
                     style: blackTextFont.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
                 ),
                 Text(
-                  widget.product.merchantLocation.toString(),
+                  widget.product.merchantLocation.toString() ?? '',
                   style: blackTextFont.copyWith(fontSize: 8, fontWeight: FontWeight.w200),
                 ),
               ],
@@ -198,21 +198,67 @@ class _DetailProductState extends State<DetailProduct> {
                         overflow: TextOverflow.clip),
                   ),
                   //note: Wishlist Button
-                  SizedBox(
-                    height: 22,
-                    width: 17,
-                    child: InkWell(
-                      child: Icon(Icons.bookmark_border, color: Colors.grey),
-                      onTap: () {
-                        print('tap bookmark detaill product');
-                        context
-                            .read<WishlistCubit>()
-                            .addWishlist(Wishlist(idProduct: widget.product.id));
-                        Get.snackbar(
-                            'Product Added', widget.product.productName + ' Added to Wishlist');
-                      },
-                    ),
-                  ),
+                  // SizedBox(
+                  //   height: 22,
+                  //   width: 17,
+                  //   child: InkWell(
+                  //     child: Icon(Icons.bookmark_border, color: Colors.grey),
+                  //     onTap: () {
+                  //       print('tap bookmark detaill product');
+                  //       context
+                  //           .read<WishlistCubit>()
+                  //           .addWishlist(Wishlist(idProduct: widget.product.id));
+                  //       Get.snackbar(
+                  //           'Product Added', widget.product.productName + ' Added to Wishlist');
+                  //     },
+                  //   ),
+                  // ),
+                  FutureBuilder(
+                      future: WishlistService.checkWishlistStatus(
+                          idProduct: widget.product.id.toString()),
+                      builder: (context, snapshot) {
+                        if (snapshot.data.toString() == widget.product.id.toString()) {
+                          return SizedBox(
+                            height: 22,
+                            width: 17,
+                            child: InkWell(
+                              child: Icon(Icons.bookmark, color: Colors.blueAccent),
+                              onTap: () {
+                                print('delete wishlist status ' +
+                                    snapshot.data.toString() +
+                                    '   ' +
+                                    widget.product.id.toString());
+                                context
+                                    .read<WishlistCubit>()
+                                    .deleteWishlist(widget.product.id.toString()); //delete wishlist
+                                WishlistService.deleteWishlistStatus(
+                                    idProduct:
+                                        widget.product.id.toString()); //delete status wishlist
+                                if (this.mounted) setState(() {});
+                              },
+                            ),
+                          );
+                        } else {
+                          return SizedBox(
+                            height: 22,
+                            width: 17,
+                            child: InkWell(
+                              child: Icon(Icons.bookmark_border, color: Colors.grey),
+                              onTap: () {
+                                print('wishlist product ' +
+                                    snapshot.data.toString() +
+                                    '   ' +
+                                    widget.product.id.toString());
+                                context.read<WishlistCubit>().addWishlist(
+                                    Wishlist(idProduct: widget.product.id)); // add wishlist
+                                WishlistService.createWishlistStatus(
+                                    idProduct: widget.product.id.toString()); //add status wishlist.
+                                if (this.mounted) setState(() {});
+                              },
+                            ),
+                          );
+                        }
+                      }),
                 ],
               ),
               // note: Price Product

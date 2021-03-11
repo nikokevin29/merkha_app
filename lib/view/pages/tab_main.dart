@@ -230,8 +230,8 @@ class _MainTabState extends State<MainTab> {
                                                     );
                                                   });
                                               await context
-                                                  .read<ProductbymerchatcatCubit>()
-                                                  .showMerchantCategorybyId(
+                                                  .read<FeedbymerchantcategoryCubit>()
+                                                  .showFeedByMerchantCat(
                                                       id: merchantCat[index].id.toString());
                                               Get.back();
                                               //buat loading disini

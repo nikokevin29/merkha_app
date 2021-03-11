@@ -73,7 +73,7 @@ class _CommentPageState extends State<CommentPage> {
                             children: state.comment
                                 .map(
                                   (e) => ListTile(
-                                    tileColor: Colors.cyanAccent,
+                                    tileColor: Colors.white,
                                     title: Text(
                                       (e.idUser == null) ? e.merchantUsername : e.userName,
                                       style: blackMonstadtTextFont.copyWith(fontSize: 14),

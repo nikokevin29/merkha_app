@@ -107,10 +107,11 @@ class _CategoryPageState extends State<CategoryPage> {
                   }),
             ),
             SizedBox(height: 15),
-            //note: Bloc Builder Product
-            BlocBuilder<ProductbymerchatcatCubit, ProductbymerchatcatState>(builder: (_, state) {
-              if (state is ProductByMerchantCatIdListLoaded) {
-                List<Product> product = state.product;
+            //note: Bloc Builder Feed Merchant Category
+            BlocBuilder<FeedbymerchantcategoryCubit, FeedbymerchantcategoryState>(
+                builder: (_, state) {
+              if (state is FeedByMerchantCatListLoaded) {
+                List<Feed> feed = state.feed;
                 return Container(
                   width: MediaQuery.of(context).size.width - 2 * defaultMargin,
                   child: GridView.builder(
@@ -120,7 +121,7 @@ class _CategoryPageState extends State<CategoryPage> {
                         crossAxisCount: 3,
                         childAspectRatio: 1,
                       ),
-                      itemCount: product.length,
+                      itemCount: feed.length,
                       itemBuilder: (_, index) => Container(
                             child: Wrap(
                               alignment: WrapAlignment.center,
@@ -128,9 +129,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               spacing: 10,
                               runSpacing: 10,
                               children: [
-                                ProductCard(product[index], onTap: () {
-                                  //Navigate to Details Product Here
-                                }),
+                                FeedBox(feed[index]),
                               ],
                             ),
                           )),
@@ -139,6 +138,39 @@ class _CategoryPageState extends State<CategoryPage> {
                 return Center(child: CircularProgressIndicator());
               }
             }),
+
+            //note: Bloc Builder Product
+            // BlocBuilder<ProductbymerchatcatCubit, ProductbymerchatcatState>(builder: (_, state) {
+            //   if (state is ProductByMerchantCatIdListLoaded) {
+            //     List<Product> product = state.product;
+            //     return Container(
+            //       width: MediaQuery.of(context).size.width - 2 * defaultMargin,
+            //       child: GridView.builder(
+            //           shrinkWrap: true,
+            //           physics: NeverScrollableScrollPhysics(),
+            //           gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+            //             crossAxisCount: 3,
+            //             childAspectRatio: 1,
+            //           ),
+            //           itemCount: product.length,
+            //           itemBuilder: (_, index) => Container(
+            //                 child: Wrap(
+            //                   alignment: WrapAlignment.center,
+            //                   direction: Axis.vertical,
+            //                   spacing: 10,
+            //                   runSpacing: 10,
+            //                   children: [
+            //                     ProductCard(product[index], onTap: () {
+            //                       //Navigate to Details Product Here
+            //                     }),
+            //                   ],
+            //                 ),
+            //               )),
+            //     );
+            //   } else {
+            //     return Center(child: CircularProgressIndicator());
+            //   }
+            // }),
           ],
         ),
       ),

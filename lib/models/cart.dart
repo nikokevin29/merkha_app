@@ -5,7 +5,7 @@ class Cart {
   String productName;
   String urlPreview;
   double price;
-  int weight;
+  double weight;
   int qty;
 
   int idMerchant;
@@ -70,7 +70,7 @@ class Cart {
       urlPreview: map['urlPreview'],
       price: double.parse(map['price']),
       qty: int.parse(map['qty']),
-      weight: int.parse(map['weight']),
+      weight: double.parse(map['weight']),
       idMerchant: int.parse(map['idMerchant']),
       merchantName: map['merchantName'],
       merchantLogo: map['merchantLogo'],

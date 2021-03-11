@@ -16,7 +16,7 @@ class Product extends Equatable {
   final String color;
   final String size;
   final int stock;
-  final int weight;
+  final double weight;
   final int reportCount;
   final String createdAt;
   final String updatedAt;
@@ -88,7 +88,7 @@ class Product extends Equatable {
         color: data['color'],
         size: data['size'],
         stock: int.parse(data['stock'].toString()),
-        weight: data['weight'], //double.parse(data['weight'].toString()),
+        weight:  double.parse(data['weight'].toString()),
         preview: data['preview'],
         photo: data['photo'].toString(),
         createdAt: data['created_at'],

@@ -346,7 +346,7 @@ class _CartTabState extends State<CartTab> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Shipping ' + idProvinceM.toString(),
+                                          'Shipping ', //+ idProvinceM.toString()
                                           style: blackTextFont.copyWith(
                                               fontWeight: FontWeight.bold, fontSize: 12),
                                         ),
@@ -903,6 +903,11 @@ class _CartTabState extends State<CartTab> {
                                     LocalStorage.db.delete(_cart[index].id);
                                     _cart.removeAt(index);
                                     Get.back();
+                                    LocalStorage.db.getCart().then((value) {
+                                      if (value.length == 0) {
+                                        widget.controller.animateTo(0);
+                                      }
+                                    });
                                     setState(() {});
                                   },
                                 );

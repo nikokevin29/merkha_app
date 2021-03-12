@@ -1,6 +1,8 @@
 part of 'pages.dart';
 
 class CartTab extends StatefulWidget {
+  final TabController controller;
+  CartTab({this.controller});
   @override
   _CartTabState createState() => _CartTabState();
 }
@@ -733,11 +735,8 @@ class _CartTabState extends State<CartTab> {
                       ),
                       shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                       color: Colors.white,
-                      onPressed: () async {
-                        Get.to(MainPage(bottomNavBarIndex: 0));
-                        SharedPreferences orders = await SharedPreferences.getInstance();
-                        orders.clear();
-                        //BUG
+                      onPressed: () {
+                        widget.controller.animateTo(0);
                       },
                     ),
                   ),

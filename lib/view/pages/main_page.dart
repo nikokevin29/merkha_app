@@ -113,8 +113,8 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
           children: [
             new MainTab(),
             new FeedTab(),
-            new CartTab(),
-            new WishlishTab(),
+            new CartTab(controller: controller),
+            new WishlishTab(controller: controller),
             new ProfileTab()
           ],
         ),

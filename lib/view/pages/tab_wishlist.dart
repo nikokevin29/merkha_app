@@ -1,6 +1,8 @@
 part of 'pages.dart';
 
 class WishlishTab extends StatefulWidget {
+  final TabController controller;
+  WishlishTab({this.controller});
   @override
   _WishlishTabState createState() => _WishlishTabState();
 }
@@ -77,7 +79,7 @@ class _WishlishTabState extends State<WishlishTab> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: new BorderRadius.circular(30.0)),
                                     onPressed: () {
-                                      Get.off(MainPage(bottomNavBarIndex: 0));
+                                      widget.controller.animateTo(0);
                                     },
                                     child: Text('Go To Home'))
                               ],

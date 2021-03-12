@@ -1,29 +1,24 @@
 part of 'pages.dart';
 
-class OrderPage extends StatefulWidget {
-  const OrderPage({
-    Key key,
-  }) : super(key: key);
-
+class OrderPageFinished extends StatefulWidget {
   @override
-  _OrderPageState createState() => _OrderPageState();
+  _OrderPageFinishedState createState() => _OrderPageFinishedState();
 }
 
-class _OrderPageState extends State<OrderPage> {
+class _OrderPageFinishedState extends State<OrderPageFinished> {
   @override
   void initState() {
     super.initState();
-    context.read<OrderCubit>().showOngoingOrder();
     context.read<OrderFinishCubit>().showFinishedOrder();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: BlocBuilder<OrderCubit, OrderState>(builder: (_, state) {
-        if (state is OrderListLoaded) {
+      child: BlocBuilder<OrderFinishCubit, OrderFinishState>(builder: (_, state) {
+        if (state is OrderFinishListLoaded) {
           return ListView(shrinkWrap: true, children: [
-            TextDividerOrder(text: 'ACTIVE ORDER'),
+            TextDividerOrder(text: 'FINISHED ORDER'),
             Column(
               children: state.order
                   .map(

@@ -248,27 +248,6 @@ class OrderCard extends StatelessWidget {
                             }),
                       )
                     : Container(),
-                // Container(
-                //   alignment: Alignment.centerRight,
-                //   child: (order.orderStatus != 'FINISHED')
-                //       ? Container()
-                //       : FutureBuilder(
-                //           future: ReviewServices.checkReviewMerchant(idOrder: order.id.toString()),
-                //           builder: (context, snapshot) {
-                //             if (snapshot.data == 1) {
-                //               return FlatButton(
-                //                 onPressed: () {
-                //                   _reviewMerchantBottomSheet(context, order);
-                //                 },
-                //                 child: Text('Give Star & Review',
-                //                     style: blackTextFont.copyWith(
-                //                         color: Colors.blueAccent, fontSize: 11)),
-                //               );
-                //             } else {
-                //               return Container();
-                //             }
-                //           }),
-                // ),
               ],
             ),
           )

@@ -29,7 +29,7 @@ class _ProfileTabState extends State<ProfileTab> {
         child: AppBarProfile(),
       ),
       body: DefaultTabController(
-        length: 2,
+        length: 3,
         child: NestedScrollView(
           headerSliverBuilder: (context, _) {
             return [
@@ -49,27 +49,28 @@ class _ProfileTabState extends State<ProfileTab> {
                 tabs: [
                   Tab(
                     icon: Container(
-                      width: 18,
-                      height: 20,
-                      child: Image.asset('assets/post-icon.png'),
+                      child: Icon(Icons.widgets),
                     ),
-                    iconMargin: const EdgeInsets.only(bottom: 5.0),
-                    text: 'Post',
+                     child: Text('Post', style: blackTextFont.copyWith())
                   ),
                   Tab(
                       icon: Container(
-                        width: 20,
-                        height: 20,
-                        child: Image.asset('assets/order-icon.png'),
+                        child: Icon(Icons.local_mall),
                       ),
-                      iconMargin: const EdgeInsets.only(bottom: 5.0),
-                      text: 'Order'),
+                      child: Text('Active Order', style: blackTextFont.copyWith())),
+                  Tab(
+                    icon: Container(
+                      child: Icon(Icons.check_circle_outline),
+                    ),
+                    child: Text('Finish Order', style: blackTextFont.copyWith()),
+                  ),
                 ],
               ),
               Expanded(
                 child: TabBarView(children: [
                   Post(),
                   OrderPage(),
+                  OrderPageFinished(),
                 ]),
               ),
             ],

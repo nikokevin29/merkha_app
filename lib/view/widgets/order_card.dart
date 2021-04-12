@@ -375,7 +375,7 @@ class OrderCard extends StatelessWidget {
                                     ReviewMerchant(
                                       idOrder: order.id,
                                       idMerchant: order.idMerchant,
-                                      isHiddenName: (status) ? '1' : '0',
+                                      isHiddenName: (status) ? 1 : 0,
                                       stars: valueMerchant,
                                       description: reviewMerchantController.text,
                                     ),

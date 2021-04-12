@@ -5,7 +5,7 @@ class ReviewProduct extends Equatable {
   final int idProduct;
   final String username;
   final String urlPhoto;
-  final String isHiddenName;
+  final int isHiddenName;
   final double stars;
   final String description;
   final String createdAt;
@@ -37,7 +37,7 @@ class ReviewProduct extends Equatable {
         idProduct: int.parse(data['id_product'].toString()),
         username: data['username'],
         urlPhoto: data['url_photo'],
-        isHiddenName: data['is_hidden_name'],
+        isHiddenName: int.parse(data['is_hidden_name'].toString()),
         stars: double.parse(data['stars'].toString()),
         description: data['description'],
         createdAt: data['created_at'],

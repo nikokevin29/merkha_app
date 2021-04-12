@@ -6,7 +6,7 @@ class ReviewMerchant extends Equatable {
   final int idMerchant;
   final String username;
   final String urlPhoto;
-  final String isHiddenName;
+  final int isHiddenName;
   final double stars;
   final String description;
   final String createdAt;
@@ -40,7 +40,7 @@ class ReviewMerchant extends Equatable {
         idOrder: int.parse(data['id_order'].toString()),
         username: data['username'],
         urlPhoto: data['url_photo'],
-        isHiddenName: data['is_hidden_name'],
+        isHiddenName: int.parse(data['is_hidden_name'].toString()),
         stars: double.parse(data['stars'].toString()),
         description: data['description'],
         createdAt: data['created_at'],

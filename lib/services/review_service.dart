@@ -37,7 +37,7 @@ class ReviewServices {
       body: jsonEncode(<String, String>{
         'id_order': review.idOrder.toString(),
         'id_merchant': review.idMerchant.toString(),
-        'is_hidden_name': review.isHiddenName,
+        'is_hidden_name': review.isHiddenName.toString(),
         'stars': review.stars.toString(),
         'description': review.description,
       }),
@@ -101,7 +101,7 @@ class ReviewServices {
       },
       body: jsonEncode(<String, String>{
         'id_product': review.idProduct.toString(),
-        'is_hidden_name': review.isHiddenName,
+        'is_hidden_name': review.isHiddenName.toString(),
         'stars': review.stars.toString(),
         'description': review.description,
       }),

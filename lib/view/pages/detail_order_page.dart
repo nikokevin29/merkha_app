@@ -249,7 +249,7 @@ class DetailProductOrderTile extends StatelessWidget {
                                   await ReviewServices.createReviewProduct(
                                     ReviewProduct(
                                       idProduct: detail.idProduct,
-                                      isHiddenName: status ? '1' : '0',
+                                      isHiddenName: status ? 1 : 0,
                                       stars: valueProduct,
                                       description: reviewMerchantController.text,
                                     ),
